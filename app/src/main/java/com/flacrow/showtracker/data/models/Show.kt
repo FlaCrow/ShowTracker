@@ -10,7 +10,6 @@ data class Show(
     val score: Float,
     val mediaType: String,
     val genres: List<Int>,
-    val dateAiring: Date,
     val overview: String
 )
 

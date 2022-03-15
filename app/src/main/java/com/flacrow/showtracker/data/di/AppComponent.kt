@@ -1,6 +1,7 @@
 package com.flacrow.showtracker.data.di
 
 import android.app.Application
+import com.flacrow.showtracker.api.presentation.fragments.ShowListFragment
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -17,6 +18,7 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
+    fun inject(fragment: ShowListFragment)
 
 }
 

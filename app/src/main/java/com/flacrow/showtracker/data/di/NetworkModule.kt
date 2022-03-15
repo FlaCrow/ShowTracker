@@ -1,6 +1,5 @@
 package com.flacrow.showtracker.data.di
 
-import androidx.viewbinding.BuildConfig
 import com.flacrow.showtracker.api.ShowAPI
 import com.flacrow.showtracker.utils.Config
 import dagger.Module
@@ -10,6 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 @Module
 object NetworkModule {
 
@@ -17,7 +17,9 @@ object NetworkModule {
     @AppScope
     fun provideOkhttp(): OkHttpClient {
         val builder = OkHttpClient.Builder()
-        if (BuildConfig.DEBUG) builder.addInterceptor(HttpLoggingInterceptor())
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        builder.addInterceptor(interceptor)
         return builder.build()
     }
 

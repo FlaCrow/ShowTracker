@@ -3,6 +3,7 @@ package com.flacrow.showtracker.data.PagingSources
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.flacrow.showtracker.api.ShowAPI
+import com.flacrow.showtracker.api.ShowResponse
 import com.flacrow.showtracker.data.models.Show
 import java.io.IOException
 
@@ -17,7 +18,7 @@ class ShowsPagingSource(private val showAPI: ShowAPI) : PagingSource<Int, Show>(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Show> {
         return try {
             val pageNumber = params.key ?: STARTING_PAGE
-            val data = showAPI.getTrending(pageNumber).map {
+            val data = showAPI.getTrending(pageNumber).results.map {
                 Show(
                     id = it.id,
                     title = it.title,
@@ -25,10 +26,11 @@ class ShowsPagingSource(private val showAPI: ShowAPI) : PagingSource<Int, Show>(
                     score = it.score,
                     mediaType = it.mediaType,
                     genres = it.genres,
-                    dateAiring = it.dateAiring,
+                    //dateAiring = it.dateAiring,
                     overview = it.overview
                 )
             }
+
             LoadResult.Page(
                 data = data,
                 prevKey = if (pageNumber == STARTING_PAGE) null else pageNumber - 1,

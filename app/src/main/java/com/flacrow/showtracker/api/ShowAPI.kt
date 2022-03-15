@@ -11,7 +11,7 @@ interface ShowAPI {
 //
 //    @GET("movies/trending/tv/week")
 //    fun getTrendingShows(@Query("api_key") apiKey: String): List<TvJson>
-    @GET("movies/trending/all/week/?api_key=${Config.API_KEY}")
-    fun getTrending(@Query("page") page: Int): List<ShowResponse>
+    @GET("3/trending/all/week?api_key=${Config.API_KEY}")
+    suspend fun getTrending(@Query("page") page: Int): ShowResponse
 
 }
