@@ -1,4 +1,4 @@
-package com.flacrow.showtracker.api.presentation.fragments
+package com.flacrow.showtracker.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -6,17 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadStateAdapter
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.ShowApp
-import com.flacrow.showtracker.api.ShowResponse
-import com.flacrow.showtracker.api.presentation.ViewModels.ShowListViewModel
-import com.flacrow.showtracker.api.presentation.adapters.ShowListAdapter
+import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
+import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
 import kotlinx.coroutines.flow.collect

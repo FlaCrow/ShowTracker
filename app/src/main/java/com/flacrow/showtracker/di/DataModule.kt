@@ -1,4 +1,4 @@
-package com.flacrow.showtracker.data.di
+package com.flacrow.showtracker.di
 
 import com.flacrow.showtracker.api.ShowAPI
 import com.flacrow.showtracker.data.repository.Repository

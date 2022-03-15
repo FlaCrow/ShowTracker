@@ -1,8 +1,8 @@
-package com.flacrow.showtracker.api.presentation.ViewModels
+package com.flacrow.showtracker.presentation.ViewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.flacrow.showtracker.data.di.AppScope
+import com.flacrow.showtracker.di.AppScope
 import javax.inject.Inject
 import javax.inject.Provider
 

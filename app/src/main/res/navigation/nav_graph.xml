@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/showListFragment"
-        android:name="com.flacrow.showtracker.api.presentation.fragments.ShowListFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.ShowListFragment"
         android:label="fragment_show_list"
         tools:layout="@layout/fragment_show_list" />
 </navigation>

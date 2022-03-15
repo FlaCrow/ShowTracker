@@ -1,8 +1,8 @@
 package com.flacrow.showtracker
 
 import android.app.Application
-import com.flacrow.showtracker.data.di.AppComponent
-import com.flacrow.showtracker.data.di.DaggerAppComponent
+import com.flacrow.showtracker.di.AppComponent
+import com.flacrow.showtracker.di.DaggerAppComponent
 
 class ShowApp : Application(){
 

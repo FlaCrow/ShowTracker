@@ -1,10 +1,9 @@
-package com.flacrow.showtracker.api.presentation.ViewModels
+package com.flacrow.showtracker.presentation.ViewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.flacrow.showtracker.api.ShowResponse
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.data.repository.Repository
 import kotlinx.coroutines.flow.Flow

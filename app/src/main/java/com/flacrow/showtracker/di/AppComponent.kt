@@ -1,7 +1,7 @@
-package com.flacrow.showtracker.data.di
+package com.flacrow.showtracker.di
 
 import android.app.Application
-import com.flacrow.showtracker.api.presentation.fragments.ShowListFragment
+import com.flacrow.showtracker.presentation.fragments.ShowListFragment
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module

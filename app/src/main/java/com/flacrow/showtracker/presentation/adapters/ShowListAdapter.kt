@@ -1,14 +1,12 @@
-package com.flacrow.showtracker.api.presentation.adapters
+package com.flacrow.showtracker.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.flacrow.showtracker.api.ShowResponse
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.ShowentityItemBinding
 

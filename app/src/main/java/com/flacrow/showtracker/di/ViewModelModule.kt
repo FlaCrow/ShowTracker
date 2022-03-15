@@ -1,9 +1,9 @@
-package com.flacrow.showtracker.data.di
+package com.flacrow.showtracker.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.flacrow.showtracker.api.presentation.ViewModels.ShowListViewModel
-import com.flacrow.showtracker.api.presentation.ViewModels.ViewModelFactory
+import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
+import com.flacrow.showtracker.presentation.ViewModels.ViewModelFactory
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
