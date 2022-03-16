@@ -7,15 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.ShowApp
 import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
+import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -49,7 +53,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentShowListBinding.inflate(inflater, container, false)
         return binding.root
@@ -63,7 +67,18 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
     }
 
     private fun setAdapter() {
-        binding.showlistRecycler.adapter = adapter
+        binding.showlistRecycler.adapter =
+            adapter.withLoadStateFooter(LoadShowsStateAdapter { adapter.retry() })
+        adapter.addLoadStateListener { state ->
+            with(binding) {
+                showlistRecycler.isVisible = state.refresh != LoadState.Loading
+                progressBar.isVisible = state.refresh == LoadState.Loading
+                errorTv.isVisible = if (state.refresh is LoadState.Error) {
+                    errorTv.text = (state.refresh as LoadState.Error).error.localizedMessage
+                    true
+                } else false
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -76,7 +91,6 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
         lifecycleScope.launch {
             viewModel.getList().collect {
                 adapter.submitData(it)
-                adapter.notifyDataSetChanged()
             }
 
         }

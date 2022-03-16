@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.fragments.ShowListFragment">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/showlist_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/showentity_item" />
+    android:layout_height="50dp">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -26,9 +15,20 @@
         android:id="@+id/error_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:gravity="center"
+        android:minHeight="50dp"
         android:visibility="gone"
         tools:text="ERROR" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/retry_tv"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:layout_gravity="center"
+        tools:text="retry button"
+        android:text="@string/retry_but_text"
+        android:textColor="@color/teal_200"
+        android:minHeight="50dp"/>
+
 
 </FrameLayout>
