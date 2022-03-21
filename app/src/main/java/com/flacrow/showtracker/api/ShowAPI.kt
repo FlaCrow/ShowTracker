@@ -3,6 +3,7 @@ package com.flacrow.showtracker.api
 import com.flacrow.showtracker.utils.Config
 import retrofit2.Retrofit
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ShowAPI {
@@ -14,4 +15,12 @@ interface ShowAPI {
     @GET("3/trending/all/week?api_key=${Config.API_KEY}")
     suspend fun getTrending(@Query("page") page: Int): ShowResponse
 
+    @GET("3/search/multi?api_key=${Config.API_KEY}")
+    suspend fun searchByQuery(@Query("query") query: String, @Query("page") page: Int): ShowResponse
+
+    @GET("3/movie/{movie_id}?api_key=${Config.API_KEY}")
+    suspend fun searchMovieById(@Path("movie_id") id: Int): MovieResponse
+
+    @GET("3/tv/{tv_id}?api_key=${Config.API_KEY}")
+    suspend fun searchTvById(@Path("tv_id") id: Int): TvResponse
 }
