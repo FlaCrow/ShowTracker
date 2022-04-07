@@ -4,9 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -66,6 +68,11 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
         getShowList()
+        setupMenu()
+    }
+
+    private fun setupMenu() {
+        binding.toolbar.inflateMenu(R.menu.menu_main)
     }
 
     private fun setAdapter() {

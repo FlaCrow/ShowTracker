@@ -12,4 +12,5 @@
     <string name="retry_but_text"><u>Retry?</u></string>
     <string name="tab_tv_shows">TV Shows</string>
     <string name="tab_movies">Movies</string>
+    <string name="action_search">Search</string>
 </resources>

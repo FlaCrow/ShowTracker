@@ -14,12 +14,15 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
+            android:id="@+id/toolbar"
             app:title="@string/app_name"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             android:layout_height="?actionBarSize"/>
 
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:tabMode="fixed">
 
             <com.google.android.material.tabs.TabItem
@@ -42,6 +45,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/showentity_item" />
 
