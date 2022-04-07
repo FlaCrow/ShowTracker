@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.ShowApp
+import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.data.models.Show
@@ -47,7 +49,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (context.applicationContext as ShowApp).appComponent.inject(this)
+        context.appComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -74,6 +76,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
                 showlistRecycler.isVisible = state.refresh != LoadState.Loading
                 progressBar.isVisible = state.refresh == LoadState.Loading
                 errorTv.isVisible = if (state.refresh is LoadState.Error) {
+                    showlistRecycler.isVisible = false
                     errorTv.text = (state.refresh as LoadState.Error).error.localizedMessage
                     true
                 } else false
