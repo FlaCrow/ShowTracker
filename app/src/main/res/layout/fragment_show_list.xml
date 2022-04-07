@@ -21,7 +21,8 @@
 
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/tab_size_default"
+            android:id="@+id/search_tabs"
             android:visibility="gone"
             app:tabMode="fixed">
 

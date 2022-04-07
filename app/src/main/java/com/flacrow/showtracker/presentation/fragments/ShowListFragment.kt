@@ -1,29 +1,28 @@
 package com.flacrow.showtracker.presentation.fragments
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isInvisible
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.paging.LoadStateAdapter
 import com.flacrow.showtracker.R
-import com.flacrow.showtracker.ShowApp
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
+import com.flacrow.showtracker.utils.ConstantValues
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +30,8 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+
+
 class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     private var _binding: FragmentShowListBinding? = null
@@ -69,10 +70,83 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
         setAdapter()
         getShowList()
         setupMenu()
+        setupTabListeners()
+    }
+
+    private fun setupTabListeners() {
+        binding.searchTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                Toast.makeText(context, "onTabSelected", Toast.LENGTH_SHORT).show()
+                viewModel.setSelectedTab(tab!!.position)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                Toast.makeText(context, "onTabUnselected", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                Toast.makeText(context, "onTabReselected", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun setupMenu() {
         binding.toolbar.inflateMenu(R.menu.menu_main)
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_search -> {
+                    val searchView = it.actionView as SearchView
+                    val valueAnimator =
+                        ValueAnimator.ofInt(
+                            0,
+                            (ConstantValues.TAB_LAYOUT_SIZE * (context?.resources?.displayMetrics?.density
+                                ?: ConstantValues.DEFAULT_DENSITY)).toInt()
+                        )
+                    valueAnimator.apply {
+                        duration = ConstantValues.ANIMATION_DURATION
+                        addUpdateListener {
+                            val tabLayoutParams = binding.searchTabs.layoutParams
+                            tabLayoutParams.height = it.animatedValue as Int
+                            binding.searchTabs.layoutParams = tabLayoutParams
+                        }
+                        searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
+                            when (isInFocus) {
+                                true -> {
+                                    binding.searchTabs.isVisible = isInFocus
+                                    valueAnimator.start()
+                                }
+
+                                false -> {
+                                    valueAnimator.reverse()
+                                }
+                            }
+                        }
+                    }
+
+                    searchView.setOnQueryTextListener(
+                        object : SearchView.OnQueryTextListener {
+                            override fun onQueryTextSubmit(query: String?): Boolean {
+                                lifecycleScope.launch {
+                                    viewModel.getMovieOrTvList(viewModel.tabSelected.value!!, query?: "")
+                                        .collect {
+                                            adapter.submitData(it)
+                                        }
+                                }
+                                return true
+                            }
+
+                            override fun onQueryTextChange(newText: String?): Boolean {
+                                return false
+                            }
+
+
+                        }
+                    )
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun setAdapter() {
@@ -99,7 +173,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     private fun getShowList() {
         lifecycleScope.launch {
-            viewModel.getList().collect {
+            viewModel.getTrendingList().collect {
                 adapter.submitData(it)
             }
 

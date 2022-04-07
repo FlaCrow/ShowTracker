@@ -13,11 +13,11 @@ data class Results(
     @SerializedName(value = "title", alternate = ["name"])
     val title: String,
     @SerializedName(value = "poster_path")
-    val poster: String,
+    val poster: String?,
     @SerializedName(value = "vote_average")
     val score: Float,
     @SerializedName(value = "media_type")
-    val mediaType: String,
+    val mediaType: String?,
     @SerializedName(value = "genre_ids")
     val genres: List<Int>,
 //    @SerializedName(value = "first_air_date", alternate = ["release_date"])
