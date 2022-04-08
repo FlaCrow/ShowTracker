@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.ShowentityItemBinding
 
@@ -50,6 +51,7 @@ class ShowListAdapter(private val navigate: (Show) -> Unit) :
                 Glide
                     .with(root.context)
                     .load("https://image.tmdb.org/t/p/w500/${showItem.poster}")
+                    .error(R.drawable.ic_placeholder_image_50)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(posterIv)
                 titleTv.text = showItem.title
