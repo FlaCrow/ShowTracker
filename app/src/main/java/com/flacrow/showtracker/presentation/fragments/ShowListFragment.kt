@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
@@ -99,7 +101,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
                     val valueAnimator =
                         ValueAnimator.ofInt(
                             0,
-                            (ConstantValues.TAB_LAYOUT_SIZE * (context?.resources?.displayMetrics?.density
+                            (14 * (context?.resources?.displayMetrics?.density
                                 ?: ConstantValues.DEFAULT_DENSITY)).toInt()
                         )
                     valueAnimator.apply {
@@ -110,6 +112,8 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
                             binding.searchTabs.layoutParams = tabLayoutParams
                         }
                         searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
+                            binding.searchTabs.getTabAt(0)!!.view.isClickable = isInFocus
+                            binding.searchTabs.getTabAt(1)!!.view.isClickable = isInFocus
                             when (isInFocus) {
                                 true -> {
                                     binding.searchTabs.isVisible = isInFocus
@@ -127,7 +131,10 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
                         object : SearchView.OnQueryTextListener {
                             override fun onQueryTextSubmit(query: String?): Boolean {
                                 lifecycleScope.launch {
-                                    viewModel.getMovieOrTvList(viewModel.tabSelected.value!!, query?: "")
+                                    viewModel.getMovieOrTvList(
+                                        viewModel.tabSelected.value!!,
+                                        query ?: ""
+                                    )
                                         .collect {
                                             adapter.submitData(it)
                                         }
@@ -182,5 +189,13 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     private fun navigate(show: Show) {
         Toast.makeText(this.context, show.title, Toast.LENGTH_LONG).show()
+        when (show.mediaType) {
+            "tv" ->
+                findNavController().navigate(
+                    ShowListFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(show.id)
+                )
+            "movie" -> Toast.makeText(this.context, show.title, Toast.LENGTH_LONG).show()
+
+        }
     }
 }

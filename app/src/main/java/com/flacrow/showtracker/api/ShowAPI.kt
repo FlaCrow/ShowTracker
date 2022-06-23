@@ -26,5 +26,5 @@ interface ShowAPI {
     suspend fun searchMovieById(@Path("movie_id") id: Int): MovieResponse
 
     @GET("3/tv/{tv_id}?api_key=${Config.API_KEY}")
-    suspend fun searchTvById(@Path("tv_id") id: Int): TvResponse
+    suspend fun searchTvById(@Path("tv_id") id: Int): TvDetailedResponse
 }

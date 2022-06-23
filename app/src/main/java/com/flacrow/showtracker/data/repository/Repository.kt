@@ -3,8 +3,14 @@ package com.flacrow.showtracker.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.flacrow.showtracker.api.ShowAPI
+import com.flacrow.showtracker.api.TvDetailedResponse
 import com.flacrow.showtracker.data.PagingSources.ShowsSearchPagingSource
 import com.flacrow.showtracker.data.PagingSources.ShowsTrendingPagingSource
+import com.flacrow.showtracker.data.models.TvDetailed
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val showAPI: ShowAPI) {
@@ -26,4 +32,9 @@ class Repository @Inject constructor(private val showAPI: ShowAPI) {
             )
         })
         .flow
+
+    fun getTvDetailed(id: Int): Flow<TvDetailedResponse> = flow {
+        emit(showAPI.searchTvById(id))
+    }.flowOn(Dispatchers.IO)
+
 }

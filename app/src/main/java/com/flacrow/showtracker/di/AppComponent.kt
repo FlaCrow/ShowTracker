@@ -1,6 +1,8 @@
 package com.flacrow.showtracker.di
 
 import android.app.Application
+import com.flacrow.showtracker.presentation.fragments.SeriesDetailsFragment
+import com.flacrow.showtracker.presentation.fragments.SeriesDetailsFragmentArgs
 import com.flacrow.showtracker.presentation.fragments.ShowListFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -19,6 +21,7 @@ interface AppComponent {
     }
 
     fun inject(fragment: ShowListFragment)
+    fun inject(fragment: SeriesDetailsFragment)
 
 }
 
