@@ -18,14 +18,23 @@
                 android:id="@+id/backdropIv"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/poster_content_desc" />
 
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/mainDetailView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
@@ -42,7 +51,6 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="lorem"
                 app:layout_constraintEnd_toStartOf="@id/series_year_tv"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,54 +63,55 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="2018"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/series_title_tv"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="2018" />
 
             <TextView
-                android:id="@+id/userscore"
+                android:id="@+id/userscore_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:text="98%"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="@id/status_group"
                 app:layout_constraintEnd_toStartOf="@id/status_group"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/series_title_tv"
-                tools:text="80%" />
+                app:layout_constraintTop_toTopOf="@id/status_group"
+                tools:text="9.9" />
 
             <RadioGroup
                 android:id="@+id/status_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="64dp"
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@id/genre_list_card"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/userscore"
-                app:layout_constraintTop_toBottomOf="@id/series_title_tv">
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/userscore_tv"
+                app:layout_constraintTop_toBottomOf="@id/series_year_tv">
 
                 <RadioButton
                     android:id="@+id/ptw_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
                     android:button="@drawable/ic_baseline_ptw_24" />
 
                 <RadioButton
                     android:id="@+id/watching_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
                     android:button="@drawable/ic_baseline_watching_24" />
 
                 <RadioButton
                     android:id="@+id/cmpl_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:button="@drawable/ic_baseline_cmpl_24" />
             </RadioGroup>
 
@@ -123,7 +132,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
-                    android:text="Action, Comedy, Drama, Horror"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/status_group"
@@ -137,7 +145,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Tagline Text Goes Here"
                 app:layout_constraintBottom_toTopOf="@id/overview_tv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +157,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Overview Goes Here"
                 app:layout_constraintBottom_toTopOf="@id/seasons_recycler"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -161,10 +167,10 @@
                 android:id="@+id/seasons_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/overview_tv" />
+                app:layout_constraintTop_toBottomOf="@id/overview_tv"
+                tools:listitem="@layout/seasons_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

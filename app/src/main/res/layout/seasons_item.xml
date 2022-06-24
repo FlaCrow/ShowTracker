@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/season_poster_iv"
+            android:layout_width="133dp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toStartOf="@id/season_num_tv"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:src="@tools:sample/avatars"
+            android:contentDescription="@string/poster_content_desc" />
+
+        <TextView
+            android:id="@+id/season_num_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/season_poster_iv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Season Name" />
+
+        <TextView
+            android:id="@+id/air_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/season_poster_iv"
+            app:layout_constraintTop_toBottomOf="@id/season_num_tv"
+            tools:text="Aired: 2020-12-12" />
+
+        <TextView
+            android:id="@+id/watched_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/episodes_watched"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ep_done_tv"
+            app:layout_constraintStart_toEndOf="@id/season_poster_iv"
+            app:layout_constraintTop_toBottomOf="@id/air_date_tv"
+            tools:text="Episodes Watched: " />
+
+        <TextView
+            android:id="@+id/ep_done_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/watched_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/watched_tv"
+            app:layout_constraintTop_toBottomOf="@id/air_date_tv"
+            tools:text="12 " />
+
+        <TextView
+            android:id="@+id/out_of_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/out_of"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/ep_done_tv"
+            app:layout_constraintBottom_toBottomOf="@id/ep_done_tv"
+            app:layout_constraintStart_toEndOf="@id/ep_done_tv"
+            app:layout_constraintTop_toTopOf="@id/ep_done_tv"
+            tools:text="out of " />
+
+        <TextView
+            android:id="@+id/max_ep_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/out_of_tv"
+            app:layout_constraintStart_toEndOf="@id/out_of_tv"
+            app:layout_constraintTop_toTopOf="@id/out_of_tv"
+            tools:text="12" />
+
+        <ImageButton
+            android:id="@+id/plus_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_arrow_up_14"
+            app:layout_constraintBottom_toTopOf="@id/ep_done_tv"
+            app:layout_constraintEnd_toEndOf="@id/ep_done_tv"
+            app:layout_constraintStart_toStartOf="@id/ep_done_tv"
+            android:contentDescription="@string/add_button_content_desc" />
+
+        <ImageButton
+            android:id="@+id/minus_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_arrow_down_14"
+            app:layout_constraintEnd_toEndOf="@id/ep_done_tv"
+            app:layout_constraintStart_toStartOf="@id/ep_done_tv"
+            app:layout_constraintTop_toBottomOf="@id/ep_done_tv"
+            android:contentDescription="@string/subtract_button_content_desc" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

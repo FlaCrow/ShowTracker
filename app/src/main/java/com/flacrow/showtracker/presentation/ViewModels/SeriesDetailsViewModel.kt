@@ -2,24 +2,26 @@ package com.flacrow.showtracker.presentation.ViewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.flacrow.showtracker.api.Genres
+import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 class SeriesDetailsViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SeriesDetailsState.Success(TvDetailed()))
+    private val _uiState: MutableStateFlow<SeriesDetailsState> =
+        MutableStateFlow(SeriesDetailsState.Empty)
     val uiState: StateFlow<SeriesDetailsState> = _uiState
 
     fun getData(id: Int) {
         viewModelScope.launch {
-            repository.getTvDetailed(id).collect { tvDetailed ->
+            _uiState.value = SeriesDetailsState.Loading
+            repository.getTvDetailed(id).catch { e ->
+                _uiState.value = SeriesDetailsState.Error(e)
+            }.collect { tvDetailed ->
                 _uiState.value = SeriesDetailsState.Success(tvDetailed.toInternalModel())
             }
         }
@@ -28,5 +30,37 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
     sealed class SeriesDetailsState {
         data class Success(val tvDetailed: TvDetailed) : SeriesDetailsState()
         data class Error(val exception: Throwable) : SeriesDetailsState()
+        object Loading : SeriesDetailsState()
+        object Empty : SeriesDetailsState()
+
     }
+
+    fun addCounter(position: Int) {
+        _uiState.update { curUiState ->
+
+            (curUiState as SeriesDetailsState.Success)
+            val seasonListCopy = curUiState.tvDetailed.seasons.map { it.copy() }
+            if (seasonListCopy[position].epDone != seasonListCopy[position].episode_count)
+                seasonListCopy[position].epDone += 1
+            val tvDetailedCopy: TvDetailed = curUiState.tvDetailed.copy(
+                seasons = seasonListCopy
+            )
+            curUiState.copy(tvDetailedCopy)
+        }
+    }
+
+    fun subCounter(position: Int) {
+        _uiState.update { curUiState ->
+
+            (curUiState as SeriesDetailsState.Success)
+            val seasonListCopy = curUiState.tvDetailed.seasons.map { it.copy() }
+                if (seasonListCopy[position].epDone > 0)
+                        seasonListCopy[position].epDone -= 1
+            val tvDetailedCopy: TvDetailed = curUiState.tvDetailed.copy(
+                seasons = seasonListCopy
+            )
+            curUiState.copy(tvDetailedCopy)
+        }
+    }
+
 }

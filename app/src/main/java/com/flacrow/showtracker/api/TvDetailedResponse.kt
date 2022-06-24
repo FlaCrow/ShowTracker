@@ -14,7 +14,7 @@ data class TvDetailedResponse(
     val overview: String,
     @SerializedName(value = "poster_path")
     val posterUrl: String,
-    val seasons: List<Seasons>,
+    val seasons: List<Season>,
     val status: String,
     val tagline: String,
     @SerializedName(value = "vote_average")
@@ -31,7 +31,8 @@ data class TvDetailedResponse(
             posterUrl = this.posterUrl,
             seasons = this.seasons,
             status = this.status,
-            tagline = this.tagline
+            tagline = this.tagline,
+            rating = this.rating
         )
     }
 }
