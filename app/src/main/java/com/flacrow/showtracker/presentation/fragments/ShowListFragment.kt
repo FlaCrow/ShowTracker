@@ -39,6 +39,8 @@ import javax.inject.Inject
 class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     private var _binding: FragmentShowListBinding? = null
+    private var hasInitiatedInitialCall = false
+
     private val valueAnimator =
         ValueAnimator.ofInt(
             0,
@@ -78,9 +80,12 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        getShowList()
         setupMenu()
         setupTabListeners()
+        if (!hasInitiatedInitialCall) {
+            getShowList()
+            hasInitiatedInitialCall = true
+        }
     }
 
     private fun setupTabListeners() {
@@ -101,6 +106,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
     }
 
     private fun setupMenu() {
+        //binding.toolbar.menu.clear()
         binding.toolbar.inflateMenu(R.menu.menu_main)
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -114,8 +120,8 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
                             binding.searchTabs.layoutParams = tabLayoutParams
                         }
                         searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
-                            binding.searchTabs.getTabAt(0)!!.view.isClickable = isInFocus
-                            binding.searchTabs.getTabAt(1)!!.view.isClickable = isInFocus
+                            binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
+                            binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
                             when (isInFocus) {
                                 true -> {
                                     binding.searchTabs.isVisible = isInFocus

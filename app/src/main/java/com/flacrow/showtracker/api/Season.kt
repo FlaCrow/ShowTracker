@@ -5,6 +5,6 @@ data class Season(
     val episode_count: Int,
     val name: String,
     var epDone: Int = 0,
-    val poster_path: String,
+    val poster_path: String? = null,
     val season_number: Int
 )
