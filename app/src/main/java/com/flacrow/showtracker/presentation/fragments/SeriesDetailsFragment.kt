@@ -14,7 +14,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
-import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.databinding.FragmentSeriesDetailsBinding
@@ -34,8 +33,8 @@ class SeriesDetailsFragment : Fragment(R.layout.fragment_series_details) {
     private val binding get() = _binding!!
     private val adapter =
         SeasonsListAdapter(
-            onAddEpCounter = { position -> addEpCounter(position) },
-            onSubEpCounter = { position -> subEpCounter(position) })
+            onAddEpCounter = { position -> onAddEpCounterClick(position) },
+            onSubEpCounter = { position -> onSubEpCounterClick(position) })
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -114,15 +113,20 @@ class SeriesDetailsFragment : Fragment(R.layout.fragment_series_details) {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    
     private fun setAdapter() {
         binding.seasonsRecycler.adapter = adapter
     }
 
-    private fun addEpCounter(position: Int) {
+    private fun onAddEpCounterClick(position: Int) {
         viewModel.addCounter(position)
     }
 
-    private fun subEpCounter(position: Int) {
+    private fun onSubEpCounterClick(position: Int) {
         viewModel.subCounter(position)
     }
 }

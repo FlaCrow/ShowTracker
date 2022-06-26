@@ -26,29 +26,39 @@ class ShowsSearchPagingSource(
                 if (searchType == ConstantValues.SEARCH_TYPE_MOVIES) showAPI.searchMovieByQuery(
                     query,
                     pageNumber
-                ).results
+                ).results.map {
+                    Show(
+                        id = it.id,
+                        title = it.title,
+                        poster = it.poster ?: " ",
+                        score = it.score,
+                        mediaType = "movie",
+                        genres = it.genres,
+                        //dateAiring = it.dateAiring,
+                        overview = it.overview
+                    )
+                }
                 else showAPI.searchTvByQuery(
                     query,
                     pageNumber
-                ).results
+                ).results.map {
+                    Show(
+                        id = it.id,
+                        title = it.title,
+                        poster = it.poster ?: " ",
+                        score = it.score,
+                        mediaType = "tv",
+                        genres = it.genres,
+                        //dateAiring = it.dateAiring,
+                        overview = it.overview
+                    )
+                }
 
-            val dataMapped = data.map {
-                Show(
-                    id = it.id,
-                    title = it.title,
-                    poster = it.poster?: " ",
-                    score = it.score,
-                    mediaType = it.mediaType?: " ",
-                    genres = it.genres,
-                    //dateAiring = it.dateAiring,
-                    overview = it.overview
-                )
-            }
 
             LoadResult.Page(
-                data = dataMapped,
+                data = data,
                 prevKey = if (pageNumber == ConstantValues.STARTING_PAGE) null else pageNumber - 1,
-                nextKey = if (dataMapped.isEmpty()) null else pageNumber + 1
+                nextKey = if (data.isEmpty()) null else pageNumber + 1
             )
         } catch (throwable: Throwable) {
             var exception = throwable

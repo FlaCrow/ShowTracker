@@ -5,11 +5,12 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.get
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +25,7 @@ import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.utils.ConstantValues
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -37,6 +39,12 @@ import javax.inject.Inject
 class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     private var _binding: FragmentShowListBinding? = null
+    private val valueAnimator =
+        ValueAnimator.ofInt(
+            0,
+            (30 * (context?.resources?.displayMetrics?.density
+                ?: ConstantValues.DEFAULT_DENSITY)).toInt()
+        )
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -77,16 +85,16 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     private fun setupTabListeners() {
         binding.searchTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
+            override fun onTabSelected(tab: TabLayout.Tab) {
                 Toast.makeText(context, "onTabSelected", Toast.LENGTH_SHORT).show()
-                viewModel.setSelectedTab(tab!!.position)
+                viewModel.setSelectedTab(tab.position)
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            override fun onTabUnselected(tab: TabLayout.Tab) {
                 Toast.makeText(context, "onTabUnselected", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onTabReselected(tab: TabLayout.Tab?) {
+            override fun onTabReselected(tab: TabLayout.Tab) {
                 Toast.makeText(context, "onTabReselected", Toast.LENGTH_SHORT).show()
             }
         })
@@ -98,12 +106,6 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
             when (it.itemId) {
                 R.id.action_search -> {
                     val searchView = it.actionView as SearchView
-                    val valueAnimator =
-                        ValueAnimator.ofInt(
-                            0,
-                            (14 * (context?.resources?.displayMetrics?.density
-                                ?: ConstantValues.DEFAULT_DENSITY)).toInt()
-                        )
                     valueAnimator.apply {
                         duration = ConstantValues.ANIMATION_DURATION
                         addUpdateListener {
@@ -132,7 +134,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
                             override fun onQueryTextSubmit(query: String?): Boolean {
                                 lifecycleScope.launch {
                                     viewModel.getMovieOrTvList(
-                                        viewModel.tabSelected.value!!,
+                                        viewModel.tabSelected.value,
                                         query ?: ""
                                     )
                                         .collect {
@@ -174,6 +176,7 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        valueAnimator.removeAllUpdateListeners()
         _binding = null
     }
 

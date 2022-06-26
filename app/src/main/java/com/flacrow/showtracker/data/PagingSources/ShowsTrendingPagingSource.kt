@@ -17,18 +17,21 @@ class ShowsTrendingPagingSource(private val showAPI: ShowAPI) : PagingSource<Int
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Show> {
         return try {
             val pageNumber = params.key ?: ConstantValues.STARTING_PAGE
-            val data = showAPI.getTrending(pageNumber).results.map {
-                Show(
-                    id = it.id,
-                    title = it.title,
-                    poster = it.poster?: " ",
-                    score = it.score,
-                    mediaType = it.mediaType?: " ",
-                    genres = it.genres,
-                    //dateAiring = it.dateAiring,
-                    overview = it.overview
-                )
-            }
+            val data =
+                showAPI.getTrending(pageNumber).results
+                    .filter { it.mediaType != "person" }
+                    .map {
+                        Show(
+                            id = it.id,
+                            title = it.title,
+                            poster = it.poster ?: " ",
+                            score = it.score,
+                            mediaType = it.mediaType,
+                            genres = it.genres,
+                            //dateAiring = it.dateAiring,
+                            overview = it.overview
+                        )
+                    }
 
             LoadResult.Page(
                 data = data,

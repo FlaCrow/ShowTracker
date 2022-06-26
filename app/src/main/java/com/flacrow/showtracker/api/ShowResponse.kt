@@ -17,7 +17,7 @@ data class Results(
     @SerializedName(value = "vote_average")
     val score: Float,
     @SerializedName(value = "media_type")
-    val mediaType: String?,
+    var mediaType: String,
     @SerializedName(value = "genre_ids")
     val genres: List<Int>,
 //    @SerializedName(value = "first_air_date", alternate = ["release_date"])

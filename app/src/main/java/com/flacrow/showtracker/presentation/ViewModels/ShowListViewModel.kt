@@ -9,25 +9,30 @@ import androidx.paging.cachedIn
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.data.repository.Repository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class ShowListViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
     private var currentData: Flow<PagingData<Show>>? = null
-    private val tabSelectedMutable = MutableLiveData(0)
-    val tabSelected: LiveData<Int> by this::tabSelectedMutable
+    private val tabSelectedMutable: MutableStateFlow<Int> =
+        MutableStateFlow(0)
+    val tabSelected: StateFlow<Int> = this.tabSelectedMutable
 
     fun getTrendingList(): Flow<PagingData<Show>> {
-        var newData = repository.getTrendingFlow().cachedIn(viewModelScope)
+        val newData = repository.getTrendingFlow().cachedIn(viewModelScope)
         currentData = newData
         return newData
     }
 
     fun setSelectedTab(tab: Int) {
-        tabSelectedMutable.value = tab
+        //tabSelectedMutable.value = tab
+        this.tabSelectedMutable.update { tab }
     }
 
     fun getMovieOrTvList(type: Int, query: String): Flow<PagingData<Show>> {
-        var newData =
+        val newData =
             repository.getMovieOrTvByQuery(type = type, query = query).cachedIn(viewModelScope)
         currentData = newData
         return newData
