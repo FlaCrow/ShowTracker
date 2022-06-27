@@ -17,7 +17,7 @@ import javax.inject.Inject
 class ShowListViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
     private var currentData: Flow<PagingData<Show>>? = null
     private val tabSelectedMutable: MutableStateFlow<Int> =
-        MutableStateFlow(0)
+        MutableStateFlow(-1)
     val tabSelected: StateFlow<Int> = this.tabSelectedMutable
 
     fun getTrendingList(): Flow<PagingData<Show>> {

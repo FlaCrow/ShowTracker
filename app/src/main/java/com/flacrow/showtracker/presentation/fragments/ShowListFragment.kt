@@ -106,63 +106,110 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
     }
 
     private fun setupMenu() {
-        //binding.toolbar.menu.clear()
         binding.toolbar.inflateMenu(R.menu.menu_main)
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_search -> {
-                    val searchView = it.actionView as SearchView
-                    valueAnimator.apply {
-                        duration = ConstantValues.ANIMATION_DURATION
-                        addUpdateListener {
-                            val tabLayoutParams = binding.searchTabs.layoutParams
-                            tabLayoutParams.height = it.animatedValue as Int
-                            binding.searchTabs.layoutParams = tabLayoutParams
-                        }
-                        searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
-                            binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
-                            binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
-                            when (isInFocus) {
-                                true -> {
-                                    binding.searchTabs.isVisible = isInFocus
-                                    valueAnimator.start()
-                                }
-
-                                false -> {
-                                    valueAnimator.reverse()
-                                }
-                            }
-                        }
+        val searchView = binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
+        valueAnimator.apply {
+            duration = ConstantValues.ANIMATION_DURATION
+            addUpdateListener {
+                val tabLayoutParams = binding.searchTabs.layoutParams
+                tabLayoutParams.height = it.animatedValue as Int
+                binding.searchTabs.layoutParams = tabLayoutParams
+            }
+            searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
+                binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
+                binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
+                binding.searchTabs.getTabAt(viewModel.tabSelected.value)?.select()
+                when (isInFocus) {
+                    true -> {
+                        binding.searchTabs.isVisible = isInFocus
+                        valueAnimator.start()
                     }
 
-                    searchView.setOnQueryTextListener(
-                        object : SearchView.OnQueryTextListener {
-                            override fun onQueryTextSubmit(query: String?): Boolean {
-                                lifecycleScope.launch {
-                                    viewModel.getMovieOrTvList(
-                                        viewModel.tabSelected.value,
-                                        query ?: ""
-                                    )
-                                        .collect {
-                                            adapter.submitData(it)
-                                        }
-                                }
-                                return true
-                            }
-
-                            override fun onQueryTextChange(newText: String?): Boolean {
-                                return false
-                            }
-
-
-                        }
-                    )
-                    true
+                    false -> {
+                        valueAnimator.reverse()
+                    }
                 }
-                else -> false
             }
         }
+
+        searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    lifecycleScope.launch {
+                        viewModel.getMovieOrTvList(
+                            viewModel.tabSelected.value,
+                            query ?: ""
+                        )
+                            .collect {
+                                adapter.submitData(it)
+                            }
+                    }
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+
+            }
+        )
     }
+//        binding.toolbar.setOnMenuItemClickListener {
+//            when (it.itemId) {
+//                R.id.action_search -> {
+//                    val searchView = it.actionView as SearchView
+//                    valueAnimator.apply {
+//                        duration = ConstantValues.ANIMATION_DURATION
+//                        addUpdateListener {
+//                            val tabLayoutParams = binding.searchTabs.layoutParams
+//                            tabLayoutParams.height = it.animatedValue as Int
+//                            binding.searchTabs.layoutParams = tabLayoutParams
+//                        }
+//                        searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
+//                            binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
+//                            binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
+//                            when (isInFocus) {
+//                                true -> {
+//                                    binding.searchTabs.isVisible = isInFocus
+//                                    valueAnimator.start()
+//                                }
+//
+//                                false -> {
+//                                    valueAnimator.reverse()
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    searchView.setOnQueryTextListener(
+//                        object : SearchView.OnQueryTextListener {
+//                            override fun onQueryTextSubmit(query: String?): Boolean {
+//                                lifecycleScope.launch {
+//                                    viewModel.getMovieOrTvList(
+//                                        viewModel.tabSelected.value,
+//                                        query ?: ""
+//                                    )
+//                                        .collect {
+//                                            adapter.submitData(it)
+//                                        }
+//                                }
+//                                return true
+//                            }
+//
+//                            override fun onQueryTextChange(newText: String?): Boolean {
+//                                return false
+//                            }
+//
+//
+//                        }
+//                    )
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
+//    }
 
     private fun setAdapter() {
         binding.showlistRecycler.adapter =
