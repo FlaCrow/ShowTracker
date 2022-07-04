@@ -17,6 +17,7 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.databinding.FragmentSeriesDetailsBinding
+import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
 import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import kotlinx.coroutines.flow.collect
@@ -24,36 +25,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class SeriesDetailsFragment : Fragment(R.layout.fragment_series_details) {
+class SeriesDetailsFragment :
+    BaseFragment<FragmentSeriesDetailsBinding, SeriesDetailsViewModel>(FragmentSeriesDetailsBinding::inflate) {
 
-    private var _binding: FragmentSeriesDetailsBinding? = null
+    override val viewModel: SeriesDetailsViewModel by viewModels {
+        viewModelFactory
+    }
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
     private val adapter =
         SeasonsListAdapter(
             onAddEpCounter = { position -> onAddEpCounterClick(position) },
             onSubEpCounter = { position -> onSubEpCounterClick(position) })
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel: SeriesDetailsViewModel by viewModels {
-        viewModelFactory
-    }
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        context.appComponent.inject(this)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSeriesDetailsBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun setupDependencies() {
+        requireContext().appComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,7 +88,7 @@ class SeriesDetailsFragment : Fragment(R.layout.fragment_series_details) {
                 } else "."
             }
             genreTv.text = buffer
-            //userscore.text = tvDetailed.rating.toString()
+            userscoreTv.text = tvDetailed.rating.toString()
             Glide
                 .with(requireContext())
                 .load("https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}")
@@ -113,11 +98,7 @@ class SeriesDetailsFragment : Fragment(R.layout.fragment_series_details) {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-    
+
     private fun setAdapter() {
         binding.seasonsRecycler.adapter = adapter
     }
@@ -129,4 +110,6 @@ class SeriesDetailsFragment : Fragment(R.layout.fragment_series_details) {
     private fun onSubEpCounterClick(position: Int) {
         viewModel.subCounter(position)
     }
+
+
 }

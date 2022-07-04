@@ -1,9 +1,9 @@
 package com.flacrow.showtracker.di
 
 import android.app.Application
-import com.flacrow.showtracker.presentation.fragments.SeriesDetailsFragment
-import com.flacrow.showtracker.presentation.fragments.SeriesDetailsFragmentArgs
-import com.flacrow.showtracker.presentation.fragments.ShowListFragment
+import androidx.lifecycle.ViewModel
+import androidx.viewbinding.ViewBinding
+import com.flacrow.showtracker.presentation.fragments.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -20,9 +20,9 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    fun inject(fragment: ShowListFragment)
+    fun inject(fragment: MovieDetailsFragment)
     fun inject(fragment: SeriesDetailsFragment)
-
+    fun inject(fragment: ShowListFragment)
 }
 
 @Module(includes = [DataModule::class, NetworkModule::class, ViewModelModule::class])

@@ -23,6 +23,7 @@ import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
+import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.utils.ConstantValues
 import com.google.android.material.appbar.MaterialToolbar
@@ -36,9 +37,8 @@ import javax.inject.Inject
  */
 
 
-class ShowListFragment : Fragment(R.layout.fragment_show_list) {
-
-    private var _binding: FragmentShowListBinding? = null
+class ShowListFragment :
+    BaseFragment<FragmentShowListBinding, ShowListViewModel>(FragmentShowListBinding::inflate) {
     private var hasInitiatedInitialCall = false
 
     private val valueAnimator =
@@ -48,34 +48,18 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
                 ?: ConstantValues.DEFAULT_DENSITY)).toInt()
         )
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
+    override val viewModel: ShowListViewModel by viewModels {
+        viewModelFactory
+    }
 
     private val adapter =
         ShowListAdapter { show -> navigate(show) }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel: ShowListViewModel by viewModels {
-        viewModelFactory
+
+    override fun setupDependencies() {
+        requireContext().appComponent.inject(this)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        context.appComponent.inject(this)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        _binding = FragmentShowListBinding.inflate(inflater, container, false)
-        return binding.root
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -230,7 +214,6 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
     override fun onDestroyView() {
         super.onDestroyView()
         valueAnimator.removeAllUpdateListeners()
-        _binding = null
     }
 
 
@@ -244,13 +227,15 @@ class ShowListFragment : Fragment(R.layout.fragment_show_list) {
     }
 
     private fun navigate(show: Show) {
-        Toast.makeText(this.context, show.title, Toast.LENGTH_LONG).show()
         when (show.mediaType) {
             "tv" ->
                 findNavController().navigate(
                     ShowListFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(show.id)
                 )
-            "movie" -> Toast.makeText(this.context, show.title, Toast.LENGTH_LONG).show()
+            "movie" ->
+                findNavController().navigate(
+                    ShowListFragmentDirections.actionShowListFragmentToMovieDetailsFragment(show.id)
+                )
 
         }
     }
