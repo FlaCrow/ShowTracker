@@ -66,12 +66,16 @@ class MovieDetailsFragment :
             mainDetailView.isVisible = true
             progressBar.isVisible = false
             var buffer = ""
-            seriesTitleTv.text = movieDetailed.title
-            seriesYearTv.text = requireContext().getString(
-                R.string.year_parenthesis,
-                movieDetailed.firstAirDate.dropLast(6)
-            )
-            overviewTv.text = movieDetailed.overview
+            movieTitleTv.text = if (movieDetailed.firstAirDate.isEmpty()) movieDetailed.title
+            else {
+                requireContext().getString(
+                    R.string.title_year_parenthesis,
+                    movieDetailed.title,
+                    movieDetailed.firstAirDate.dropLast(6)
+                )
+            }
+            overviewTv.text = if (movieDetailed.overview.isEmpty()) requireContext().getText(R.string.no_overview)
+                else movieDetailed.overview
             taglineTv.text = movieDetailed.tagline
             for (i in movieDetailed.genres.indices) {
                 buffer += movieDetailed.genres.get(i).name + if (movieDetailed.genres.indices.last != i) {

@@ -45,29 +45,18 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/series_title_tv"
-                android:layout_width="match_parent"
+                android:id="@+id/movie_title_tv"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintEnd_toStartOf="@id/series_year_tv"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Breaking Bad" />
-
-            <TextView
-                android:id="@+id/series_year_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/series_title_tv"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="2018" />
 
             <TextView
                 android:id="@+id/userscore_tv"
@@ -94,7 +83,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@id/userscore_tv"
-                app:layout_constraintTop_toBottomOf="@id/series_year_tv">
+                app:layout_constraintTop_toBottomOf="@id/movie_title_tv">
 
                 <RadioButton
                     android:id="@+id/ptw_button"

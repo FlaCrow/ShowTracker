@@ -75,12 +75,17 @@ class SeriesDetailsFragment :
             mainDetailView.isVisible = true
             progressBar.isVisible = false
             var buffer = ""
-            seriesTitleTv.text = tvDetailed.title
-            seriesYearTv.text = requireContext().getString(
-                R.string.year_parenthesis,
-                tvDetailed.firstAirDate.dropLast(6)
-            )
-            overviewTv.text = tvDetailed.overview
+            seriesTitleTv.text = if (tvDetailed.firstAirDate.isEmpty()) tvDetailed.title
+            else {
+                requireContext().getString(
+                    R.string.title_year_parenthesis,
+                    tvDetailed.title,
+                    tvDetailed.firstAirDate.dropLast(6)
+                )
+            }
+            overviewTv.text =
+                if (tvDetailed.overview.isEmpty()) requireContext().getText(R.string.no_overview)
+                else tvDetailed.overview
             taglineTv.text = tvDetailed.tagline
             for (i in tvDetailed.genres.indices) {
                 buffer += tvDetailed.genres.get(i).name + if (tvDetailed.genres.indices.last != i) {
@@ -93,6 +98,7 @@ class SeriesDetailsFragment :
                 .with(requireContext())
                 .load("https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}")
                 .error(R.drawable.ic_placeholder_image_50)
+                .centerInside()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(backdropIv)
         }
