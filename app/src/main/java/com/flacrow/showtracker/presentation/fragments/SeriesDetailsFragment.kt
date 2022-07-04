@@ -54,13 +54,21 @@ class SeriesDetailsFragment :
                         uiState.tvDetailed
                     )
                     is SeriesDetailsViewModel.SeriesDetailsState.Error
-                    -> throw uiState.exception
+                    -> showError(uiState.exception)
                     is SeriesDetailsViewModel.SeriesDetailsState.Empty -> {}
                 }
             }
 
         }
 
+    }
+
+    private fun showError(exception: Throwable) {
+        with(binding) {
+            progressBar.isVisible = false
+            errorDetailedSeriesTv.isVisible = true
+            errorDetailedSeriesTv.text = exception.localizedMessage
+        }
     }
 
     private fun showProgressBar() {
@@ -72,6 +80,7 @@ class SeriesDetailsFragment :
         setAdapter()
         adapter.submitList(tvDetailed.seasons)
         with(binding) {
+            binding.errorDetailedSeriesTv.isVisible = false
             mainDetailView.isVisible = true
             progressBar.isVisible = false
             var buffer = ""

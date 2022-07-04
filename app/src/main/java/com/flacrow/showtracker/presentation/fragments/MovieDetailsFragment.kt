@@ -23,6 +23,7 @@ import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
 import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 class MovieDetailsFragment :
@@ -48,13 +49,21 @@ class MovieDetailsFragment :
                         uiState.movieDetailed
                     )
                     is MovieDetailsViewModel.MovieDetailsState.Error
-                    -> throw uiState.exception
+                    -> showError(uiState.exception)
                     is MovieDetailsViewModel.MovieDetailsState.Empty -> {}
                 }
             }
 
         }
     }
+
+    private fun showError(exception: Throwable) {
+        with(binding){
+            progressBar.isVisible = false
+            errorDetailedMovieTv.isVisible = true
+            errorDetailedMovieTv.text = exception.localizedMessage
+        }
+        }
 
     private fun showProgressBar() {
         binding.mainDetailView.isVisible = false
@@ -63,6 +72,7 @@ class MovieDetailsFragment :
 
     private fun updateUi(movieDetailed: MovieDetailed) {
         with(binding) {
+            binding.errorDetailedMovieTv.isVisible = true
             mainDetailView.isVisible = true
             progressBar.isVisible = false
             var buffer = ""
@@ -74,7 +84,8 @@ class MovieDetailsFragment :
                     movieDetailed.firstAirDate.dropLast(6)
                 )
             }
-            overviewTv.text = if (movieDetailed.overview.isEmpty()) requireContext().getText(R.string.no_overview)
+            overviewTv.text =
+                if (movieDetailed.overview.isEmpty()) requireContext().getText(R.string.no_overview)
                 else movieDetailed.overview
             taglineTv.text = movieDetailed.tagline
             for (i in movieDetailed.genres.indices) {
