@@ -24,10 +24,13 @@
         <entry key="app/src/main/res/layout/error_item.xml" value="0.16757246376811594" />
         <entry key="app/src/main/res/layout/fragment_detail_series.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.16757246376811594" />
+        <entry key="app/src/main/res/layout/fragment_movie_detailed.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_movie_details.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_series_details.xml" value="0.2563131313131313" />
+        <entry key="app/src/main/res/layout/fragment_series_details.xml" value="0.26556016597510373" />
         <entry key="app/src/main/res/layout/fragment_show_list.xml" value="0.15" />
         <entry key="app/src/main/res/layout/loading_item.xml" value="0.16757246376811594" />
+        <entry key="app/src/main/res/layout/production_company_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/showentity_item.xml" value="0.16757246376811594" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.19270833333333334" />
       </map>

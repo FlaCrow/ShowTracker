@@ -21,8 +21,8 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
             _uiState.value = SeriesDetailsState.Loading
             repository.getTvDetailed(id).catch { e ->
                 _uiState.value = SeriesDetailsState.Error(e)
-            }.collect { tvDetailed ->
-                _uiState.value = SeriesDetailsState.Success(tvDetailed.toInternalModel())
+            }.collect { tvDetailedResponse ->
+                _uiState.value = SeriesDetailsState.Success(tvDetailedResponse.toInternalModel())
             }
         }
     }

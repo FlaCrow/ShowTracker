@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_showListFragment_to_seriesDetailsFragment"
             app:destination="@id/seriesDetailsFragment" />
+        <action
+            android:id="@+id/action_showListFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/seriesDetailsFragment"
@@ -20,6 +23,14 @@
         android:label="SeriesDetailsFragment" >
         <argument
             android:name="seriesId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.MovieDetailsFragment"
+        android:label="MovieDetailsFragment" >
+        <argument
+            android:name="movieId"
             app:argType="integer" />
     </fragment>
 </navigation>

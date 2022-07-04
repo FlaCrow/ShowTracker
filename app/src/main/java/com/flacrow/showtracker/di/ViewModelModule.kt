@@ -2,6 +2,7 @@ package com.flacrow.showtracker.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
 import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
 import com.flacrow.showtracker.presentation.ViewModels.ViewModelFactory
@@ -21,6 +22,11 @@ interface ViewModelModule {
     @Binds
     @[IntoMap ViewModelKey(SeriesDetailsViewModel::class)]
     fun provideSeriesDetailsViewModel(seriesDetailsViewModel: SeriesDetailsViewModel): ViewModel
+
+
+    @Binds
+    @[IntoMap ViewModelKey(MovieDetailsViewModel::class)]
+    fun provideMovieDetailsViewModel(movieDetailsViewModel: MovieDetailsViewModel): ViewModel
 
 
     @Binds

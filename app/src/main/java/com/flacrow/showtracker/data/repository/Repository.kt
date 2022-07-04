@@ -2,6 +2,7 @@ package com.flacrow.showtracker.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.flacrow.showtracker.api.MovieDetailedResponse
 import com.flacrow.showtracker.api.ShowAPI
 import com.flacrow.showtracker.api.TvDetailedResponse
 import com.flacrow.showtracker.data.PagingSources.ShowsSearchPagingSource
@@ -35,6 +36,10 @@ class Repository @Inject constructor(private val showAPI: ShowAPI) {
 
     fun getTvDetailed(id: Int): Flow<TvDetailedResponse> = flow {
         emit(showAPI.searchTvById(id))
+    }.flowOn(Dispatchers.IO)
+
+    fun getMovieDetailed(id: Int): Flow<MovieDetailedResponse> = flow {
+        emit(showAPI.searchMovieById(id))
     }.flowOn(Dispatchers.IO)
 
 }

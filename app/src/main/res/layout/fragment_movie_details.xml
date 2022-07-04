@@ -48,10 +48,10 @@
                 android:id="@+id/series_title_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginHorizontal="32dp"
-                android:layout_marginBottom="16dp"
                 android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toStartOf="@id/series_year_tv"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -158,20 +158,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@id/seasons_recycler"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tagline_tv"
                 tools:text="Overview Goes Here" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/seasons_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/overview_tv"
-                tools:listitem="@layout/seasons_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
