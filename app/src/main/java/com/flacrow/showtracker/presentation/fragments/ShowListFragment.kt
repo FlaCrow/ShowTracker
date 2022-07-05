@@ -228,11 +228,11 @@ class ShowListFragment :
 
     private fun navigate(show: Show) {
         when (show.mediaType) {
-            "tv" ->
+            ConstantValues.TV_TYPE_STRING ->
                 findNavController().navigate(
                     ShowListFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(show.id)
                 )
-            "movie" ->
+            ConstantValues.MOVIE_TYPE_STRING ->
                 findNavController().navigate(
                     ShowListFragmentDirections.actionShowListFragmentToMovieDetailsFragment(show.id)
                 )

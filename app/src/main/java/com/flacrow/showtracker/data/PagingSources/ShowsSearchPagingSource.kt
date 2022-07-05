@@ -32,7 +32,7 @@ class ShowsSearchPagingSource(
                         title = it.title,
                         poster = it.poster ?: " ",
                         score = it.score,
-                        mediaType = "movie",
+                        mediaType = ConstantValues.MOVIE_TYPE_STRING,
                         genres = it.genres,
                         //dateAiring = it.dateAiring,
                         overview = it.overview
@@ -47,7 +47,7 @@ class ShowsSearchPagingSource(
                         title = it.title,
                         poster = it.poster ?: " ",
                         score = it.score,
-                        mediaType = "tv",
+                        mediaType = ConstantValues.TV_TYPE_STRING,
                         genres = it.genres,
                         //dateAiring = it.dateAiring,
                         overview = it.overview

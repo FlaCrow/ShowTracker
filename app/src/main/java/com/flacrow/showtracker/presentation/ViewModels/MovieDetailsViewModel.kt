@@ -24,7 +24,7 @@ class MovieDetailsViewModel @Inject constructor(private var repository: Reposito
             repository.getMovieDetailed(id).catch { e ->
                 _uiState.value = MovieDetailsState.Error(e)
             }.collect { movieDetailedResponse ->
-                _uiState.value = MovieDetailsState.Success(movieDetailedResponse.toInternalModel())
+                _uiState.value = MovieDetailsState.Success(movieDetailedResponse)
             }
         }
     }

@@ -25,7 +25,7 @@ interface AppComponent {
     fun inject(fragment: ShowListFragment)
 }
 
-@Module(includes = [DataModule::class, NetworkModule::class, ViewModelModule::class])
+@Module(includes = [DataModule::class, NetworkModule::class, ViewModelModule::class, BindingModule::class])
 class AppModule
 
 @Scope

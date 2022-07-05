@@ -2,6 +2,8 @@ package com.flacrow.showtracker.di
 
 import com.flacrow.showtracker.api.ShowAPI
 import com.flacrow.showtracker.data.repository.Repository
+import com.flacrow.showtracker.data.repository.RepositoryImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 
@@ -9,5 +11,11 @@ import dagger.Provides
 object DataModule {
     @Provides
     @AppScope
-    fun provideRepository(showAPI: ShowAPI): Repository = Repository(showAPI)
+    fun provideRepositoryImpl(showAPI: ShowAPI): RepositoryImpl = RepositoryImpl(showAPI)
+}
+
+@Module
+interface BindingModule {
+    @Binds
+    fun bindRepositoryToImpl(repositoryImpl: RepositoryImpl) : Repository
 }
