@@ -1,44 +1,35 @@
 package com.flacrow.showtracker.presentation.fragments
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
-import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
+import com.flacrow.showtracker.presentation.ViewModels.TrendingListViewModel
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
-import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.utils.ConstantValues
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 
 
-class ShowListFragment :
-    BaseFragment<FragmentShowListBinding, ShowListViewModel>(FragmentShowListBinding::inflate) {
+class TrendingListFragment :
+    BaseFragment<FragmentShowListBinding, TrendingListViewModel>(FragmentShowListBinding::inflate) {
     private var hasInitiatedInitialCall = false
 
     private val valueAnimator =
@@ -48,7 +39,7 @@ class ShowListFragment :
                 ?: ConstantValues.DEFAULT_DENSITY)).toInt()
         )
 
-    override val viewModel: ShowListViewModel by viewModels {
+    override val viewModel: TrendingListViewModel by viewModels {
         viewModelFactory
     }
 
@@ -230,11 +221,11 @@ class ShowListFragment :
         when (show.mediaType) {
             ConstantValues.TV_TYPE_STRING ->
                 findNavController().navigate(
-                    ShowListFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(show.id)
+                    TrendingListFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(show.id)
                 )
             ConstantValues.MOVIE_TYPE_STRING ->
                 findNavController().navigate(
-                    ShowListFragmentDirections.actionShowListFragmentToMovieDetailsFragment(show.id)
+                    TrendingListFragmentDirections.actionShowListFragmentToMovieDetailsFragment(show.id)
                 )
 
         }

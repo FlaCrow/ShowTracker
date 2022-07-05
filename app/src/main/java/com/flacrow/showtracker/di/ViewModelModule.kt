@@ -2,10 +2,7 @@ package com.flacrow.showtracker.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
-import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
-import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
-import com.flacrow.showtracker.presentation.ViewModels.ViewModelFactory
+import com.flacrow.showtracker.presentation.ViewModels.*
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -16,8 +13,8 @@ import kotlin.reflect.KClass
 interface ViewModelModule {
 
     @Binds
-    @[IntoMap ViewModelKey(ShowListViewModel::class)]
-    fun provideShowListViewModel(showListViewModel: ShowListViewModel): ViewModel
+    @[IntoMap ViewModelKey(TrendingListViewModel::class)]
+    fun provideShowListViewModel(trendingListViewModel: TrendingListViewModel): ViewModel
 
     @Binds
     @[IntoMap ViewModelKey(SeriesDetailsViewModel::class)]
@@ -28,6 +25,9 @@ interface ViewModelModule {
     @[IntoMap ViewModelKey(MovieDetailsViewModel::class)]
     fun provideMovieDetailsViewModel(movieDetailsViewModel: MovieDetailsViewModel): ViewModel
 
+    @Binds
+    @[IntoMap ViewModelKey(ShowPickedListViewModel::class)]
+    fun provideShowPickedListViewModel(showPickedListViewModel: ShowPickedListViewModel): ViewModel
 
     @Binds
     fun provideViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

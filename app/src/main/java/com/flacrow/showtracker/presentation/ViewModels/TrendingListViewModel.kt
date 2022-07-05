@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-class ShowListViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
+class TrendingListViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
     private var currentData: Flow<PagingData<Show>>? = null
     private val tabSelectedMutable: MutableStateFlow<Int> =
         MutableStateFlow(0)
