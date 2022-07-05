@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/showListFragment">
+    app:startDestination="@id/trendingListFragment">
 
     <fragment
-        android:id="@+id/showListFragment"
-        android:name="com.flacrow.showtracker.presentation.fragments.ShowListFragment"
-        android:label="fragment_show_list"
-        tools:layout="@layout/fragment_show_list" >
+        android:id="@+id/trendingListFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.TrendingListFragment"
+        android:label="fragment_trending_list"
+        tools:layout="@layout/fragment_show_list">
         <action
             android:id="@+id/action_showListFragment_to_seriesDetailsFragment"
             app:destination="@id/seriesDetailsFragment" />
@@ -33,4 +33,8 @@
             android:name="movieId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/showPickedListFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.ShowPickedListFragment"
+        android:label="ShowPickedListFragment" />
 </navigation>

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -45,6 +46,7 @@ class SeriesDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         val args: SeriesDetailsFragmentArgs by navArgs()
         viewModel.getData(args.seriesId)
+        setupRadioButtonListeners()
         lifecycleScope.launch {
             viewModel.uiState.collect { uiState ->
                 when (uiState) {
@@ -61,6 +63,17 @@ class SeriesDetailsFragment :
 
         }
 
+    }
+
+    private fun setupRadioButtonListeners() {
+        binding.statusGroup.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                R.id.ptw_button -> {Toast.makeText(requireContext(),"ptw",Toast.LENGTH_SHORT).show()}
+                R.id.watching_button -> {Toast.makeText(requireContext(),"ptw2",Toast.LENGTH_SHORT).show()}
+                R.id.cmpl_button -> {Toast.makeText(requireContext(),"ptw3",Toast.LENGTH_SHORT).show()}
+                else -> {}
+            }
+        }
     }
 
     private fun showError(exception: Throwable) {

@@ -1,14 +1,10 @@
 package com.flacrow.showtracker.presentation.fragments
 
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -16,15 +12,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.MovieDetailed
-import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.databinding.FragmentMovieDetailsBinding
-import com.flacrow.showtracker.databinding.FragmentSeriesDetailsBinding
 import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
-import com.flacrow.showtracker.presentation.ViewModels.ShowListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import javax.inject.Inject
 
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>(FragmentMovieDetailsBinding::inflate) {
@@ -40,6 +31,7 @@ class MovieDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args: MovieDetailsFragmentArgs by navArgs()
         viewModel.getData(args.movieId)
+        setupRadioButtonListeners()
         lifecycleScope.launch {
             viewModel.uiState.collect { uiState ->
                 when (uiState) {
@@ -54,6 +46,21 @@ class MovieDetailsFragment :
                 }
             }
 
+        }
+    }
+
+
+    private fun setupRadioButtonListeners() {
+        binding.statusGroup.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                R.id.ptw_button -> {
+                    Toast.makeText(requireContext(),"ptw", Toast.LENGTH_SHORT).show()}
+                R.id.watching_button -> {
+                    Toast.makeText(requireContext(),"ptw2", Toast.LENGTH_SHORT).show()}
+                R.id.cmpl_button -> {
+                    Toast.makeText(requireContext(),"ptw3", Toast.LENGTH_SHORT).show()}
+                else -> {}
+            }
         }
     }
 

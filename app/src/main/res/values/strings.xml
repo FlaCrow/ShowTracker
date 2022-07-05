@@ -25,4 +25,8 @@
     <string name="add_button_content_desc">Add Button</string>
     <string name="subtract_button_content_desc">Subtract Button</string>
     <string name="no_overview">No overview available for this show</string>
+    <string name="trending">Trending</string>
+    <string name="plan_to_watch">Plan To Watch</string>
+    <string name="watching">Watching</string>
+    <string name="completed">Completed</string>
 </resources>
