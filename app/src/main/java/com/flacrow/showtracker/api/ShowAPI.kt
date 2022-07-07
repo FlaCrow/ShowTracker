@@ -16,10 +16,16 @@ interface ShowAPI {
     suspend fun getTrending(@Query("page") page: Int): ShowResponse
 
     @GET("3/search/movie?api_key=${Config.API_KEY}")
-    suspend fun searchMovieByQuery(@Query("query") query: String, @Query("page") page: Int): ShowResponse
+    suspend fun searchMovieByQuery(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): ShowResponse
 
     @GET("3/search/tv?api_key=${Config.API_KEY}")
-    suspend fun searchTvByQuery(@Query("query") query: String, @Query("page") page: Int): ShowResponse
+    suspend fun searchTvByQuery(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): ShowResponse
 
 
     @GET("3/movie/{movie_id}?api_key=${Config.API_KEY}")

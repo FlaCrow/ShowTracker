@@ -28,6 +28,7 @@ class MovieDetailsViewModel @Inject constructor(private var repository: Reposito
             }
         }
     }
+
     sealed class MovieDetailsState {
         data class Success(val movieDetailed: MovieDetailed) : MovieDetailsState()
         data class Error(val exception: Throwable) : MovieDetailsState()

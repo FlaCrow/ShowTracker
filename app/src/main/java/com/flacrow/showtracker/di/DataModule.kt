@@ -17,5 +17,5 @@ object DataModule {
 @Module
 interface BindingModule {
     @Binds
-    fun bindRepositoryToImpl(repositoryImpl: RepositoryImpl) : Repository
+    fun bindRepositoryToImpl(repositoryImpl: RepositoryImpl): Repository
 }

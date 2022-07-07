@@ -4,17 +4,18 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.flacrow.showtracker.api.ShowAPI
 import com.flacrow.showtracker.api.ShowResponse
+import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.utils.ConstantValues
 import java.io.IOException
 
-class ShowsTrendingPagingSource(private val showAPI: ShowAPI) : PagingSource<Int, Show>() {
+class ShowsTrendingPagingSource(private val showAPI: ShowAPI) : PagingSource<Int, IShow>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Show>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, IShow>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Show> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, IShow> {
         return try {
             val pageNumber = params.key ?: ConstantValues.STARTING_PAGE
             val data =
@@ -24,7 +25,7 @@ class ShowsTrendingPagingSource(private val showAPI: ShowAPI) : PagingSource<Int
                         Show(
                             id = it.id,
                             title = it.title,
-                            poster = it.poster ?: " ",
+                            posterUrl = it.poster ?: " ",
                             score = it.score,
                             mediaType = it.mediaType,
                             genres = it.genres,

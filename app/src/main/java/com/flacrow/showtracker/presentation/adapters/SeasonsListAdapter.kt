@@ -35,7 +35,10 @@ class SeasonsListAdapter(
                 epDoneTv.text = season.epDone.toString()
                 maxEpTv.text = season.episode_count.toString()
                 airDateTv.text =
-                    root.context.getString(R.string.aired_string, season.air_date?: root.context.getString(R.string.no_info))
+                    root.context.getString(
+                        R.string.aired_string,
+                        season.air_date ?: root.context.getString(R.string.no_info)
+                    )
                 plusButton.setOnClickListener { onAddEpCounter.invoke(position) }
                 minusButton.setOnClickListener { onSubEpCounter.invoke(position) }
             }

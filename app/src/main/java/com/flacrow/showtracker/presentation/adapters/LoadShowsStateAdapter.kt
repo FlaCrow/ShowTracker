@@ -22,10 +22,11 @@ class LoadShowsStateAdapter(private val retry: () -> Unit) :
 
 
     //ViewHolder
-    class LoadStateViewHolder(parent: ViewGroup, private val retry: () -> Unit) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.loading_item, parent, false)
-    ) {
+    class LoadStateViewHolder(parent: ViewGroup, private val retry: () -> Unit) :
+        RecyclerView.ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.loading_item, parent, false)
+        ) {
         private val binding = LoadingItemBinding.bind(itemView)
 
         fun bind(loadState: LoadState) {

@@ -54,8 +54,8 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
 
             (curUiState as SeriesDetailsState.Success)
             val seasonListCopy = curUiState.tvDetailed.seasons.map { it.copy() }
-                if (seasonListCopy[position].epDone > 0)
-                        seasonListCopy[position].epDone -= 1
+            if (seasonListCopy[position].epDone > 0)
+                seasonListCopy[position].epDone -= 1
             val tvDetailedCopy: TvDetailed = curUiState.tvDetailed.copy(
                 seasons = seasonListCopy
             )

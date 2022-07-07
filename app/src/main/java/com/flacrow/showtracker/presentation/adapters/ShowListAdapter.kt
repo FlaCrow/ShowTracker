@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
-import com.flacrow.showtracker.data.models.Show
+import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.databinding.ShowentityItemBinding
 
-class ShowListAdapter(private val navigate: (Show) -> Unit) :
-    PagingDataAdapter<Show, ShowListAdapter.ViewHolder>(
+class ShowListAdapter(private val navigate: (IShow) -> Unit) :
+    PagingDataAdapter<IShow, ShowListAdapter.ViewHolder>(
         DiffCallback()
     ) {
 
@@ -31,12 +31,12 @@ class ShowListAdapter(private val navigate: (Show) -> Unit) :
         )
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<Show>() {
-        override fun areItemsTheSame(oldItem: Show, newItem: Show): Boolean {
+    private class DiffCallback : DiffUtil.ItemCallback<IShow>() {
+        override fun areItemsTheSame(oldItem: IShow, newItem: IShow): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Show, newItem: Show): Boolean {
+        override fun areContentsTheSame(oldItem: IShow, newItem: IShow): Boolean {
             return oldItem == newItem
         }
     }
@@ -46,11 +46,11 @@ class ShowListAdapter(private val navigate: (Show) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(showItem: Show) {
+        fun bind(showItem: IShow) {
             binding.apply {
                 Glide
                     .with(root.context)
-                    .load("https://image.tmdb.org/t/p/w500/${showItem.poster}")
+                    .load("https://image.tmdb.org/t/p/w500/${showItem.posterUrl}")
                     .error(R.drawable.ic_placeholder_image_50)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(posterIv)

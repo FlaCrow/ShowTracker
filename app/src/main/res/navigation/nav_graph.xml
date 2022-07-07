@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/trendingListFragment"
-        android:name="com.flacrow.showtracker.presentation.fragments.TrendingListFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.ListTrendingFragment"
         android:label="fragment_trending_list"
         tools:layout="@layout/fragment_show_list">
         <action
@@ -34,7 +34,15 @@
             app:argType="integer" />
     </fragment>
     <fragment
-        android:id="@+id/showPickedListFragment"
-        android:name="com.flacrow.showtracker.presentation.fragments.ShowPickedListFragment"
-        android:label="ShowPickedListFragment" />
+        android:id="@+id/listWatchingFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.ListWatchingFragment"
+        android:label="ListWatchingFragment" />
+    <fragment
+        android:id="@+id/listPlanToWatchFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.ListPlanToWatchFragment"
+        android:label="ListPlanToWatchFragment" />
+    <fragment
+        android:id="@+id/listCompletedFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.ListCompletedFragment"
+        android:label="ListCompletedFragment" />
 </navigation>

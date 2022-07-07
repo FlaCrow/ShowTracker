@@ -3,8 +3,9 @@
     package="com.flacrow.showtracker">
 
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".ShowApp"
         android:allowBackup="true"
@@ -16,8 +17,8 @@
         <activity
             android:name="com.flacrow.showtracker.presentation.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.ShowTracker.NoActionBar">
+            android:theme="@style/Theme.ShowTracker.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

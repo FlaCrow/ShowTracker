@@ -3,6 +3,7 @@ package com.flacrow.showtracker.data.PagingSources
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.flacrow.showtracker.api.ShowAPI
+import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.utils.ConstantValues
 import java.io.IOException
@@ -13,13 +14,13 @@ class ShowsSearchPagingSource(
     private val searchType: Int,
     private val query: String
 ) :
-    PagingSource<Int, Show>() {
+    PagingSource<Int, IShow>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Show>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, IShow>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Show> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, IShow> {
         return try {
             val pageNumber = params.key ?: ConstantValues.STARTING_PAGE
             val data =
@@ -30,7 +31,7 @@ class ShowsSearchPagingSource(
                     Show(
                         id = it.id,
                         title = it.title,
-                        poster = it.poster ?: " ",
+                        posterUrl = it.poster ?: " ",
                         score = it.score,
                         mediaType = ConstantValues.MOVIE_TYPE_STRING,
                         genres = it.genres,
@@ -45,7 +46,7 @@ class ShowsSearchPagingSource(
                     Show(
                         id = it.id,
                         title = it.title,
-                        poster = it.poster ?: " ",
+                        posterUrl = it.poster ?: " ",
                         score = it.score,
                         mediaType = ConstantValues.TV_TYPE_STRING,
                         genres = it.genres,

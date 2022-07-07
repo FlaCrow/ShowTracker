@@ -54,23 +54,26 @@ class MovieDetailsFragment :
         binding.statusGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
                 R.id.ptw_button -> {
-                    Toast.makeText(requireContext(),"ptw", Toast.LENGTH_SHORT).show()}
+                    Toast.makeText(requireContext(), "ptw", Toast.LENGTH_SHORT).show()
+                }
                 R.id.watching_button -> {
-                    Toast.makeText(requireContext(),"ptw2", Toast.LENGTH_SHORT).show()}
+                    Toast.makeText(requireContext(), "ptw2", Toast.LENGTH_SHORT).show()
+                }
                 R.id.cmpl_button -> {
-                    Toast.makeText(requireContext(),"ptw3", Toast.LENGTH_SHORT).show()}
+                    Toast.makeText(requireContext(), "ptw3", Toast.LENGTH_SHORT).show()
+                }
                 else -> {}
             }
         }
     }
 
     private fun showError(exception: Throwable) {
-        with(binding){
+        with(binding) {
             progressBar.isVisible = false
             errorDetailedMovieTv.isVisible = true
             errorDetailedMovieTv.text = exception.localizedMessage
         }
-        }
+    }
 
     private fun showProgressBar() {
         binding.mainDetailView.isVisible = false

@@ -8,6 +8,7 @@ import com.flacrow.showtracker.api.ShowAPI
 import com.flacrow.showtracker.api.TvDetailedResponse
 import com.flacrow.showtracker.data.PagingSources.ShowsSearchPagingSource
 import com.flacrow.showtracker.data.PagingSources.ShowsTrendingPagingSource
+import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.data.models.TvDetailed
@@ -19,8 +20,8 @@ import javax.inject.Inject
 
 
 interface Repository {
-    fun getTrendingFlow(): Flow<PagingData<Show>>
-    fun getMovieOrTvByQuery(type: Int, query: String): Flow<PagingData<Show>>
+    fun getTrendingFlow(): Flow<PagingData<IShow>>
+    fun getMovieOrTvByQuery(type: Int, query: String): Flow<PagingData<IShow>>
     fun getTvDetailed(id: Int): Flow<TvDetailed>
     fun getMovieDetailed(id: Int): Flow<MovieDetailed>
 }

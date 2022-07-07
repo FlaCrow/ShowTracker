@@ -5,15 +5,15 @@
         android:icon="@drawable/ic_baseline_trending_up_24"
         android:title="@string/trending" />
     <item
-        android:id="@+id/showPickedListFragment"
+        android:id="@+id/listPlanToWatchFragment"
         android:icon="@drawable/ic_baseline_ptw_24"
         android:title="@string/plan_to_watch" />
     <item
-        android:id="@+id/show_watching_fragment"
+        android:id="@+id/listWatchingFragment"
         android:icon="@drawable/ic_baseline_watching_24"
         android:title="@string/watching" />
     <item
-        android:id="@+id/show_completed_fragment"
+        android:id="@+id/listCompletedFragment"
         android:icon="@drawable/ic_baseline_cmpl_24"
         android:title="@string/completed" />
 </menu>

@@ -13,8 +13,8 @@ import kotlin.reflect.KClass
 interface ViewModelModule {
 
     @Binds
-    @[IntoMap ViewModelKey(TrendingListViewModel::class)]
-    fun provideShowListViewModel(trendingListViewModel: TrendingListViewModel): ViewModel
+    @[IntoMap ViewModelKey(ListTrendingViewModel::class)]
+    fun provideShowListViewModel(listTrendingViewModel: ListTrendingViewModel): ViewModel
 
     @Binds
     @[IntoMap ViewModelKey(SeriesDetailsViewModel::class)]
@@ -26,8 +26,8 @@ interface ViewModelModule {
     fun provideMovieDetailsViewModel(movieDetailsViewModel: MovieDetailsViewModel): ViewModel
 
     @Binds
-    @[IntoMap ViewModelKey(ShowPickedListViewModel::class)]
-    fun provideShowPickedListViewModel(showPickedListViewModel: ShowPickedListViewModel): ViewModel
+    @[IntoMap ViewModelKey(ListCachedShowsViewModel::class)]
+    fun provideListCachedShowsViewModel(listCachedShowsViewModel: ListCachedShowsViewModel): ViewModel
 
     @Binds
     fun provideViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

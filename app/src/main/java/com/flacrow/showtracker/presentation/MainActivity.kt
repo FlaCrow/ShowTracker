@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNav() {
         val navController = binding.navHostFragmentContainer.findNavController()
         binding.bottomNav.setupWithNavController(navController)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.movieDetailsFragment -> hideBottomNav()
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBottomNav() {
-    binding.bottomNav.isVisible = true
+        binding.bottomNav.isVisible = true
     }
 
     private fun hideBottomNav() {

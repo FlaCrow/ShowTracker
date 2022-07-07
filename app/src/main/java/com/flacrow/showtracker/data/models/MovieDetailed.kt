@@ -2,17 +2,19 @@ package com.flacrow.showtracker.data.models
 
 import com.flacrow.showtracker.api.Genres
 import com.flacrow.showtracker.api.Season
+import com.flacrow.showtracker.utils.ConstantValues
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetailed(
-    val title: String,
+    override val id: Int,
+    override val title: String,
+    override val mediaType: String = ConstantValues.MOVIE_TYPE_STRING,
     val backdropUrl: String?,
     val firstAirDate: String,
     val genres: List<Genres>,
-    val id: Int,
     val overview: String,
-    val posterUrl: String?,
+    override val posterUrl: String?,
     val status: String,
     val tagline: String,
     val rating: Float
-)
+) : IShow

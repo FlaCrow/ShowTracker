@@ -20,8 +20,11 @@ interface AppComponent {
 
     fun inject(fragment: MovieDetailsFragment)
     fun inject(fragment: SeriesDetailsFragment)
-    fun inject(fragment: TrendingListFragment)
-    fun inject(fragment: ShowPickedListFragment)
+    fun inject(fragment: ListTrendingFragment)
+    fun inject(fragment: ListWatchingFragment)
+    fun inject(fragment: ListPlanToWatchFragment)
+    fun inject(fragment: ListCompletedFragment)
+
 }
 
 @Module(includes = [DataModule::class, NetworkModule::class, ViewModelModule::class, BindingModule::class])
