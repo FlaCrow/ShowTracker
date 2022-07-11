@@ -54,6 +54,7 @@ class MovieDetailsFragment :
         binding.statusGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
                 R.id.ptw_button -> {
+                    viewModel.addToPTW()
                     Toast.makeText(requireContext(), "ptw", Toast.LENGTH_SHORT).show()
                 }
                 R.id.watching_button -> {

@@ -27,7 +27,7 @@ interface AppComponent {
 
 }
 
-@Module(includes = [DataModule::class, NetworkModule::class, ViewModelModule::class, BindingModule::class])
+@Module(includes = [DataModule::class, NetworkModule::class, ViewModelModule::class, BindingModule::class, RoomModule::class])
 class AppModule
 
 @Scope

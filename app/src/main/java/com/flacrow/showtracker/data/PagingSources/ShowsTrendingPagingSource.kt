@@ -22,16 +22,7 @@ class ShowsTrendingPagingSource(private val showAPI: ShowAPI) : PagingSource<Int
                 showAPI.getTrending(pageNumber).results
                     .filter { it.mediaType != "person" }
                     .map {
-                        Show(
-                            id = it.id,
-                            title = it.title,
-                            posterUrl = it.poster ?: " ",
-                            score = it.score,
-                            mediaType = it.mediaType,
-                            genres = it.genres,
-                            //dateAiring = it.dateAiring,
-                            overview = it.overview
-                        )
+                        Show(it, mediaType = it.mediaType)
                     }
 
             LoadResult.Page(

@@ -28,31 +28,13 @@ class ShowsSearchPagingSource(
                     query,
                     pageNumber
                 ).results.map {
-                    Show(
-                        id = it.id,
-                        title = it.title,
-                        posterUrl = it.poster ?: " ",
-                        score = it.score,
-                        mediaType = ConstantValues.MOVIE_TYPE_STRING,
-                        genres = it.genres,
-                        //dateAiring = it.dateAiring,
-                        overview = it.overview
-                    )
+                    Show(it, ConstantValues.MOVIE_TYPE_STRING)
                 }
                 else showAPI.searchTvByQuery(
                     query,
                     pageNumber
                 ).results.map {
-                    Show(
-                        id = it.id,
-                        title = it.title,
-                        posterUrl = it.poster ?: " ",
-                        score = it.score,
-                        mediaType = ConstantValues.TV_TYPE_STRING,
-                        genres = it.genres,
-                        //dateAiring = it.dateAiring,
-                        overview = it.overview
-                    )
+                    Show(it, ConstantValues.TV_TYPE_STRING)
                 }
 
 

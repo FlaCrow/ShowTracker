@@ -29,6 +29,13 @@ class MovieDetailsViewModel @Inject constructor(private var repository: Reposito
         }
     }
 
+    fun addToPTW() {
+        viewModelScope.launch {
+            repository.saveMovieToDatabase((_uiState.value as MovieDetailsState.Success).movieDetailed)
+        }
+
+    }
+
     sealed class MovieDetailsState {
         data class Success(val movieDetailed: MovieDetailed) : MovieDetailsState()
         data class Error(val exception: Throwable) : MovieDetailsState()

@@ -19,4 +19,6 @@ class ListPlanToWatchFragment : BaseListFragment<ListCachedShowsViewModel>() {
     override fun onListElementClick(show: IShow) {
         Toast.makeText(requireContext(), show.title, Toast.LENGTH_SHORT).show()
     }
+
+
 }

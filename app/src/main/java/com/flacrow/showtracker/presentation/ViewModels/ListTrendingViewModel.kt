@@ -16,7 +16,9 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class ListTrendingViewModel @Inject constructor(private var repository: Repository) :
+
     BaseViewModel() {
+    protected var currentData: Flow<PagingData<IShow>>? = null
 
     override fun getShowList(): Flow<PagingData<IShow>> {
         val newData = repository.getTrendingFlow().cachedIn(viewModelScope)
