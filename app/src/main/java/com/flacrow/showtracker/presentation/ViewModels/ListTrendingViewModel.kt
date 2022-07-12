@@ -18,23 +18,20 @@ import javax.inject.Inject
 class ListTrendingViewModel @Inject constructor(private var repository: Repository) :
 
     BaseViewModel() {
-    protected var currentData: Flow<PagingData<IShow>>? = null
-
-    override fun getShowList(): Flow<PagingData<IShow>> {
-        val newData = repository.getTrendingFlow().cachedIn(viewModelScope)
-        if (currentData == null)
-            currentData = newData
-        return currentData ?: newData
-    }
 
     override fun setSelectedTab(tab: Int) {
         //tabSelectedMutable.value = tab
         this.tabSelectedMutable.update { tab }
     }
 
-    override fun getShowListByQuery(type: Int, query: String): Flow<PagingData<IShow>> {
-        val newData =
-            repository.getMovieOrTvByQuery(type = type, query = query).cachedIn(viewModelScope)
+    override fun getShowList(query: String): Flow<PagingData<IShow>> {
+        val newData: Flow<PagingData<IShow>> =
+            if (query.isEmpty())
+                currentData ?: repository.getTrendingFlow()
+                    .cachedIn(viewModelScope)
+            else
+                repository.getMovieOrTvByQuery(type = tabSelected.value, query = query)
+                    .cachedIn(viewModelScope)
         currentData = newData
         return newData
     }

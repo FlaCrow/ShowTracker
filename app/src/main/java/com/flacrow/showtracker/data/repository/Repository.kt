@@ -23,10 +23,9 @@ interface Repository {
     fun getTvDetailed(id: Int): Flow<TvDetailed>
     fun getMovieDetailed(id: Int): Flow<MovieDetailed>
     suspend fun saveMovieToDatabase(movieDetailed: MovieDetailed)
-    suspend fun saveTvToDatabase(tvDetailed: TvDetailed)
-    fun getSavedMoviesFlow(): Flow<PagingData<MovieDetailed>>
-    fun getSavedSeriesFlow(): Flow<PagingData<TvDetailed>>
-    fun getSavedMoviesByQuery(query: String) : Flow<PagingData<MovieDetailed>>
+    suspend fun saveSeriesToDatabase(tvDetailed: TvDetailed)
+    fun getSavedMovies(query: String): Flow<PagingData<MovieDetailed>>
+    fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>>
 }
 
 class RepositoryImpl @Inject constructor(
@@ -52,36 +51,37 @@ class RepositoryImpl @Inject constructor(
         .flow
 
     override fun getTvDetailed(id: Int): Flow<TvDetailed> = flow {
-        emit(showAPI.searchTvById(id).toInternalModel())
+        emit(database.tvDao().getSeriesById(id) ?: showAPI.searchTvById(id).toInternalModel())
     }.flowOn(Dispatchers.IO)
 
     override fun getMovieDetailed(id: Int): Flow<MovieDetailed> = flow {
-        emit(showAPI.searchMovieById(id).toInternalModel())
+        emit(database.movieDao().getMovieById(id) ?: showAPI.searchMovieById(id).toInternalModel())
     }.flowOn(Dispatchers.IO)
 
     override suspend fun saveMovieToDatabase(movieDetailed: MovieDetailed) {
         database.movieDao().insertMovie(movieDetailed)
     }
 
-    override suspend fun saveTvToDatabase(tvDetailed: TvDetailed) {
+    override suspend fun saveSeriesToDatabase(tvDetailed: TvDetailed) {
         database.tvDao().insertTv(tvDetailed)
     }
 
-    override fun getSavedSeriesFlow(): Flow<PagingData<TvDetailed>> {
+
+    override fun getSavedMovies(query: String): Flow<PagingData<MovieDetailed>> {
         return Pager(config = PagingConfig(enablePlaceholders = false, pageSize = 20),
-            pagingSourceFactory = { database.tvDao().getAllTv() })
+            pagingSourceFactory = {
+                if (query.isEmpty()) database.movieDao().getAllMovies() else database.movieDao()
+                    .getMoviesByQuery(query)
+            })
             .flow
     }
 
-    override fun getSavedMoviesFlow(): Flow<PagingData<MovieDetailed>> {
+    override fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>> {
         return Pager(config = PagingConfig(enablePlaceholders = false, pageSize = 20),
-            pagingSourceFactory = { database.movieDao().getAllMovies() })
-            .flow
-    }
-
-    override fun getSavedMoviesByQuery(query: String) : Flow<PagingData<MovieDetailed>> {
-        return Pager(config = PagingConfig(enablePlaceholders = false, pageSize = 20),
-            pagingSourceFactory = { database.movieDao().getMoviesByQuery(query) })
+            pagingSourceFactory = {
+                if (query.isEmpty()) database.tvDao().getAllSeries() else database.tvDao()
+                    .getSeriesByQuery(query)
+            })
             .flow
     }
 

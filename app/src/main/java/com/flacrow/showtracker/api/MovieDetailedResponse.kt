@@ -32,7 +32,8 @@ data class MovieDetailedResponse(
             posterUrl = this.posterUrl,
             status = this.status,
             tagline = this.tagline,
-            rating = this.rating
+            rating = this.rating,
+            watchStatus = 0
         )
     }
 }

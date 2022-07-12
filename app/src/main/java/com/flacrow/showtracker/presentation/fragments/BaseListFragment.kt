@@ -7,15 +7,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.paging.LoadState
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
-import com.flacrow.showtracker.presentation.ViewModels.ListTrendingViewModel
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
-import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
 import com.flacrow.showtracker.presentation.ViewModels.BaseViewModel
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
@@ -45,12 +42,11 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         setAdapter()
         setupMenu()
         setupTabListeners()
         //if (viewModel.isDataNull()) {
-        getShowList()
+        getShowList("")
         // }
     }
 
@@ -77,6 +73,7 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
             override fun onTabSelected(tab: TabLayout.Tab) {
                 Toast.makeText(context, "onTabSelected", Toast.LENGTH_SHORT).show()
                 viewModel.setSelectedTab(tab.position)
+                getShowList((binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView).query.toString())
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -119,19 +116,14 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    lifecycleScope.launch {
-                        viewModel.getShowListByQuery(
-                            viewModel.tabSelected.value,
-                            query ?: ""
-                        )
-                            .collect {
-                                adapter.submitData(it)
-                            }
-                    }
+                    getShowList(query ?: "")
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText?.isEmpty() == true) {
+                        getShowList("")
+                    }
                     return false
                 }
 
@@ -147,9 +139,9 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
     }
 
 
-    protected fun getShowList() {
+    protected open fun getShowList(query: String) {
         lifecycleScope.launch {
-            viewModel.getShowList().collect {
+            viewModel.getShowList(query).collect {
                 adapter.submitData(it)
             }
 

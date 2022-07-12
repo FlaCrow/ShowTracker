@@ -33,7 +33,8 @@ data class TvDetailedResponse(
             seasons = this.seasons,
             status = this.status,
             tagline = this.tagline,
-            rating = this.rating
+            rating = this.rating,
+            watchStatus = 0
         )
     }
 }

@@ -23,7 +23,7 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : ViewModel>(
     protected abstract val viewModel: VModel
     protected abstract fun setupDependencies()
     private var _binding: VBinding? = null
-    val binding: VBinding
+    protected val binding: VBinding
         get() = _binding!!
 
     @Inject
@@ -47,7 +47,7 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : ViewModel>(
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+            _binding = null
     }
 
 }

@@ -36,13 +36,34 @@
     <fragment
         android:id="@+id/listWatchingFragment"
         android:name="com.flacrow.showtracker.presentation.fragments.ListWatchingFragment"
-        android:label="ListWatchingFragment" />
+        android:label="ListWatchingFragment" >
+        <action
+            android:id="@+id/action_listWatchingFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_listWatchingFragment_to_seriesDetailsFragment"
+            app:destination="@id/seriesDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listPlanToWatchFragment"
         android:name="com.flacrow.showtracker.presentation.fragments.ListPlanToWatchFragment"
-        android:label="ListPlanToWatchFragment" />
+        android:label="ListPlanToWatchFragment" >
+        <action
+            android:id="@+id/action_listPlanToWatchFragment_to_seriesDetailsFragment"
+            app:destination="@id/seriesDetailsFragment" />
+        <action
+            android:id="@+id/action_listPlanToWatchFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listCompletedFragment"
         android:name="com.flacrow.showtracker.presentation.fragments.ListCompletedFragment"
-        android:label="ListCompletedFragment" />
+        android:label="ListCompletedFragment" >
+        <action
+            android:id="@+id/action_listCompletedFragment_to_seriesDetailsFragment"
+            app:destination="@id/seriesDetailsFragment" />
+        <action
+            android:id="@+id/action_listCompletedFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
 </navigation>

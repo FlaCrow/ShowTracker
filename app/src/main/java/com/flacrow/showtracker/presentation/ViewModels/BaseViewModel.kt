@@ -14,13 +14,16 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 abstract class BaseViewModel : ViewModel() {
+    protected var currentData: Flow<PagingData<IShow>>? = null
     protected val tabSelectedMutable: MutableStateFlow<Int> =
         MutableStateFlow(0)
     val tabSelected: StateFlow<Int> = this.tabSelectedMutable
 
-    abstract fun getShowList(): Flow<PagingData<IShow>>
-
     abstract fun setSelectedTab(tab: Int)
 
-    abstract fun getShowListByQuery(type: Int, query: String): Flow<PagingData<IShow>>
+    fun invalidateData() {
+        currentData = null
+    }
+
+    abstract fun getShowList(query: String): Flow<PagingData<IShow>>
 }

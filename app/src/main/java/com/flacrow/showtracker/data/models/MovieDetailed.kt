@@ -21,5 +21,6 @@ data class MovieDetailed(
     override val posterUrl: String?,
     val status: String,
     val tagline: String,
-    val rating: Float
+    val rating: Float,
+    override var watchStatus: Int
 ) : IShow

@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -29,9 +30,9 @@ class MovieDetailsFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val args: MovieDetailsFragmentArgs by navArgs()
         viewModel.getData(args.movieId)
-        setupRadioButtonListeners()
         lifecycleScope.launch {
             viewModel.uiState.collect { uiState ->
                 when (uiState) {
@@ -45,7 +46,6 @@ class MovieDetailsFragment :
                     is MovieDetailsViewModel.MovieDetailsState.Empty -> {}
                 }
             }
-
         }
     }
 
@@ -58,9 +58,11 @@ class MovieDetailsFragment :
                     Toast.makeText(requireContext(), "ptw", Toast.LENGTH_SHORT).show()
                 }
                 R.id.watching_button -> {
+                    viewModel.addToWatching()
                     Toast.makeText(requireContext(), "ptw2", Toast.LENGTH_SHORT).show()
                 }
                 R.id.cmpl_button -> {
+                    viewModel.addToCMPL()
                     Toast.makeText(requireContext(), "ptw3", Toast.LENGTH_SHORT).show()
                 }
                 else -> {}
@@ -86,6 +88,9 @@ class MovieDetailsFragment :
             binding.errorDetailedMovieTv.isVisible = true
             mainDetailView.isVisible = true
             progressBar.isVisible = false
+            binding.statusGroup.check(movieDetailed.watchStatus)
+            setupRadioButtonListeners()
+
             var buffer = ""
             movieTitleTv.text = if (movieDetailed.firstAirDate.isEmpty()) movieDetailed.title
             else {

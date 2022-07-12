@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.flacrow.showtracker.api.Genres
 import com.flacrow.showtracker.api.Season
+import com.flacrow.showtracker.api.TvDetailedResponse
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
+import com.flacrow.showtracker.utils.ConstantValues
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -60,6 +62,36 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                 seasons = seasonListCopy
             )
             curUiState.copy(tvDetailedCopy)
+        }
+    }
+
+    fun addToPTW() {
+        viewModelScope.launch {
+            repository.saveSeriesToDatabase(
+                (_uiState.value as SeriesDetailsState.Success).tvDetailed.copy(
+                    watchStatus = ConstantValues.STATUS_PLAN_TO_WATCH
+                )
+            )
+        }
+    }
+
+    fun addToWatching() {
+        viewModelScope.launch {
+            repository.saveSeriesToDatabase(
+                (_uiState.value as SeriesDetailsState.Success).tvDetailed.copy(
+                    watchStatus = ConstantValues.STATUS_WATCHING
+                )
+            )
+        }
+    }
+
+    fun addToCMPL() {
+        viewModelScope.launch {
+            repository.saveSeriesToDatabase(
+                (_uiState.value as SeriesDetailsState.Success).tvDetailed.copy(
+                    watchStatus = ConstantValues.STATUS_COMPLETED
+                )
+            )
         }
     }
 

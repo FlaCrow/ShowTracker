@@ -46,7 +46,6 @@ class SeriesDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         val args: SeriesDetailsFragmentArgs by navArgs()
         viewModel.getData(args.seriesId)
-        setupRadioButtonListeners()
         lifecycleScope.launch {
             viewModel.uiState.collect { uiState ->
                 when (uiState) {
@@ -60,7 +59,6 @@ class SeriesDetailsFragment :
                     is SeriesDetailsViewModel.SeriesDetailsState.Empty -> {}
                 }
             }
-
         }
 
     }
@@ -69,12 +67,15 @@ class SeriesDetailsFragment :
         binding.statusGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
                 R.id.ptw_button -> {
+                    viewModel.addToPTW()
                     Toast.makeText(requireContext(), "ptw", Toast.LENGTH_SHORT).show()
                 }
                 R.id.watching_button -> {
+                    viewModel.addToWatching()
                     Toast.makeText(requireContext(), "ptw2", Toast.LENGTH_SHORT).show()
                 }
                 R.id.cmpl_button -> {
+                    viewModel.addToCMPL()
                     Toast.makeText(requireContext(), "ptw3", Toast.LENGTH_SHORT).show()
                 }
                 else -> {}
@@ -102,6 +103,9 @@ class SeriesDetailsFragment :
             binding.errorDetailedSeriesTv.isVisible = false
             mainDetailView.isVisible = true
             progressBar.isVisible = false
+            binding.statusGroup.check(tvDetailed.watchStatus)
+            setupRadioButtonListeners()
+
             var buffer = ""
             seriesTitleTv.text = if (tvDetailed.firstAirDate.isEmpty()) tvDetailed.title
             else {
@@ -112,8 +116,7 @@ class SeriesDetailsFragment :
                 )
             }
             overviewTv.text =
-                if (tvDetailed.overview.isEmpty()) requireContext().getText(R.string.no_overview)
-                else tvDetailed.overview
+                tvDetailed.overview.ifEmpty { requireContext().getText(R.string.no_overview) }
             taglineTv.text = tvDetailed.tagline
             for (i in tvDetailed.genres.indices) {
                 buffer += tvDetailed.genres.get(i).name + if (tvDetailed.genres.indices.last != i) {
@@ -144,6 +147,5 @@ class SeriesDetailsFragment :
     private fun onSubEpCounterClick(position: Int) {
         viewModel.subCounter(position)
     }
-
 
 }

@@ -14,7 +14,8 @@ data class Show(
     val score: Float,
     override val mediaType: String,
     val genres: List<Int>,
-    val overview: String
+    val overview: String,
+    override var watchStatus: Int
 ) : IShow {
     constructor(responseResult: Results, mediaType: String) : this(
         id = responseResult.id,
@@ -23,7 +24,8 @@ data class Show(
         score = responseResult.score,
         genres = responseResult.genres,
         mediaType = mediaType,
-        overview = responseResult.overview
+        overview = responseResult.overview,
+        watchStatus = 0
     )
 }
 
