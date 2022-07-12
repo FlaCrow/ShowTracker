@@ -43,7 +43,6 @@ class SeriesDetailsFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val args: SeriesDetailsFragmentArgs by navArgs()
         viewModel.getData(args.seriesId)
         lifecycleScope.launch {

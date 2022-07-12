@@ -9,6 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
@@ -19,6 +20,7 @@ import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.utils.ConstantValues
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -28,6 +30,18 @@ import kotlinx.coroutines.launch
 
 abstract class BaseListFragment<VModel : BaseViewModel> :
     BaseFragment<FragmentShowListBinding, VModel>(FragmentShowListBinding::inflate) {
+
+    private val updateListener = { state: CombinedLoadStates ->
+        with(binding) {
+            showlistRecycler.isVisible = state.refresh != LoadState.Loading
+            progressBar.isVisible = state.refresh == LoadState.Loading
+            errorTv.isVisible = if (state.refresh is LoadState.Error) {
+                showlistRecycler.isVisible = false
+                errorTv.text = (state.refresh as LoadState.Error).error.localizedMessage
+                true
+            } else false
+        }
+    }
 
     private val valueAnimator =
         ValueAnimator.ofInt(
@@ -54,17 +68,7 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
     private fun setAdapter() {
         binding.showlistRecycler.adapter =
             adapter.withLoadStateFooter(LoadShowsStateAdapter { adapter.retry() })
-        adapter.addLoadStateListener { state ->
-            with(binding) {
-                showlistRecycler.isVisible = state.refresh != LoadState.Loading
-                progressBar.isVisible = state.refresh == LoadState.Loading
-                errorTv.isVisible = if (state.refresh is LoadState.Error) {
-                    showlistRecycler.isVisible = false
-                    errorTv.text = (state.refresh as LoadState.Error).error.localizedMessage
-                    true
-                } else false
-            }
-        }
+        adapter.addLoadStateListener(updateListener)
     }
 
 
@@ -134,8 +138,9 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
 
 
     override fun onDestroyView() {
-        super.onDestroyView()
         valueAnimator.removeAllUpdateListeners()
+        adapter.removeLoadStateListener(updateListener)
+        super.onDestroyView()
     }
 
 

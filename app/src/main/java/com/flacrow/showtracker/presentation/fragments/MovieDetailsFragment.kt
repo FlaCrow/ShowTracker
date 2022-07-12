@@ -30,7 +30,6 @@ class MovieDetailsFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val args: MovieDetailsFragmentArgs by navArgs()
         viewModel.getData(args.movieId)
         lifecycleScope.launch {
