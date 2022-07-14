@@ -2,6 +2,7 @@ package com.flacrow.showtracker.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_IDLE
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,10 +12,7 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 
-class SeasonsListAdapter(
-    private val onAddEpCounter: (Int) -> Unit,
-    private val onSubEpCounter: (Int) -> Unit
-) :
+class SeasonsListAdapter(private val onEpisodePickerValueChanged: (Int, Int) -> Unit) :
     ListAdapter<Season, SeasonsListAdapter.SeasonsViewHolder>(DiffCallback()) {
 
     inner class SeasonsViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
@@ -32,15 +30,27 @@ class SeasonsListAdapter(
                     .into(seasonPosterIv)
                 seasonNumTv.text =
                     root.context.getString(R.string.season_string, season.season_number)
-                epDoneTv.text = season.epDone.toString()
-                maxEpTv.text = season.episode_count.toString()
+                maxEpTv.text =
+                    root.context.getString(
+                        R.string.out_of,
+                        season.episode_count
+                    )
                 airDateTv.text =
                     root.context.getString(
                         R.string.aired_string,
                         season.air_date ?: root.context.getString(R.string.no_info)
                     )
-                plusButton.setOnClickListener { onAddEpCounter.invoke(position) }
-                minusButton.setOnClickListener { onSubEpCounter.invoke(position) }
+                epDonePicker.wrapSelectorWheel = false
+                epDonePicker.maxValue = season.episode_count
+                epDonePicker.value = season.epDone
+                epDonePicker.setOnScrollListener { numberPicker, scrollState ->
+                    if (scrollState == SCROLL_STATE_IDLE)
+                        onEpisodePickerValueChanged.invoke(
+                            position,
+                            numberPicker.value
+                        )
+                }
+
             }
         }
 

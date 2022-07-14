@@ -1,15 +1,10 @@
 package com.flacrow.showtracker.presentation.fragments
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -18,12 +13,10 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.databinding.FragmentSeriesDetailsBinding
-import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
 import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 class SeriesDetailsFragment :
@@ -35,8 +28,11 @@ class SeriesDetailsFragment :
 
     private val adapter =
         SeasonsListAdapter(
-            onAddEpCounter = { position -> onAddEpCounterClick(position) },
-            onSubEpCounter = { position -> onSubEpCounterClick(position) })
+            onEpisodePickerValueChanged = { position, newValue ->
+                onEpisodePickerValueChanged(
+                    position, newValue
+                )
+            })
 
     override fun setupDependencies() {
         requireContext().appComponent.inject(this)
@@ -139,12 +135,9 @@ class SeriesDetailsFragment :
         binding.seasonsRecycler.adapter = adapter
     }
 
-    private fun onAddEpCounterClick(position: Int) {
-        viewModel.addCounter(position)
+    private fun onEpisodePickerValueChanged(position: Int, newValue: Int) {
+        viewModel.changeEpisodeWatchedValue(position, newValue)
     }
 
-    private fun onSubEpCounterClick(position: Int) {
-        viewModel.subCounter(position)
-    }
 
 }

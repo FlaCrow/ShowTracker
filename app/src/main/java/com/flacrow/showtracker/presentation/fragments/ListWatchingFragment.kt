@@ -1,6 +1,9 @@
 package com.flacrow.showtracker.presentation.fragments
 
+import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -9,12 +12,15 @@ import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.presentation.ViewModels.ListCachedShowsViewModel
 import com.flacrow.showtracker.utils.ConstantValues
+import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
+import com.flacrow.showtracker.utils.ConstantValues.TV_TYPE_STRING
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ListWatchingFragment : BaseListFragment<ListCachedShowsViewModel>() {
 
+    override val playAnimations = false
     override val viewModel: ListCachedShowsViewModel by viewModels {
         viewModelFactory
     }
@@ -23,15 +29,20 @@ class ListWatchingFragment : BaseListFragment<ListCachedShowsViewModel>() {
         requireContext().appComponent.inject(this)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.searchTabs.isVisible = true
+    }
+
     override fun onListElementClick(show: IShow) {
         when (show.mediaType) {
-            ConstantValues.TV_TYPE_STRING ->
+            TV_TYPE_STRING ->
                 findNavController().navigate(
                     ListWatchingFragmentDirections.actionListWatchingFragmentToSeriesDetailsFragment(
                         show.id
                     )
                 )
-            ConstantValues.MOVIE_TYPE_STRING ->
+            MOVIE_TYPE_STRING ->
                 findNavController().navigate(
                     ListWatchingFragmentDirections.actionListWatchingFragmentToMovieDetailsFragment(
                         show.id

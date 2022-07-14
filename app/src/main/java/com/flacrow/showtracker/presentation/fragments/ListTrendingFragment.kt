@@ -14,12 +14,15 @@ import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.presentation.ViewModels.ListTrendingViewModel
 import com.flacrow.showtracker.utils.ConstantValues
+import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
+import com.flacrow.showtracker.utils.ConstantValues.TV_TYPE_STRING
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ListTrendingFragment : BaseListFragment<ListTrendingViewModel>() {
 
+    override val playAnimations = true
     override val viewModel: ListTrendingViewModel by viewModels {
         viewModelFactory
     }
@@ -30,13 +33,13 @@ class ListTrendingFragment : BaseListFragment<ListTrendingViewModel>() {
 
     override fun onListElementClick(show: IShow) {
         when (show.mediaType) {
-            ConstantValues.TV_TYPE_STRING ->
+            TV_TYPE_STRING ->
                 findNavController().navigate(
                     ListTrendingFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(
                         show.id
                     )
                 )
-            ConstantValues.MOVIE_TYPE_STRING ->
+            MOVIE_TYPE_STRING ->
                 findNavController().navigate(
                     ListTrendingFragmentDirections.actionShowListFragmentToMovieDetailsFragment(show.id)
                 )

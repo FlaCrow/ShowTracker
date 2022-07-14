@@ -18,6 +18,7 @@ import com.flacrow.showtracker.databinding.FragmentShowListBinding
 import com.flacrow.showtracker.presentation.ViewModels.BaseViewModel
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.utils.ConstantValues
+import com.flacrow.showtracker.utils.ConstantValues.ANIMATION_DURATION
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
 abstract class BaseListFragment<VModel : BaseViewModel> :
     BaseFragment<FragmentShowListBinding, VModel>(FragmentShowListBinding::inflate) {
 
+    abstract val playAnimations: Boolean
     private val updateListener = { state: CombinedLoadStates ->
         with(binding) {
             showlistRecycler.isVisible = state.refresh != LoadState.Loading
@@ -81,11 +83,9 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                Toast.makeText(context, "onTabUnselected", Toast.LENGTH_SHORT).show()
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
-                Toast.makeText(context, "onTabReselected", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -94,16 +94,18 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
         binding.toolbar.inflateMenu(R.menu.menu_main)
         val searchView = binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
         valueAnimator.apply {
-            duration = ConstantValues.ANIMATION_DURATION
+            duration = ANIMATION_DURATION
             addUpdateListener {
                 val tabLayoutParams = binding.searchTabs.layoutParams
                 tabLayoutParams.height = it.animatedValue as Int
                 binding.searchTabs.layoutParams = tabLayoutParams
             }
+
+            binding.searchTabs.getTabAt(viewModel.tabSelected.value)?.select()
             searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
                 binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
                 binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
-                binding.searchTabs.getTabAt(viewModel.tabSelected.value)?.select()
+                if (playAnimations)
                 when (isInFocus) {
                     true -> {
                         binding.searchTabs.isVisible = isInFocus

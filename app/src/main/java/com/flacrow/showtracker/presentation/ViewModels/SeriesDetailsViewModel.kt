@@ -8,6 +8,9 @@ import com.flacrow.showtracker.api.TvDetailedResponse
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.utils.ConstantValues
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,31 +40,17 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
 
     }
 
-    fun addCounter(position: Int) {
-        _uiState.update { curUiState ->
-
-            (curUiState as SeriesDetailsState.Success)
-            val seasonListCopy = curUiState.tvDetailed.seasons.map { it.copy() }
-            if (seasonListCopy[position].epDone != seasonListCopy[position].episode_count)
-                seasonListCopy[position].epDone += 1
-            val tvDetailedCopy: TvDetailed = curUiState.tvDetailed.copy(
-                seasons = seasonListCopy
-            )
-            curUiState.copy(tvDetailedCopy)
-        }
-    }
-
-    fun subCounter(position: Int) {
-        _uiState.update { curUiState ->
-
-            (curUiState as SeriesDetailsState.Success)
-            val seasonListCopy = curUiState.tvDetailed.seasons.map { it.copy() }
-            if (seasonListCopy[position].epDone > 0)
-                seasonListCopy[position].epDone -= 1
-            val tvDetailedCopy: TvDetailed = curUiState.tvDetailed.copy(
-                seasons = seasonListCopy
-            )
-            curUiState.copy(tvDetailedCopy)
+    fun changeEpisodeWatchedValue(position: Int, newValue: Int) {
+//        _uiState.update { curUiState ->
+//            curUiState as SeriesDetailsState.Success
+//            val uiStateCopy = curUiState.copy()
+//            uiStateCopy.tvDetailed.seasons[position].epDone = newValue
+//            uiStateCopy
+//        }
+        viewModelScope.launch {
+            val uiStateCopy = (_uiState.value as SeriesDetailsState.Success).copy()
+            uiStateCopy.tvDetailed.seasons[position].epDone = newValue
+            repository.saveSeriesToDatabase(uiStateCopy.tvDetailed)
         }
     }
 
@@ -69,30 +58,57 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
         viewModelScope.launch {
             repository.saveSeriesToDatabase(
                 (_uiState.value as SeriesDetailsState.Success).tvDetailed.copy(
-                    watchStatus = ConstantValues.STATUS_PLAN_TO_WATCH
+                    watchStatus = STATUS_PLAN_TO_WATCH
                 )
             )
         }
+
+//        _uiState.update { curUiState ->
+//            curUiState as SeriesDetailsState.Success
+//            val uiStateCopy = curUiState.copy()
+//            uiStateCopy.tvDetailed.watchStatus = STATUS_PLAN_TO_WATCH
+//            uiStateCopy
+//    }
     }
 
     fun addToWatching() {
         viewModelScope.launch {
             repository.saveSeriesToDatabase(
                 (_uiState.value as SeriesDetailsState.Success).tvDetailed.copy(
-                    watchStatus = ConstantValues.STATUS_WATCHING
+                    watchStatus = STATUS_WATCHING
                 )
             )
         }
+
+//        _uiState.update { curUiState ->
+//            curUiState as SeriesDetailsState.Success
+//            val uiStateCopy = curUiState.copy()
+//            uiStateCopy.tvDetailed.watchStatus = STATUS_WATCHING
+//            uiStateCopy
+//}
     }
 
     fun addToCMPL() {
         viewModelScope.launch {
             repository.saveSeriesToDatabase(
                 (_uiState.value as SeriesDetailsState.Success).tvDetailed.copy(
-                    watchStatus = ConstantValues.STATUS_COMPLETED
+                    watchStatus = STATUS_COMPLETED
                 )
             )
         }
+
+//        _uiState.update { curUiState ->
+//            curUiState as SeriesDetailsState.Success
+//            val uiStateCopy = curUiState.copy()
+//            uiStateCopy.tvDetailed.watchStatus = STATUS_COMPLETED
+//            uiStateCopy
+//        }
     }
+
+//    fun saveChangesToDatabase() {
+//        viewModelScope.launch {
+//            repository.saveSeriesToDatabase((_uiState.value as SeriesDetailsState.Success).tvDetailed)
+//        }
+//    }
 
 }
