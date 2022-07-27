@@ -1,4 +1,4 @@
-package com.flacrow.showtracker.presentation.ViewModels
+package com.flacrow.showtracker.presentation.viewModels
 
 import androidx.paging.PagingData
 import androidx.paging.map
@@ -17,21 +17,19 @@ class ListCachedShowsViewModel @Inject constructor(private var repository: Repos
         this.tabSelectedMutable.update { tab }
     }
 
-    @Suppress("USELESS_CAST")
     override fun getShowList(query: String): Flow<PagingData<IShow>> {
 
-        val newData: Flow<PagingData<IShow>>?
-        newData = if (tabSelected.value == SEARCH_TYPE_MOVIES) {
+        val newData: Flow<PagingData<IShow>> = if (tabSelected.value == SEARCH_TYPE_MOVIES) {
 
             repository.getSavedMovies(query).map {
-                it.map {
-                    it as IShow
+                it.map { movie ->
+                    movie
                 }
             }
         } else {
             repository.getSavedSeries(query).map {
-                it.map {
-                    it as IShow
+                it.map { tv ->
+                    tv
                 }
             }
         }

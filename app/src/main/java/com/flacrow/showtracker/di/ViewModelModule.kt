@@ -2,7 +2,7 @@ package com.flacrow.showtracker.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.flacrow.showtracker.presentation.ViewModels.*
+import com.flacrow.showtracker.presentation.viewModels.*
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

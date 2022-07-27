@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.flacrow.showtracker.api.ShowAPI
-import com.flacrow.showtracker.data.PagingSources.ShowsSearchPagingSource
-import com.flacrow.showtracker.data.PagingSources.ShowsTrendingPagingSource
+import com.flacrow.showtracker.data.pagingSources.ShowsSearchPagingSource
+import com.flacrow.showtracker.data.pagingSources.ShowsTrendingPagingSource
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.data.models.TvDetailed

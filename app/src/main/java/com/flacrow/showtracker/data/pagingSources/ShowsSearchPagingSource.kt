@@ -1,4 +1,4 @@
-package com.flacrow.showtracker.data.PagingSources
+package com.flacrow.showtracker.data.pagingSources
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

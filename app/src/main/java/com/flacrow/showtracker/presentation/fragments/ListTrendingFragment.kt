@@ -4,7 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShow
-import com.flacrow.showtracker.presentation.ViewModels.ListTrendingViewModel
+import com.flacrow.showtracker.presentation.viewModels.ListTrendingViewModel
 import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
 import com.flacrow.showtracker.utils.ConstantValues.TV_TYPE_STRING
 

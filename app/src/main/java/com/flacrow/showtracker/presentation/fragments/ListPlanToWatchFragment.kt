@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.filter
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShow
-import com.flacrow.showtracker.presentation.ViewModels.ListCachedShowsViewModel
+import com.flacrow.showtracker.presentation.viewModels.ListCachedShowsViewModel
 import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.showtracker.utils.ConstantValues.TV_TYPE_STRING

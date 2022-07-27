@@ -1,4 +1,4 @@
-package com.flacrow.showtracker.presentation.ViewModels
+package com.flacrow.showtracker.presentation.viewModels
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData

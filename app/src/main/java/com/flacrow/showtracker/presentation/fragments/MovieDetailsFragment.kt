@@ -13,7 +13,7 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.databinding.FragmentMovieDetailsBinding
-import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
+import com.flacrow.showtracker.presentation.viewModels.MovieDetailsViewModel
 import kotlinx.coroutines.launch
 
 class MovieDetailsFragment :

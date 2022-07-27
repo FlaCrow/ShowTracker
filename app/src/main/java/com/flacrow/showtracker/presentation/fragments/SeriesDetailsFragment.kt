@@ -13,7 +13,7 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.databinding.FragmentSeriesDetailsBinding
-import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
+import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
