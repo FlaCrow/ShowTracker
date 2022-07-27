@@ -11,8 +11,14 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flow
 
-class SeasonsListAdapter(private val onEpisodePickerValueChanged: (Int, Int) -> Unit) :
+class SeasonsListAdapter(private val onEpisodePickerValueChanged: (Int, Flow<Int>) -> Unit) :
     ListAdapter<Season, SeasonsListAdapter.SeasonsViewHolder>(DiffCallback()) {
 
     inner class SeasonsViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
@@ -43,18 +49,18 @@ class SeasonsListAdapter(private val onEpisodePickerValueChanged: (Int, Int) -> 
                 epDonePicker.wrapSelectorWheel = false
                 epDonePicker.maxValue = season.episode_count
                 epDonePicker.value = season.epDone
-                epDonePicker.setOnScrollListener { numberPicker, scrollState ->
-                    if (scrollState == SCROLL_STATE_IDLE)
-                        onEpisodePickerValueChanged.invoke(
-                            position,
-                            numberPicker.value
-                        )
+                val flow = callbackFlow {
+                    epDonePicker.setOnValueChangedListener { _, _, newValue ->
+                        trySend(newValue)
+                    }
+                    awaitClose { epDonePicker.setOnValueChangedListener(null) }
                 }
-
+                onEpisodePickerValueChanged.invoke(position, flow)
             }
-        }
 
+        }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonsViewHolder {
         return SeasonsViewHolder(parent)

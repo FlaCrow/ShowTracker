@@ -11,6 +11,7 @@ import com.flacrow.showtracker.utils.ConstantValues
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,17 +41,14 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
 
     }
 
-    fun changeEpisodeWatchedValue(position: Int, newValue: Int) {
-//        _uiState.update { curUiState ->
-//            curUiState as SeriesDetailsState.Success
-//            val uiStateCopy = curUiState.copy()
-//            uiStateCopy.tvDetailed.seasons[position].epDone = newValue
-//            uiStateCopy
-//        }
+    @OptIn(FlowPreview::class)
+    fun changeEpisodeWatchedValue(position: Int, newValueFlow: Flow<Int>) {
         viewModelScope.launch {
             val uiStateCopy = (_uiState.value as SeriesDetailsState.Success).copy()
-            uiStateCopy.tvDetailed.seasons[position].epDone = newValue
-            repository.saveSeriesToDatabase(uiStateCopy.tvDetailed)
+            newValueFlow.debounce(500).collect { value ->
+                uiStateCopy.tvDetailed.seasons[position].epDone = value
+                repository.saveSeriesToDatabase(uiStateCopy.tvDetailed)
+            }
         }
     }
 
@@ -62,13 +60,6 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                 )
             )
         }
-
-//        _uiState.update { curUiState ->
-//            curUiState as SeriesDetailsState.Success
-//            val uiStateCopy = curUiState.copy()
-//            uiStateCopy.tvDetailed.watchStatus = STATUS_PLAN_TO_WATCH
-//            uiStateCopy
-//    }
     }
 
     fun addToWatching() {
@@ -79,13 +70,6 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                 )
             )
         }
-
-//        _uiState.update { curUiState ->
-//            curUiState as SeriesDetailsState.Success
-//            val uiStateCopy = curUiState.copy()
-//            uiStateCopy.tvDetailed.watchStatus = STATUS_WATCHING
-//            uiStateCopy
-//}
     }
 
     fun addToCMPL() {
@@ -97,18 +81,6 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
             )
         }
 
-//        _uiState.update { curUiState ->
-//            curUiState as SeriesDetailsState.Success
-//            val uiStateCopy = curUiState.copy()
-//            uiStateCopy.tvDetailed.watchStatus = STATUS_COMPLETED
-//            uiStateCopy
-//        }
     }
-
-//    fun saveChangesToDatabase() {
-//        viewModelScope.launch {
-//            repository.saveSeriesToDatabase((_uiState.value as SeriesDetailsState.Success).tvDetailed)
-//        }
-//    }
 
 }

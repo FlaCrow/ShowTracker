@@ -15,6 +15,7 @@ import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.databinding.FragmentSeriesDetailsBinding
 import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -28,9 +29,9 @@ class SeriesDetailsFragment :
 
     private val adapter =
         SeasonsListAdapter(
-            onEpisodePickerValueChanged = { position, newValue ->
+            onEpisodePickerValueChanged = { position, newValueFlow ->
                 onEpisodePickerValueChanged(
-                    position, newValue
+                    position, newValueFlow
                 )
             })
 
@@ -135,8 +136,8 @@ class SeriesDetailsFragment :
         binding.seasonsRecycler.adapter = adapter
     }
 
-    private fun onEpisodePickerValueChanged(position: Int, newValue: Int) {
-        viewModel.changeEpisodeWatchedValue(position, newValue)
+    private fun onEpisodePickerValueChanged(position: Int, newValueFlow: Flow<Int>) {
+        viewModel.changeEpisodeWatchedValue(position, newValueFlow)
     }
 
 
