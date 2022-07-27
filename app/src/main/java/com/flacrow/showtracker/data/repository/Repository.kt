@@ -4,12 +4,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.flacrow.showtracker.api.ShowAPI
-import com.flacrow.showtracker.data.pagingSources.ShowsSearchPagingSource
-import com.flacrow.showtracker.data.pagingSources.ShowsTrendingPagingSource
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.models.room.AppDatabase
+import com.flacrow.showtracker.data.pagingSources.ShowsSearchPagingSource
+import com.flacrow.showtracker.data.pagingSources.ShowsTrendingPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -13,9 +13,9 @@ import androidx.paging.LoadState
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
-import com.flacrow.showtracker.presentation.viewModels.BaseViewModel
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
+import com.flacrow.showtracker.presentation.viewModels.BaseViewModel
 import com.flacrow.showtracker.utils.ConstantValues
 import com.flacrow.showtracker.utils.ConstantValues.ANIMATION_DURATION
 import com.google.android.material.tabs.TabLayout
