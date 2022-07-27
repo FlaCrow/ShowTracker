@@ -2,7 +2,6 @@ package com.flacrow.showtracker.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_IDLE
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,11 +11,8 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flow
 
 class SeasonsListAdapter(private val onEpisodePickerValueChanged: (Int, Flow<Int>) -> Unit) :
     ListAdapter<Season, SeasonsListAdapter.SeasonsViewHolder>(DiffCallback()) {

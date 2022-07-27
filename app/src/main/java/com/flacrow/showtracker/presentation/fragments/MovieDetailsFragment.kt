@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -15,7 +14,6 @@ import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.databinding.FragmentMovieDetailsBinding
 import com.flacrow.showtracker.presentation.ViewModels.MovieDetailsViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MovieDetailsFragment :

@@ -1,7 +1,6 @@
 package com.flacrow.showtracker.api
 
 import com.flacrow.showtracker.utils.Config
-import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

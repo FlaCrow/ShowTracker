@@ -1,13 +1,10 @@
 package com.flacrow.showtracker.presentation.ViewModels
 
-import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.map
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.utils.ConstantValues.SEARCH_TYPE_MOVIES
-import com.flacrow.showtracker.utils.ConstantValues.SEARCH_TYPE_TV
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update

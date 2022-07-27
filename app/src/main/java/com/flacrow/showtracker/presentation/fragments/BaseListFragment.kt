@@ -2,26 +2,23 @@ package com.flacrow.showtracker.presentation.fragments
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
-import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.databinding.FragmentShowListBinding
 import com.flacrow.showtracker.presentation.ViewModels.BaseViewModel
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
+import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.utils.ConstantValues
 import com.flacrow.showtracker.utils.ConstantValues.ANIMATION_DURATION
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**

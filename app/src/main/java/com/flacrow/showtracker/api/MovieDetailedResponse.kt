@@ -1,7 +1,6 @@
 package com.flacrow.showtracker.api
 
 import com.flacrow.showtracker.data.models.MovieDetailed
-import com.flacrow.showtracker.data.models.TvDetailed
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetailedResponse(

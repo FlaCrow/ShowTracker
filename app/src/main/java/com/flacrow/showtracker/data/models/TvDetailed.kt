@@ -1,6 +1,5 @@
 package com.flacrow.showtracker.data.models
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.flacrow.showtracker.api.Genres

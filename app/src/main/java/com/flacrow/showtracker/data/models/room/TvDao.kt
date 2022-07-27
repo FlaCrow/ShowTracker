@@ -5,8 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.flacrow.showtracker.data.models.IShow
-import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.utils.ConstantValues
 

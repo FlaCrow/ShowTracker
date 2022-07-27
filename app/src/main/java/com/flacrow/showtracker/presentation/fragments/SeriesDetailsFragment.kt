@@ -16,7 +16,6 @@ import com.flacrow.showtracker.databinding.FragmentSeriesDetailsBinding
 import com.flacrow.showtracker.presentation.ViewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 

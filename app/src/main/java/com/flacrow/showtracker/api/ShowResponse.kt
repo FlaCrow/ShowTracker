@@ -1,7 +1,6 @@
 package com.flacrow.showtracker.api
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class ShowResponse(
     @SerializedName("results") var results: ArrayList<Results>

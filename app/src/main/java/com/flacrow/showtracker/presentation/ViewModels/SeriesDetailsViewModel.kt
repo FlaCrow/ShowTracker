@@ -2,12 +2,8 @@ package com.flacrow.showtracker.presentation.ViewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.flacrow.showtracker.api.Genres
-import com.flacrow.showtracker.api.Season
-import com.flacrow.showtracker.api.TvDetailedResponse
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
-import com.flacrow.showtracker.utils.ConstantValues
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING

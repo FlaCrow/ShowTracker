@@ -3,7 +3,6 @@ package com.flacrow.showtracker.data.PagingSources
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.flacrow.showtracker.api.ShowAPI
-import com.flacrow.showtracker.api.ShowResponse
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.Show
 import com.flacrow.showtracker.utils.ConstantValues

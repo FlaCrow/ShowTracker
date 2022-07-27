@@ -3,7 +3,6 @@ package com.flacrow.showtracker.presentation.ViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.flacrow.showtracker.data.models.MovieDetailed
-import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
@@ -11,7 +10,6 @@ import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
