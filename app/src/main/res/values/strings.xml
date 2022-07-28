@@ -1,12 +1,8 @@
 <resources>
     <string name="app_name">ShowTracker</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="retry_but_text"><u>Retry?</u></string>
@@ -15,8 +11,7 @@
     <string name="action_search">Search</string>
     <string name="aired_string">"Aired: %s"</string>
     <string name="season_string">Season %d</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="watch_history_string">Episode %s watched:\n %s</string>
     <string name="episodes_watched">"Episodes\nWatched: "</string>
     <string name="out_of">" out of %s"</string>
     <string name="title_year_parenthesis">"%s (%s)"</string>
@@ -24,9 +19,11 @@
     <string name="poster_content_desc">Poster</string>
     <string name="add_button_content_desc">Add Button</string>
     <string name="subtract_button_content_desc">Subtract Button</string>
+    <string name="details_button_text">Details</string>
     <string name="no_overview">No overview available for this show</string>
     <string name="trending">Trending</string>
     <string name="plan_to_watch">Plan To Watch</string>
     <string name="watching">Watching</string>
     <string name="completed">Completed</string>
+    <string name="details_button_content_desc">Button for revealing timestamps</string>
 </resources>

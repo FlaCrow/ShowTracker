@@ -3,6 +3,7 @@ package com.flacrow.showtracker.presentation.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.appComponent
@@ -12,6 +13,9 @@ import com.flacrow.showtracker.presentation.adapters.SeasonAdapterItem
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class SeriesDetailsFragment :
@@ -37,16 +41,18 @@ class SeriesDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun setupDependencies() {
-        requireContext().appComponent.inject(this)
+    override fun updateUi(tvDetailed: IShowDetailed) {
+        super.updateUi(tvDetailed)
+        setAdapter()
+        lifecycleScope.launch {
+            viewModel.seasonListStateFlow.collect {
+                adapter.submitList(it)
+            }
+        }
     }
 
-    override fun updateUi(tvDetailed: IShowDetailed) {
-        setAdapter()
-        if (tvDetailed is TvDetailed)
-            viewModel.saveSeasonAdapterList(tvDetailed.seasons.toMutableList())
-            adapter.submitList(viewModel.list)
-        super.updateUi(tvDetailed)
+    override fun setupDependencies() {
+        requireContext().appComponent.inject(this)
     }
 
     private fun setAdapter() {
@@ -59,7 +65,6 @@ class SeriesDetailsFragment :
 
     private fun onExpandButtonClicked(position: Int) {
         viewModel.expandRecycler(position)
-        adapter.notifyDataSetChanged()
     }
 
 

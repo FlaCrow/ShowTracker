@@ -22,13 +22,13 @@ class DataConverters {
     }
 
     @TypeConverter
-    fun fromDateToUnixTime(dateItem: DateItem?): Long? {
-        return dateItem?.date?.time
+    fun fromDateToGson(dateItem: DateItem?): String {
+        return Gson().toJson(dateItem)
     }
 
     @TypeConverter
-    fun fromUnixTimeToDate(timestamp: Long?): DateItem? {
-        return timestamp?.let { DateItem(Date(it)) }
+    fun fromGsonToDate(gsonString: String): DateItem? {
+        return Gson().fromJson(gsonString, DateItem::class.java)
     }
 
     @TypeConverter

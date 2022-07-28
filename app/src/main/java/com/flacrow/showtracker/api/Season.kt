@@ -12,5 +12,4 @@ data class Season(
     var listOfWatchDates: MutableList<DateItem?>?,
     val poster_path: String? = null,
     val season_number: Int,
-    var isExpanded: Boolean = false
 ) : SeasonAdapterItem

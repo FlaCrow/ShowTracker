@@ -39,7 +39,7 @@ class SeasonsListAdapter(
                 maxEpTv.text =
                     root.context.getString(
                         R.string.out_of,
-                        season.episode_count
+                        season.episode_count.toString()
                     )
                 airDateTv.text =
                     root.context.getString(
@@ -56,7 +56,7 @@ class SeasonsListAdapter(
                     awaitClose { epDonePicker.setOnValueChangedListener(null) }
                 }
                 onEpisodePickerValueChanged.invoke(position, flow)
-                seasonPosterIv.setOnClickListener {
+                detailsButton.setOnClickListener {
                     onExpandButtonClicked.invoke(position)
                 }
             }
@@ -65,12 +65,18 @@ class SeasonsListAdapter(
     }
 
     inner class WatchHistoryViewHolder(parent: ViewGroup) :
-        RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.watch_history_item, parent, false)) {
+        RecyclerView.ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.watch_history_item, parent, false)
+        ) {
         private val binding = WatchHistoryItemBinding.bind(itemView)
 
         fun bind(dateItem: DateItem) {
-            binding.episodeHistoryTv.text = dateItem.date.toString()
+            binding.episodeHistoryTv.text = binding.root.context.getString(
+                R.string.watch_history_string,
+                dateItem.position.toString(),
+                dateItem.date.toString()
+            )
         }
 
     }

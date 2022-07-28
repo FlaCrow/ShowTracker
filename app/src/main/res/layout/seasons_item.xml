@@ -24,6 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:src="@tools:sample/avatars" />
 
+
         <TextView
             android:id="@+id/season_num_tv"
             android:layout_width="wrap_content"
@@ -79,6 +80,19 @@
             app:layout_constraintStart_toEndOf="@id/ep_done_picker"
             app:layout_constraintTop_toTopOf="@id/ep_done_picker"
             tools:text="out of 12" />
+
+
+        <TextView
+            android:contentDescription="@string/details_button_content_desc"
+            android:id="@+id/details_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/details_button_text"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:drawableEndCompat="@drawable/ic_baseline_arrow_down_14" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

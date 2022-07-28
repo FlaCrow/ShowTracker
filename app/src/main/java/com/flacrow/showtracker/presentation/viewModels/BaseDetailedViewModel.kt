@@ -4,12 +4,13 @@ import androidx.lifecycle.ViewModel
 import com.flacrow.showtracker.data.models.IShowDetailed
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 abstract class BaseDetailedViewModel : ViewModel() {
 
     protected val _uiState: MutableStateFlow<ShowsDetailsState> =
         MutableStateFlow(ShowsDetailsState.Empty)
-    val uiState: StateFlow<ShowsDetailsState> = _uiState
+    val uiState: StateFlow<ShowsDetailsState> = _uiState.asStateFlow()
 
     abstract fun getData(id: Int)
 

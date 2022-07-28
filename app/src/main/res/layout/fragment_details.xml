@@ -165,10 +165,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/seasons_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/overview_tv"
+                app:stackFromEnd="true"
                 tools:listitem="@layout/seasons_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
