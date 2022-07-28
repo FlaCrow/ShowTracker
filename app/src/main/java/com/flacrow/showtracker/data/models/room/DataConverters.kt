@@ -3,8 +3,10 @@ package com.flacrow.showtracker.data.models.room
 import androidx.room.TypeConverter
 import com.flacrow.showtracker.api.Genres
 import com.flacrow.showtracker.api.Season
+import com.flacrow.showtracker.presentation.adapters.DateItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.sql.Date
 
 class DataConverters {
     @TypeConverter
@@ -17,6 +19,16 @@ class DataConverters {
     fun fromJsonToSeasons(seasonListString: String): List<Season> {
         val type = object : TypeToken<List<Season>>() {}.type
         return Gson().fromJson(seasonListString, type)
+    }
+
+    @TypeConverter
+    fun fromDateToUnixTime(dateItem: DateItem?): Long? {
+        return dateItem?.date?.time
+    }
+
+    @TypeConverter
+    fun fromUnixTimeToDate(timestamp: Long?): DateItem? {
+        return timestamp?.let { DateItem(Date(it)) }
     }
 
     @TypeConverter

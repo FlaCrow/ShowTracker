@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.data.models.TvDetailed
+import com.flacrow.showtracker.presentation.adapters.SeasonAdapterItem
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +27,8 @@ class SeriesDetailsFragment :
                 onEpisodePickerValueChanged(
                     position, newValueFlow
                 )
+            }, onExpandButtonClicked = { position ->
+                onExpandButtonClicked(position)
             })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,7 +43,9 @@ class SeriesDetailsFragment :
 
     override fun updateUi(tvDetailed: IShowDetailed) {
         setAdapter()
-        adapter.submitList((tvDetailed as TvDetailed).seasons)
+        if (tvDetailed is TvDetailed)
+            viewModel.saveSeasonAdapterList(tvDetailed.seasons.toMutableList())
+            adapter.submitList(viewModel.list)
         super.updateUi(tvDetailed)
     }
 
@@ -49,6 +55,11 @@ class SeriesDetailsFragment :
 
     private fun onEpisodePickerValueChanged(position: Int, newValueFlow: Flow<Int>) {
         viewModel.changeEpisodeWatchedValue(position, newValueFlow)
+    }
+
+    private fun onExpandButtonClicked(position: Int) {
+        viewModel.expandRecycler(position)
+        adapter.notifyDataSetChanged()
     }
 
 

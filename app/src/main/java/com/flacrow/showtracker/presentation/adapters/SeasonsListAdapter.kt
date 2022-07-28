@@ -10,13 +10,17 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
+import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.util.*
 
-class SeasonsListAdapter(private val onEpisodePickerValueChanged: (Int, Flow<Int>) -> Unit) :
-    ListAdapter<Season, SeasonsListAdapter.SeasonsViewHolder>(DiffCallback()) {
-
+class SeasonsListAdapter(
+    private val onEpisodePickerValueChanged: (Int, Flow<Int>) -> Unit,
+    private val onExpandButtonClicked: (Int) -> Unit,
+) :
+    ListAdapter<SeasonAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
     inner class SeasonsViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.seasons_item, parent, false)
@@ -52,28 +56,69 @@ class SeasonsListAdapter(private val onEpisodePickerValueChanged: (Int, Flow<Int
                     awaitClose { epDonePicker.setOnValueChangedListener(null) }
                 }
                 onEpisodePickerValueChanged.invoke(position, flow)
+                seasonPosterIv.setOnClickListener {
+                    onExpandButtonClicked.invoke(position)
+                }
             }
 
         }
     }
 
+    inner class WatchHistoryViewHolder(parent: ViewGroup) :
+        RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.watch_history_item, parent, false)) {
+        private val binding = WatchHistoryItemBinding.bind(itemView)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonsViewHolder {
-        return SeasonsViewHolder(parent)
+        fun bind(dateItem: DateItem) {
+            binding.episodeHistoryTv.text = dateItem.date.toString()
+        }
+
     }
 
-    override fun onBindViewHolder(holder: SeasonsViewHolder, position: Int) {
-        getItem(position)?.let { season ->
-            holder.bind(season, position)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            R.layout.seasons_item -> SeasonsViewHolder(parent)
+            R.layout.watch_history_item -> WatchHistoryViewHolder(parent)
+            else -> {
+                throw IllegalArgumentException()
+            }
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<Season>() {
-        override fun areItemsTheSame(oldItem: Season, newItem: Season): Boolean {
-            return oldItem.season_number == newItem.season_number
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is Season -> R.layout.seasons_item
+            is DateItem -> R.layout.watch_history_item
+            else -> throw IllegalArgumentException()
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            R.layout.seasons_item ->
+                (holder as SeasonsViewHolder).bind(getItem(position) as Season, position)
+            R.layout.watch_history_item ->
+                (holder as WatchHistoryViewHolder).bind(getItem(position) as DateItem)
+            else ->
+                throw IllegalArgumentException()
+        }
+    }
+
+    private class DiffCallback : DiffUtil.ItemCallback<SeasonAdapterItem>() {
+        override fun areItemsTheSame(
+            oldItem: SeasonAdapterItem,
+            newItem: SeasonAdapterItem,
+        ): Boolean {
+            return if (oldItem::class != newItem::class) false
+            else if (oldItem is Season && newItem is Season) oldItem.season_number == newItem.season_number
+            else false
+
         }
 
-        override fun areContentsTheSame(oldItem: Season, newItem: Season): Boolean {
+        override fun areContentsTheSame(
+            oldItem: SeasonAdapterItem,
+            newItem: SeasonAdapterItem,
+        ): Boolean {
             return oldItem == newItem
         }
     }
