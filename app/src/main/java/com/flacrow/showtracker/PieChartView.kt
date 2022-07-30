@@ -112,16 +112,16 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
         )
         rectText.set(rectCenter)
         rectText.offset(0f, -((textPaint.descent() + textPaint.ascent()) / 2))
+
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
         primaryCirclePaint.color = when (percentage) {
             in 0f..0.4f -> context.getColor(R.color.pie_chart_red)
             in 0.4f..0.8f -> context.getColor(R.color.pie_chart_yellow)
             else -> context.getColor(R.color.pie_chart_green)
         }
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-
         canvas?.drawArc(rect, -90f, CIRCLE_DEGREES, true, secondaryCirclePaint)
 
         if (percentage != 0f) {
