@@ -10,7 +10,6 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.databinding.FragmentDetailsBinding
 import com.flacrow.showtracker.presentation.viewModels.BaseDetailedViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
@@ -93,7 +92,7 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                 } else "."
             }
             genreTv.text = buffer
-            userscoreTv.text = tvDetailed.rating.toString()
+            userscore.percentage = tvDetailed.rating * 10f
             Glide
                 .with(requireContext())
                 .load("https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}")

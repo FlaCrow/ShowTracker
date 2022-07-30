@@ -13,7 +13,6 @@ import com.flacrow.showtracker.presentation.viewModels.ListCachedShowsViewModel
 import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import com.flacrow.showtracker.utils.ConstantValues.TV_TYPE_STRING
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ListWatchingFragment : BaseListFragment<ListCachedShowsViewModel>() {

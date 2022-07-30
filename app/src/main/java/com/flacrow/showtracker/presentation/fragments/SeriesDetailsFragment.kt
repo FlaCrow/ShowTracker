@@ -5,16 +5,11 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShowDetailed
-import com.flacrow.showtracker.data.models.TvDetailed
-import com.flacrow.showtracker.presentation.adapters.SeasonAdapterItem
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 

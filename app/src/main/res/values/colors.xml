@@ -7,5 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="pie_chart_black">#FF000000</color>
+    <color name="pie_chart_white">#FFFFFFFF</color>
+    <color name="pie_chart_grey">#3B4142</color>
+    <color name="pie_chart_green">#00FF00</color>
+    <color name="pie_chart_yellow">#FFFF00</color>
+    <color name="pie_chart_red">#FF0000</color>
     <color name="transparent">#00FFFFFF</color>
 </resources>

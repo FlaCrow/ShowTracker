@@ -19,7 +19,6 @@ import com.flacrow.showtracker.presentation.viewModels.BaseViewModel
 import com.flacrow.showtracker.utils.ConstantValues
 import com.flacrow.showtracker.utils.ConstantValues.ANIMATION_DURATION
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**

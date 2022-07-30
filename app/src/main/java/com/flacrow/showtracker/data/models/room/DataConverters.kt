@@ -6,7 +6,6 @@ import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.presentation.adapters.DateItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.sql.Date
 
 class DataConverters {
     @TypeConverter

@@ -14,7 +14,6 @@ import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import java.util.*
 
 class SeasonsListAdapter(
     private val onEpisodePickerValueChanged: (Int, Flow<Int>) -> Unit,
