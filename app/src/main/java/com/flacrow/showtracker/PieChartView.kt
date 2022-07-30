@@ -1,11 +1,13 @@
 package com.flacrow.showtracker
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.LinearInterpolator
 import kotlin.math.roundToInt
 
 private const val DEFAULT_TEXT = "0%"
@@ -28,12 +30,21 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
     private var percentageSize = DEFAULT_PERCENTAGE_SIZE
     private var innerCirclePadding = DEFAULT_INNER_PADDING
     private var percentTextString = DEFAULT_TEXT
+    private var animator: ValueAnimator? = null
     var percentage = 0f
         set(value) {
             field = value / maxPercentage
             angle = (CIRCLE_DEGREES * field)
             setPercentageText()
-            invalidate()
+            animator = ValueAnimator.ofFloat(0f, angle).apply {
+                duration = 650
+                interpolator = LinearInterpolator()
+                addUpdateListener { valueAnimator ->
+                    angle = valueAnimator.animatedValue as Float
+                    invalidate()
+                }
+            }
+            animator?.start()
         }
 
     private fun setPercentageText() {
@@ -106,7 +117,6 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
             in 0.4f..0.8f -> context.getColor(R.color.pie_chart_yellow)
             else -> context.getColor(R.color.pie_chart_green)
         }
-
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -125,5 +135,10 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
             rectText.centerY(),
             textPaint
         )
+    }
+
+    override fun onDetachedFromWindow() {
+        animator?.removeAllUpdateListeners()
+        super.onDetachedFromWindow()
     }
 }

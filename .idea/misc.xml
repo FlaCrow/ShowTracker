@@ -8,6 +8,8 @@
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_arrow_up_14.xml" value="0.209" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_cmpl_24.xml" value="0.131" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_14.xml" value="0.209" />
+        <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_local_movies_24.xml" value="0.131" />
+        <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_movie_24.xml" value="0.131" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_ptw_24.xml" value="0.131" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_watching_24.xml" value="0.131" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/layout/activity_main.xml" value="0.1625" />
@@ -17,7 +19,7 @@
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/layout/fragment_show_list.xml" value="0.16847826086956522" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/layout/loading_item.xml" value="0.2015625" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/layout/seasons_item.xml" value="0.33" />
-        <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/layout/showentity_item.xml" value="0.5" />
+        <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/layout/showentity_item.xml" value="0.416988416988417" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/layout/watch_history_item.xml" value="0.358695652173913" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/menu/menu_bottom_nav.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/menu/menu_main.xml" value="0.1625" />

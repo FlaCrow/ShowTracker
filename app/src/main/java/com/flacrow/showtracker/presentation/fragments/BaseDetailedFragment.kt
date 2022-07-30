@@ -75,12 +75,12 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
             setupRadioButtonListeners()
 
             var buffer = ""
-            seriesTitleTv.text = if (tvDetailed.firstAirDate.isEmpty()) tvDetailed.title
+            seriesTitleTv.text = if (tvDetailed.firstAirDate.isNullOrEmpty()) tvDetailed.title
             else {
                 requireContext().getString(
                     R.string.title_year_parenthesis,
                     tvDetailed.title,
-                    tvDetailed.firstAirDate.dropLast(6)
+                    tvDetailed.firstAirDate?.dropLast(6)
                 )
             }
             overviewTv.text =

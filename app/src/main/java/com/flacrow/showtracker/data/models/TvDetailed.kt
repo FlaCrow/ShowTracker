@@ -13,7 +13,7 @@ data class TvDetailed(
     override val title: String,
     override val mediaType: String = ConstantValues.TV_TYPE_STRING,
     override val backdropUrl: String?,
-    override val firstAirDate: String,
+    override val firstAirDate: String?,
     override val genres: List<Genres>,
     override val overview: String,
     override val posterUrl: String?,

@@ -10,8 +10,9 @@
     <string name="tab_movies">Movies</string>
     <string name="action_search">Search</string>
     <string name="aired_string">"Aired: %s"</string>
+    <string name="released_in_string">Released:\n%s</string>
     <string name="season_string">Season %d</string>
-    <string name="watch_history_string">Episode %s watched on:\n%s</string>
+    <string name="watch_history_string">Episode %s watched in:\n%s</string>
     <string name="episodes_watched">"Episodes\nWatched: "</string>
     <string name="out_of">" out of %s"</string>
     <string name="title_year_parenthesis">"%s (%s)"</string>
@@ -26,4 +27,6 @@
     <string name="watching">Watching</string>
     <string name="completed">Completed</string>
     <string name="details_button_content_desc">Button for revealing timestamps</string>
+    <string name="media_type_image_view">Media Type Image View</string>
+    <string name="poster_image_view">Poster Image View</string>
 </resources>

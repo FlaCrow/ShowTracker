@@ -16,10 +16,10 @@ import com.flacrow.showtracker.databinding.FragmentShowListBinding
 import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.presentation.viewModels.BaseViewModel
-import com.flacrow.showtracker.utils.ConstantValues
 import com.flacrow.showtracker.utils.ConstantValues.ANIMATION_DURATION
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -42,12 +42,7 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
         }
     }
 
-    private val valueAnimator =
-        ValueAnimator.ofInt(
-            0,
-            (30 * (context?.resources?.displayMetrics?.density
-                ?: ConstantValues.DEFAULT_DENSITY)).toInt()
-        )
+    private var valueAnimator: ValueAnimator? = null
 
 
     protected val adapter =
@@ -90,11 +85,15 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
     private fun setupMenu() {
         binding.toolbar.inflateMenu(R.menu.menu_main)
         val searchView = binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
-        valueAnimator.apply {
+        valueAnimator = ValueAnimator.ofFloat(
+            0f,
+            48f * requireContext().resources.displayMetrics.density
+        )
+        valueAnimator?.apply {
             duration = ANIMATION_DURATION
             addUpdateListener {
                 val tabLayoutParams = binding.searchTabs.layoutParams
-                tabLayoutParams.height = it.animatedValue as Int
+                tabLayoutParams.height = (it.animatedValue as Float).roundToInt()
                 binding.searchTabs.layoutParams = tabLayoutParams
             }
 
@@ -103,16 +102,16 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
                 binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
                 binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
                 if (playAnimations)
-                when (isInFocus) {
-                    true -> {
-                        binding.searchTabs.isVisible = isInFocus
-                        valueAnimator.start()
-                    }
+                    when (isInFocus) {
+                        true -> {
+                            binding.searchTabs.isVisible = isInFocus
+                            valueAnimator?.start()
+                        }
 
-                    false -> {
-                        valueAnimator.reverse()
+                        false -> {
+                            valueAnimator?.reverse()
+                        }
                     }
-                }
             }
         }
 
@@ -137,7 +136,7 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
 
 
     override fun onDestroyView() {
-        valueAnimator.removeAllUpdateListeners()
+        valueAnimator?.removeAllUpdateListeners()
         adapter.removeLoadStateListener(updateListener)
         super.onDestroyView()
     }

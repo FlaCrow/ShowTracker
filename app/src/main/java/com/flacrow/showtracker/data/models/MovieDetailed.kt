@@ -12,7 +12,7 @@ data class MovieDetailed(
     override val title: String,
     override val mediaType: String = ConstantValues.MOVIE_TYPE_STRING,
     override val backdropUrl: String?,
-    override val firstAirDate: String,
+    override val firstAirDate: String?,
     override val genres: List<Genres>,
     override val overview: String,
     override val posterUrl: String?,

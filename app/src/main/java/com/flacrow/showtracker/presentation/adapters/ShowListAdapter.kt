@@ -10,6 +10,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.databinding.ShowentityItemBinding
+import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
 
 class ShowListAdapter(private val navigate: (IShow) -> Unit) :
     PagingDataAdapter<IShow, ShowListAdapter.ViewHolder>(
@@ -51,10 +52,19 @@ class ShowListAdapter(private val navigate: (IShow) -> Unit) :
                 Glide
                     .with(root.context)
                     .load("https://image.tmdb.org/t/p/w500/${showItem.posterUrl}")
+                    .placeholder(R.drawable.ic_placeholder_image_50)
                     .error(R.drawable.ic_placeholder_image_50)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(posterIv)
                 titleTv.text = showItem.title
+                releasedDateTv.text =
+                    root.context.getString(
+                        R.string.released_in_string,
+                        showItem.firstAirDate.let { if (it.isNullOrEmpty()) root.context.getString(R.string.no_info) else it })
+                ratingPieView.percentage = showItem.rating * 10f
+                if (showItem.mediaType == MOVIE_TYPE_STRING) {
+                    mediaTypeIv.setImageResource(R.drawable.ic_baseline_movie_24)
+                } else mediaTypeIv.setImageResource(R.drawable.ic_baseline_tv_24)
                 binding.root.setOnClickListener { navigate.invoke(showItem) }
             }
         }
