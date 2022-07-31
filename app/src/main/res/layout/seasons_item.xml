@@ -71,28 +71,39 @@
             app:layout_constraintTop_toBottomOf="@id/air_date_tv" />
 
         <TextView
+            android:id="@+id/ep_done_immutable_tv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:theme="@style/NumberPickerStyle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/watched_tv"
+            app:layout_constraintTop_toBottomOf="@id/air_date_tv" />
+
+        <TextView
             android:id="@+id/max_ep_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:text="@string/out_of"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@id/ep_done_picker"
-            app:layout_constraintStart_toEndOf="@id/ep_done_picker"
-            app:layout_constraintTop_toTopOf="@id/ep_done_picker"
+            app:layout_constraintBottom_toBottomOf="@id/watched_tv"
+            app:layout_constraintStart_toEndOf="@id/watched_tv"
+            app:layout_constraintTop_toTopOf="@id/watched_tv"
             tools:text="out of 12" />
 
 
         <TextView
-            android:contentDescription="@string/details_button_content_desc"
             android:id="@+id/details_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/details_button_content_desc"
             android:padding="8dp"
             android:text="@string/details_button_text"
             android:textSize="16sp"
+            app:drawableEndCompat="@drawable/ic_baseline_arrow_down_14"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:drawableEndCompat="@drawable/ic_baseline_arrow_down_14" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

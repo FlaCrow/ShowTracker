@@ -10,6 +10,9 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.databinding.FragmentDetailsBinding
 import com.flacrow.showtracker.presentation.viewModels.BaseDetailedViewModel
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import kotlinx.coroutines.launch
 
 abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
@@ -38,13 +41,13 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
         binding.statusGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
                 R.id.ptw_button -> {
-                    viewModel.addToPTW()
+                    viewModel.saveWatchStatus(STATUS_PLAN_TO_WATCH)
                 }
                 R.id.watching_button -> {
-                    viewModel.addToWatching()
+                    viewModel.saveWatchStatus(STATUS_WATCHING)
                 }
                 R.id.cmpl_button -> {
-                    viewModel.addToCMPL()
+                    viewModel.saveWatchStatus(STATUS_COMPLETED)
                 }
                 else -> {}
             }

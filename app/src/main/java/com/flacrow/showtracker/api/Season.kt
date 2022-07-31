@@ -10,5 +10,6 @@ data class Season(
     var epDone: Int = 0,
     var listOfWatchDates: MutableList<DateItem?>?,
     val poster_path: String? = null,
+    var watchStatus: Int = 0,
     val season_number: Int,
 ) : SeasonAdapterItem

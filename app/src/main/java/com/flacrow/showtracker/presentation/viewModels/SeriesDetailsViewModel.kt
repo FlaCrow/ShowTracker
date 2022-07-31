@@ -6,15 +6,14 @@ import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.presentation.adapters.DateItem
 import com.flacrow.showtracker.presentation.adapters.SeasonAdapterItem
-import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
-import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
-import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+
+//TODO: tidy up code, it is horrible!!!!
 class SeriesDetailsViewModel @Inject constructor(private var repository: Repository) :
     BaseDetailedViewModel() {
     private var _seasonListStateFlow: MutableStateFlow<List<SeasonAdapterItem>> =
@@ -66,35 +65,28 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
         }
     }
 
-    override fun addToPTW() {
+    override fun saveWatchStatus(watchStatus: Int) {
         viewModelScope.launch {
-            repository.saveSeriesToDatabase(
-                ((_uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed).copy(
-                    watchStatus = STATUS_PLAN_TO_WATCH
-                )
-            )
-        }
-    }
+            val listCopy =
+                ((_uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed).copy()
+            _seasonListStateFlow.update {
+                listCopy.seasons.map {
+                    it.copy(watchStatus = watchStatus)
+                }
+            }
+            listCopy.watchStatus = watchStatus
 
-    override fun addToWatching() {
-        viewModelScope.launch {
-            repository.saveSeriesToDatabase(
-                ((_uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed).copy(
-                    watchStatus = STATUS_WATCHING
+            val listCopy2 = listCopy.copy(seasons = listCopy.seasons.map {
+                it.copy(
+                    watchStatus = watchStatus
                 )
-            )
-        }
-    }
+            })
 
-    override fun addToCMPL() {
-        viewModelScope.launch {
-            repository.saveSeriesToDatabase(
-                ((_uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed).copy(
-                    watchStatus = STATUS_COMPLETED
-                )
-            )
+            _uiState.update {
+                ShowsDetailsState.Success(listCopy2)
+            }
+            repository.saveSeriesToDatabase(listCopy2)
         }
-
     }
 
     fun expandRecycler(position: Int) {

@@ -14,11 +14,8 @@ abstract class BaseDetailedViewModel : ViewModel() {
 
     abstract fun getData(id: Int)
 
-    abstract fun addToPTW()
 
-    abstract fun addToWatching()
-
-    abstract fun addToCMPL()
+    abstract fun saveWatchStatus(watchStatus: Int)
 
 
     sealed class ShowsDetailsState {

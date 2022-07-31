@@ -3,9 +3,6 @@ package com.flacrow.showtracker.presentation.viewModels
 import androidx.lifecycle.viewModelScope
 import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.data.repository.Repository
-import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
-import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
-import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,36 +22,14 @@ class MovieDetailsViewModel @Inject constructor(private var repository: Reposito
         }
     }
 
-    override fun addToPTW() {
+    override fun saveWatchStatus(watchStatus: Int) {
         viewModelScope.launch {
             repository.saveMovieToDatabase(
                 ((_uiState.value as ShowsDetailsState.Success).showDetailed as MovieDetailed).copy(
-                    watchStatus = STATUS_PLAN_TO_WATCH
+                    watchStatus = watchStatus
                 )
             )
         }
-
     }
 
-    override fun addToWatching() {
-        viewModelScope.launch {
-            repository.saveMovieToDatabase(
-                ((_uiState.value as ShowsDetailsState.Success).showDetailed as MovieDetailed).copy(
-                    watchStatus = STATUS_WATCHING
-                )
-            )
-        }
-
-    }
-
-    override fun addToCMPL() {
-        viewModelScope.launch {
-            repository.saveMovieToDatabase(
-                ((_uiState.value as ShowsDetailsState.Success).showDetailed as MovieDetailed).copy(
-                    watchStatus = STATUS_COMPLETED
-                )
-            )
-        }
-
-    }
 }

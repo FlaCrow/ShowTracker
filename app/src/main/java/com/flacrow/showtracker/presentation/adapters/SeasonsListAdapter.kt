@@ -2,6 +2,7 @@ package com.flacrow.showtracker.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -45,9 +47,12 @@ class SeasonsListAdapter(
                         R.string.aired_string,
                         season.air_date ?: root.context.getString(R.string.no_info)
                     )
+                epDonePicker.isVisible = season.watchStatus == STATUS_WATCHING
+                epDoneImmutableTv.isVisible = !epDonePicker.isVisible
                 epDonePicker.wrapSelectorWheel = false
                 epDonePicker.maxValue = season.episode_count
                 epDonePicker.value = season.epDone
+                epDoneImmutableTv.text = season.epDone.toString()
                 val flow = callbackFlow {
                     epDonePicker.setOnValueChangedListener { _, _, newValue ->
                         trySend(newValue)
