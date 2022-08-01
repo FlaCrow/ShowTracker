@@ -95,6 +95,7 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                 } else "."
             }
             genreTv.text = buffer
+            if(userscore.percentage != tvDetailed.rating * 10f / userscore.maxPercentage)
             userscore.percentage = tvDetailed.rating * 10f
             Glide
                 .with(requireContext())

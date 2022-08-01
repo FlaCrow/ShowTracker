@@ -8,7 +8,7 @@ data class Season(
     val episode_count: Int,
     val name: String,
     var epDone: Int = 0,
-    var listOfWatchDates: MutableList<DateItem?>?,
+    var listOfWatchDates: MutableList<DateItem>?,
     val poster_path: String? = null,
     var watchStatus: Int = 0,
     val season_number: Int,

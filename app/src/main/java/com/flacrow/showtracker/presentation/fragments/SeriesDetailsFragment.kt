@@ -9,7 +9,9 @@ import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 
@@ -37,13 +39,13 @@ class SeriesDetailsFragment :
     }
 
     override fun updateUi(tvDetailed: IShowDetailed) {
-        super.updateUi(tvDetailed)
         setAdapter()
         lifecycleScope.launch {
             viewModel.seasonListStateFlow.collect {
                 adapter.submitList(it)
             }
         }
+        super.updateUi(tvDetailed)
     }
 
     override fun setupDependencies() {
@@ -54,8 +56,13 @@ class SeriesDetailsFragment :
         binding.seasonsRecycler.adapter = adapter
     }
 
+    @OptIn(FlowPreview::class)
     private fun onEpisodePickerValueChanged(position: Int, newValueFlow: Flow<Int>) {
-        viewModel.changeEpisodeWatchedValue(position, newValueFlow)
+        lifecycleScope.launch {
+            newValueFlow.debounce(500).collect { newValue ->
+                viewModel.changeEpisodeWatchedValue(position, newValue)
+            }
+        }
     }
 
     private fun onExpandButtonClicked(position: Int) {

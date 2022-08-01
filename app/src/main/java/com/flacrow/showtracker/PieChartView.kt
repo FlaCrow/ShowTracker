@@ -18,7 +18,6 @@ private const val CIRCLE_DEGREES = 360f
 class PieChartView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
 
-    private val maxPercentage = 100f
     private var angle: Float = 0f
     private val rect = RectF()
     private val rectCenter = RectF()
@@ -31,11 +30,13 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
     private var innerCirclePadding = DEFAULT_INNER_PADDING
     private var percentTextString = DEFAULT_TEXT
     private var animator: ValueAnimator? = null
+    val maxPercentage = 100f
     var percentage = 0f
         set(value) {
             field = value / maxPercentage
             angle = (CIRCLE_DEGREES * field)
             setPercentageText()
+            setFilledCircleColor()
             animator = ValueAnimator.ofFloat(0f, angle).apply {
                 duration = 650
                 interpolator = LinearInterpolator()
@@ -43,14 +44,23 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
                     angle = valueAnimator.animatedValue as Float
                     invalidate()
                 }
+                start()
             }
-            animator?.start()
+
         }
 
     private fun setPercentageText() {
         percentTextString = if (percentage != 0f) {
             (percentage * maxPercentage).roundToInt().toString() + "%"
         } else DEFAULT_TEXT
+    }
+
+    private fun setFilledCircleColor() {
+        primaryCirclePaint.color = when (percentage) {
+            in 0f..0.4f -> context.getColor(R.color.pie_chart_red)
+            in 0.4f..0.8f -> context.getColor(R.color.pie_chart_yellow)
+            else -> context.getColor(R.color.pie_chart_green)
+        }
     }
 
     init {
@@ -112,16 +122,11 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
         )
         rectText.set(rectCenter)
         rectText.offset(0f, -((textPaint.descent() + textPaint.ascent()) / 2))
-
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        primaryCirclePaint.color = when (percentage) {
-            in 0f..0.4f -> context.getColor(R.color.pie_chart_red)
-            in 0.4f..0.8f -> context.getColor(R.color.pie_chart_yellow)
-            else -> context.getColor(R.color.pie_chart_green)
-        }
+
         canvas?.drawArc(rect, -90f, CIRCLE_DEGREES, true, secondaryCirclePaint)
 
         if (percentage != 0f) {
