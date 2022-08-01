@@ -13,6 +13,7 @@ import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
+import com.flacrow.showtracker.utils.Extensions.setImageWithGlide
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -29,12 +30,7 @@ class SeasonsListAdapter(
         private val binding = SeasonsItemBinding.bind(itemView)
         fun bind(season: Season, position: Int) {
             binding.apply {
-                Glide
-                    .with(root.context)
-                    .load("https://image.tmdb.org/t/p/w500/${season.poster_path}")
-                    .error(R.drawable.ic_placeholder_image_50)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(seasonPosterIv)
+                seasonPosterIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${season.poster_path}")
                 seasonNumTv.text =
                     root.context.getString(R.string.season_string, season.season_number)
                 maxEpTv.text =

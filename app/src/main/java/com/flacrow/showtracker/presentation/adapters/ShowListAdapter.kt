@@ -11,6 +11,7 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.databinding.ShowentityItemBinding
 import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
+import com.flacrow.showtracker.utils.Extensions.setImageWithGlide
 
 class ShowListAdapter(private val navigate: (IShow) -> Unit) :
     PagingDataAdapter<IShow, ShowListAdapter.ViewHolder>(
@@ -49,13 +50,7 @@ class ShowListAdapter(private val navigate: (IShow) -> Unit) :
 
         fun bind(showItem: IShow) {
             binding.apply {
-                Glide
-                    .with(root.context)
-                    .load("https://image.tmdb.org/t/p/w500/${showItem.posterUrl}")
-                    .placeholder(R.drawable.ic_placeholder_image_50)
-                    .error(R.drawable.ic_placeholder_image_50)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(posterIv)
+                posterIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${showItem.posterUrl}")
                 titleTv.text = showItem.title
                 releasedDateTv.text =
                     root.context.getString(

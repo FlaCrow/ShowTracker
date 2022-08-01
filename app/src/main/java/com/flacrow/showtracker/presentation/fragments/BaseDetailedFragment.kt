@@ -13,6 +13,7 @@ import com.flacrow.showtracker.presentation.viewModels.BaseDetailedViewModel
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
+import com.flacrow.showtracker.utils.Extensions.setImageWithGlide
 import kotlinx.coroutines.launch
 
 abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
@@ -97,13 +98,7 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
             genreTv.text = buffer
             if(userscore.percentage != tvDetailed.rating * 10f / userscore.maxPercentage)
             userscore.percentage = tvDetailed.rating * 10f
-            Glide
-                .with(requireContext())
-                .load("https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}")
-                .error(R.drawable.ic_placeholder_image_50)
-                .centerInside()
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(backdropIv)
+            backdropIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}")
         }
     }
 
