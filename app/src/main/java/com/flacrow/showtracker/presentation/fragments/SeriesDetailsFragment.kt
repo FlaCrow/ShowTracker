@@ -9,9 +9,11 @@ import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
+import com.flacrow.showtracker.utils.Extensions.setChildrenEnabled
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -59,9 +61,14 @@ class SeriesDetailsFragment :
     @OptIn(FlowPreview::class)
     private fun onEpisodePickerValueChanged(position: Int, newValueFlow: Flow<Int>) {
         lifecycleScope.launch {
-            newValueFlow.debounce(500).collect { newValue ->
-                viewModel.changeEpisodeWatchedValue(position, newValue)
-            }
+            newValueFlow.map {
+                binding.statusGroup.setChildrenEnabled(false)
+                it
+            }.debounce(500)
+                .collect { newValue ->
+                    viewModel.changeEpisodeWatchedValue(position, newValue)
+                    binding.statusGroup.setChildrenEnabled(true)
+                }
         }
     }
 
