@@ -12,7 +12,7 @@
     <string name="aired_string">"Aired: %s"</string>
     <string name="released_in_string">Released:\n%s</string>
     <string name="season_string">Season %d</string>
-    <string name="watch_history_string">Episode %s watched in:\n%s</string>
+    <string name="watch_history_string">Episode %s watched on:\n%s</string>
     <string name="episodes_watched">"Episodes\nWatched: "</string>
     <string name="out_of">" out of %s"</string>
     <string name="title_year_parenthesis">"%s (%s)"</string>

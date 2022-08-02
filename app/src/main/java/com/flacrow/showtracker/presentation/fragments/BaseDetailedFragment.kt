@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.databinding.FragmentDetailsBinding

@@ -13,13 +13,19 @@ object Extensions {
         }
     }
 
-    fun ImageView.setImageWithGlide(url: String){
+    fun ImageView.setImageWithGlide(url: String) {
         Glide
-                .with(this.context)
-                .load(url)
-                .placeholder(R.drawable.ic_placeholder_image_50)
-                .error(R.drawable.ic_placeholder_image_50)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(this)
+            .with(this.context)
+            .load(url)
+            .placeholder(R.drawable.ic_placeholder_image_50)
+            .error(R.drawable.ic_placeholder_image_50)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(this)
     }
+
+    inline fun <T> List<T>.allReverseIteration(predicate: (T) -> Boolean): Boolean {
+        for (i in this.size - 1 downTo 0) if (!predicate(this[i])) return false
+        return true
+    }
+
 }

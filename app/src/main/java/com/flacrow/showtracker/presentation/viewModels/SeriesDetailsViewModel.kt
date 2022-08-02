@@ -6,6 +6,9 @@ import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.presentation.adapters.DateItem
 import com.flacrow.showtracker.presentation.adapters.SeasonAdapterItem
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
+import com.flacrow.showtracker.utils.Extensions.allReverseIteration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -41,7 +44,7 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
         viewModelScope.launch {
             val uiStateCopy = (_uiState.value as ShowsDetailsState.Success).copy()
             if (uiStateCopy.showDetailed is TvDetailed) {
-                val oldValue = uiStateCopy.showDetailed.seasons[position].epDone
+                val oldValue = uiStateCopy.showDetailed.seasons[position].episodeDone
                 val date = Calendar.getInstance().time
                 uiStateCopy.showDetailed.seasons[position].let { season ->
                     for (i in oldValue until newValue) {
@@ -52,10 +55,15 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                         season.listOfWatchDates?.subList(newValue, oldValue)?.clear()
                     }
                 }
-                (uiStateCopy.showDetailed).seasons[position].epDone = newValue
-                repository.saveSeriesToDatabase(uiStateCopy.showDetailed)
+                uiStateCopy.showDetailed.seasons[position].episodeDone = newValue
+                //check if episodeDone == episodeCount : if so for all seasons -> watch status "completed"
+                val isCompleted =
+                    uiStateCopy.showDetailed.seasons.allReverseIteration { it.episodeDone == it.episodeCount }
+                if (isCompleted) _uiState.update {
+                    ShowsDetailsState.Success(uiStateCopy.showDetailed.copy(watchStatus = STATUS_COMPLETED))
+                }
+                repository.saveSeriesToDatabase((uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed)
                 _isRecyclerExpanded.update { BooleanArray(uiStateCopy.showDetailed.seasons.size).toList() }
-                _uiState.update { ShowsDetailsState.Success(uiStateCopy.showDetailed) }
                 _seasonListStateFlow.update { uiStateCopy.showDetailed.seasons }
 
             }
@@ -69,6 +77,11 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                 ((_uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed).let { series ->
                     series.copy(seasons = series.seasons.map { season ->
                         season.watchStatus = watchStatus
+                        //reset epDone counter if Status = Plan to Watch
+                        if (watchStatus == STATUS_PLAN_TO_WATCH) {
+                            season.listOfWatchDates = mutableListOf()
+                            season.episodeDone = 0
+                        }
                         season
                     })
                 }

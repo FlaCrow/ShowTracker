@@ -6,12 +6,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import com.flacrow.showtracker.utils.Extensions.setImageWithGlide
 import kotlinx.coroutines.channels.awaitClose
@@ -30,25 +30,36 @@ class SeasonsListAdapter(
         private val binding = SeasonsItemBinding.bind(itemView)
         fun bind(season: Season, position: Int) {
             binding.apply {
-                seasonPosterIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${season.poster_path}")
+                seasonPosterIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${season.posterUrl}")
                 seasonNumTv.text =
-                    root.context.getString(R.string.season_string, season.season_number)
+                    root.context.getString(R.string.season_string, season.seasonNumber)
                 maxEpTv.text =
                     root.context.getString(
                         R.string.out_of,
-                        season.episode_count.toString()
+                        season.episodeCount.toString()
                     )
                 airDateTv.text =
                     root.context.getString(
                         R.string.aired_string,
-                        season.air_date ?: root.context.getString(R.string.no_info)
+                        season.dateAired ?: root.context.getString(R.string.no_info)
                     )
                 epDonePicker.isVisible = season.watchStatus == STATUS_WATCHING
                 epDoneImmutableTv.isVisible = !epDonePicker.isVisible
                 epDonePicker.wrapSelectorWheel = false
-                epDonePicker.maxValue = season.episode_count
-                epDonePicker.value = season.epDone
-                epDoneImmutableTv.text = season.epDone.toString()
+                epDonePicker.maxValue = season.episodeCount
+                epDonePicker.value = season.episodeDone
+                when (season.watchStatus) {
+                    STATUS_PLAN_TO_WATCH -> {
+                        epDoneImmutableTv.text = "0"
+                        detailsButton.isVisible = false
+                    }
+                    STATUS_COMPLETED ->
+                        epDoneImmutableTv.text = season.episodeCount.toString()
+                    else -> {
+                        epDoneImmutableTv.text = season.episodeDone.toString()
+                        detailsButton.isVisible = true
+                    }
+                }
                 val flow = callbackFlow {
                     epDonePicker.setOnValueChangedListener { _, _, newValue ->
                         trySend(newValue)
@@ -116,7 +127,7 @@ class SeasonsListAdapter(
             newItem: SeasonAdapterItem,
         ): Boolean {
             return if (oldItem::class != newItem::class) false
-            else if (oldItem is Season && newItem is Season) oldItem.season_number == newItem.season_number
+            else if (oldItem is Season && newItem is Season) oldItem.seasonNumber == newItem.seasonNumber
             else false
 
         }
