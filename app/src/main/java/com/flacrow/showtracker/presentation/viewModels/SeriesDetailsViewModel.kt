@@ -1,7 +1,7 @@
 package com.flacrow.showtracker.presentation.viewModels
 
 import androidx.lifecycle.viewModelScope
-import com.flacrow.showtracker.api.Season
+import com.flacrow.showtracker.data.models.SeasonLocal
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.presentation.adapters.DateItem
@@ -48,11 +48,10 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                 val date = Calendar.getInstance().time
                 uiStateCopy.showDetailed.seasons[position].let { season ->
                     for (i in oldValue until newValue) {
-                        season.listOfWatchDates = season.listOfWatchDates ?: mutableListOf()
-                        season.listOfWatchDates?.add(i, DateItem(date, i + 1))
+                        season.listOfWatchDates.add(i, DateItem(date, i + 1))
                     }
                     if (oldValue > newValue) {
-                        season.listOfWatchDates?.subList(newValue, oldValue)?.clear()
+                        season.listOfWatchDates.subList(newValue, oldValue).clear()
                     }
                 }
                 uiStateCopy.showDetailed.seasons[position].episodeDone = newValue
@@ -63,8 +62,15 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                     ShowsDetailsState.Success(uiStateCopy.showDetailed.copy(watchStatus = STATUS_COMPLETED))
                 }
                 repository.saveSeriesToDatabase((uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed)
-                _isRecyclerExpanded.update { BooleanArray(uiStateCopy.showDetailed.seasons.size).toList() }
-                _seasonListStateFlow.update { uiStateCopy.showDetailed.seasons }
+//                _isRecyclerExpanded.update { BooleanArray(uiStateCopy.showDetailed.seasons.size).toList() }
+                //build list for adapter with expanded recycler
+                if (_isRecyclerExpanded.value[position]) {
+                    val seasonAdapterUpdatedList: MutableList<SeasonAdapterItem> =
+                        uiStateCopy.showDetailed.seasons.toMutableList()
+                    seasonAdapterUpdatedList.addAll(position + 1,
+                        uiStateCopy.showDetailed.seasons[position].listOfWatchDates)
+                    _seasonListStateFlow.update { seasonAdapterUpdatedList }
+                }
 
             }
 
@@ -89,6 +95,7 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
             _uiState.update {
                 ShowsDetailsState.Success(currentSeries)
             }
+            _seasonListStateFlow.update { currentSeries.seasons }
             repository.saveSeriesToDatabase(currentSeries)
         }
     }
@@ -103,12 +110,16 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                     if (index == position) return@update listOfSeasonsCopy
                 }
             }
-            listOfSeasonsCopy.addAll(position + 1,
-                (listOfSeasonsCopy[position] as Season).listOfWatchDates
-                    ?: emptyList())
+            val expandedSeason = listOfSeasonsCopy[position] as SeasonLocal
+
+            //update expanded season number if list of watch dates is not empty
+            if (expandedSeason.listOfWatchDates.isNotEmpty())
             _isRecyclerExpanded.update {
                 BooleanArray(listOfSeasonsCopy.size).toMutableList().let { it[position] = true; it }
             }
+            listOfSeasonsCopy.addAll(position + 1,
+                (expandedSeason).listOfWatchDates)
+
             listOfSeasonsCopy
         }
     }

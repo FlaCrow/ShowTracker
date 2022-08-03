@@ -13,7 +13,7 @@ import com.flacrow.showtracker.utils.Extensions.setChildrenEnabled
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -61,9 +61,8 @@ class SeriesDetailsFragment :
     @OptIn(FlowPreview::class)
     private fun onEpisodePickerValueChanged(position: Int, newValueFlow: Flow<Int>) {
         lifecycleScope.launch {
-            newValueFlow.map {
+            newValueFlow.onEach {
                 binding.statusGroup.setChildrenEnabled(false)
-                it
             }.debounce(500)
                 .collect { newValue ->
                     viewModel.changeEpisodeWatchedValue(position, newValue)

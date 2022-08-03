@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.flacrow.showtracker.R
-import com.flacrow.showtracker.api.Season
+import com.flacrow.showtracker.data.models.SeasonLocal
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
@@ -28,7 +28,7 @@ class SeasonsListAdapter(
             .inflate(R.layout.seasons_item, parent, false)
     ) {
         private val binding = SeasonsItemBinding.bind(itemView)
-        fun bind(season: Season, position: Int) {
+        fun bind(season: SeasonLocal, position: Int) {
             binding.apply {
                 seasonPosterIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${season.posterUrl}")
                 seasonNumTv.text =
@@ -104,7 +104,7 @@ class SeasonsListAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is Season -> R.layout.seasons_item
+            is SeasonLocal -> R.layout.seasons_item
             is DateItem -> R.layout.watch_history_item
             else -> throw IllegalArgumentException()
         }
@@ -113,7 +113,7 @@ class SeasonsListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             R.layout.seasons_item ->
-                (holder as SeasonsViewHolder).bind(getItem(position) as Season, position)
+                (holder as SeasonsViewHolder).bind(getItem(position) as SeasonLocal, position)
             R.layout.watch_history_item ->
                 (holder as WatchHistoryViewHolder).bind(getItem(position) as DateItem)
             else ->
@@ -127,7 +127,7 @@ class SeasonsListAdapter(
             newItem: SeasonAdapterItem,
         ): Boolean {
             return if (oldItem::class != newItem::class) false
-            else if (oldItem is Season && newItem is Season) oldItem.seasonNumber == newItem.seasonNumber
+            else if (oldItem is SeasonLocal && newItem is SeasonLocal) oldItem.seasonNumber == newItem.seasonNumber
             else false
 
         }

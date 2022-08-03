@@ -15,7 +15,8 @@ data class TvDetailedResponse(
     val overview: String,
     @SerializedName(value = "poster_path")
     val posterUrl: String?,
-    val seasons: List<Season>,
+    @SerializedName("seasons")
+    val seasonsResponse: List<Season>,
     val status: String,
     val tagline: String,
     @SerializedName(value = "vote_average")
@@ -30,7 +31,7 @@ data class TvDetailedResponse(
             id = this.id,
             overview = this.overview,
             posterUrl = this.posterUrl,
-            seasons = this.seasons,
+            seasons = this.seasonsResponse.map { it.toInternalModel() },
             status = this.status,
             tagline = this.tagline,
             rating = this.rating,

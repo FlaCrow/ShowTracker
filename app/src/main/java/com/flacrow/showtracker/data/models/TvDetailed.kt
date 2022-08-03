@@ -3,7 +3,6 @@ package com.flacrow.showtracker.data.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.flacrow.showtracker.api.Genres
-import com.flacrow.showtracker.api.Season
 import com.flacrow.showtracker.utils.ConstantValues
 
 @Entity(tableName = ConstantValues.TV_TYPE_STRING)
@@ -17,7 +16,7 @@ data class TvDetailed(
     override val genres: List<Genres>,
     override val overview: String,
     override val posterUrl: String?,
-    val seasons: List<Season>,
+    val seasons: List<SeasonLocal>,
     val status: String,
     override val tagline: String,
     override val rating: Float,

@@ -151,5 +151,5 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
         }
     }
 
-    abstract fun onListElementClick(show: IShow)
+    protected abstract fun onListElementClick(show: IShow)
 }

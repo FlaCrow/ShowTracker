@@ -1,7 +1,6 @@
 package com.flacrow.showtracker.api
 
-import com.flacrow.showtracker.presentation.adapters.DateItem
-import com.flacrow.showtracker.presentation.adapters.SeasonAdapterItem
+import com.flacrow.showtracker.data.models.SeasonLocal
 import com.google.gson.annotations.SerializedName
 
 data class Season(
@@ -10,11 +9,17 @@ data class Season(
     @SerializedName("episode_count")
     val episodeCount: Int,
     val name: String,
-    var episodeDone: Int = 0,
-    var listOfWatchDates: MutableList<DateItem>?,
     @SerializedName("poster_path")
     val posterUrl: String? = null,
-    var watchStatus: Int = 0,
     @SerializedName("season_number")
     val seasonNumber: Int,
-) : SeasonAdapterItem
+)  {
+    fun toInternalModel(): SeasonLocal {
+        return SeasonLocal(dateAired = this.dateAired,
+            episodeCount = this.episodeCount,
+            name = this.name,
+            posterUrl = this.posterUrl,
+            seasonNumber = this.seasonNumber)
+
+    }
+}
