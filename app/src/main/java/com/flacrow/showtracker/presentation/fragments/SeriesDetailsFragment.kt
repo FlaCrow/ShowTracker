@@ -1,5 +1,8 @@
 package com.flacrow.showtracker.presentation.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -36,7 +39,9 @@ class SeriesDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args: SeriesDetailsFragmentArgs by navArgs()
-        viewModel.getData(args.seriesId)
+        if (isOnline(requireContext())) {
+            viewModel.updateData(args.seriesId)
+        } else viewModel.getData(args.seriesId)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -75,5 +80,20 @@ class SeriesDetailsFragment :
         viewModel.expandRecycler(position)
     }
 
-
+    private fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return true
+            }
+        }
+        return false
+    }
 }

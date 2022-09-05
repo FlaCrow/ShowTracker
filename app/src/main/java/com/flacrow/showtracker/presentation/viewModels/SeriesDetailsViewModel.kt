@@ -67,8 +67,10 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
                 if (_isRecyclerExpanded.value[position]) {
                     val seasonAdapterUpdatedList: MutableList<SeasonAdapterItem> =
                         uiStateCopy.showDetailed.seasons.toMutableList()
-                    seasonAdapterUpdatedList.addAll(position + 1,
-                        uiStateCopy.showDetailed.seasons[position].listOfWatchDates)
+                    seasonAdapterUpdatedList.addAll(
+                        position + 1,
+                        uiStateCopy.showDetailed.seasons[position].listOfWatchDates
+                    )
                     _seasonListStateFlow.update { seasonAdapterUpdatedList }
                 }
 
@@ -114,13 +116,29 @@ class SeriesDetailsViewModel @Inject constructor(private var repository: Reposit
 
             //update expanded season number if list of watch dates is not empty
             if (expandedSeason.listOfWatchDates.isNotEmpty())
-            _isRecyclerExpanded.update {
-                BooleanArray(listOfSeasonsCopy.size).toMutableList().let { it[position] = true; it }
-            }
-            listOfSeasonsCopy.addAll(position + 1,
-                (expandedSeason).listOfWatchDates)
+                _isRecyclerExpanded.update {
+                    BooleanArray(listOfSeasonsCopy.size).toMutableList()
+                        .let { it[position] = true; it }
+                }
+            listOfSeasonsCopy.addAll(
+                position + 1,
+                (expandedSeason).listOfWatchDates
+            )
 
             listOfSeasonsCopy
+        }
+    }
+
+    fun updateData(id: Int) {
+        viewModelScope.launch {
+            _uiState.value = ShowsDetailsState.Loading
+            repository.updateTvDetailed(id).catch { e ->
+                _uiState.value = ShowsDetailsState.Error(e)
+            }.collect { tvDetailedResponse ->
+                _uiState.value = ShowsDetailsState.Success(tvDetailedResponse)
+                _isRecyclerExpanded.update { BooleanArray(tvDetailedResponse.seasons.size).toList() }
+                _seasonListStateFlow.update { tvDetailedResponse.seasons.toMutableList() }
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.models.room.AppDatabase
 import com.flacrow.showtracker.data.pagingSources.ShowsSearchPagingSource
 import com.flacrow.showtracker.data.pagingSources.ShowsTrendingPagingSource
+import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
+import com.flacrow.showtracker.utils.Extensions.isMutableFieldEqual
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,6 +28,7 @@ interface Repository {
     suspend fun saveSeriesToDatabase(tvDetailed: TvDetailed)
     fun getSavedMovies(query: String): Flow<PagingData<MovieDetailed>>
     fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>>
+    fun updateTvDetailed(id: Int): Flow<TvDetailed>
 }
 
 class RepositoryImpl @Inject constructor(
@@ -84,5 +87,41 @@ class RepositoryImpl @Inject constructor(
             })
             .flow
     }
+
+    override fun updateTvDetailed(id: Int): Flow<TvDetailed> = flow {
+        val cachedTvDetailed = database.tvDao().getSeriesById(id)
+        if (cachedTvDetailed == null) {
+            emit(showAPI.searchTvById(id).toInternalModel())
+            return@flow
+        }
+
+        val updatedTvDetailed = showAPI.searchTvById(id).toInternalModel()
+        //data class SeasonLocal equals is overridden
+        if (cachedTvDetailed.isMutableFieldEqual(updatedTvDetailed)) {
+            emit(cachedTvDetailed)
+            return@flow
+        }
+
+        val newSeasonList = cachedTvDetailed.seasons.toMutableList()
+        //check if "extras/season 0" season was added, insert it at the start of the new list if so
+        if (cachedTvDetailed.seasons[0].seasonNumber != updatedTvDetailed.seasons[0].seasonNumber) {
+            newSeasonList.add(0, updatedTvDetailed.seasons[0].copy())
+        }
+
+        val newTvDetailed = cachedTvDetailed.copy(
+            seasons = newSeasonList.mapIndexed { index, newSeason ->
+                newSeason.copy(
+                    episodeCount = updatedTvDetailed.seasons[index].episodeCount,
+                    dateAired = updatedTvDetailed.seasons[index].dateAired,
+                    watchStatus = STATUS_WATCHING
+                )
+            },
+            rating = updatedTvDetailed.rating,
+            status = updatedTvDetailed.status,
+            watchStatus = STATUS_WATCHING
+        )
+        saveSeriesToDatabase(newTvDetailed)
+        emit(newTvDetailed)
+    }.flowOn(Dispatchers.IO)
 
 }
