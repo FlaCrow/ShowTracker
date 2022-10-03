@@ -1,5 +1,9 @@
+<!DOCTYPE resources [
+    <!ENTITY appname "ShowTracker">
+    <!ENTITY author "FlaCrow">
+    ]>
 <resources>
-    <string name="app_name">ShowTracker</string>
+    <string name="app_name">&appname;</string>
     <string name="action_settings">Settings</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
@@ -29,4 +33,12 @@
     <string name="details_button_content_desc">Button for revealing timestamps</string>
     <string name="media_type_image_view">Media Type Image View</string>
     <string name="poster_image_view">Poster Image View</string>
+    <string name="settings_database_export">Export Database</string>
+    <string name="settings_database_import">Import Database</string>
+    <string name="settings_database_clear">Clear Database</string>
+    <string name="settings_update_on_interact">Allow this app to update local media entries when interacted with</string>
+    <string name="settings_tmdb_thanks">ShowTracker uses TMDb but is not endorsed or certified by TMDb</string>
+    <string name="settings_info">&appname; is made by &author; \nBuild Type: %s\nVersion: %s</string>
+    <string name="app_logo_desc">App logo</string>
+    <string name="tmdb_logo_description">The Movie Database Logo</string>
 </resources>

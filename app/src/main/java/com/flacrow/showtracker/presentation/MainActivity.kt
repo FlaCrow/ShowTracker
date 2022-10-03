@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.movieDetailsFragment -> hideBottomNav()
                 R.id.seriesDetailsFragment -> hideBottomNav()
+                R.id.settingsFragment -> hideBottomNav()
                 else -> showBottomNav()
             }
         }

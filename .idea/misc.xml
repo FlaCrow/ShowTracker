@@ -25,8 +25,19 @@
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/menu/menu_main.xml" value="0.1625" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/menu/menu_test.xml" value="0.1625" />
         <entry key="..\:/Users/max/AndroidStudioProjects/ShowTracker/app/src/main/res/menu/test.xml" value="0.16145833333333334" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/drawable/ic_app.xml" value="0.387" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.387" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.387" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/drawable/ic_tmdb_logo.xml" value="0.387" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/drawable/ic_tmdb_logo_alt.xml" value="0.209" />
         <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/layout/fragment_details.xml" value="0.2015625" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/layout/fragment_settings.xml" value="0.33" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/layout/fragment_show_list.xml" value="0.24375" />
         <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/layout/seasons_item.xml" value="0.2015625" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/layout/settings_item.xml" value="0.33" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/layout/settings_switchable_item.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/menu/menu_bottom_nav.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/max/StudioProjects/ShowTracker/app/src/main/res/menu/menu_main.xml" value="0.38697916666666665" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_up_14.xml" value="0.122" />
         <entry key="app/src/main/res/drawable/ic_baseline_cmpl_24.xml" value="0.122" />
         <entry key="app/src/main/res/drawable/ic_baseline_placeholder_image_original_24.xml" value="0.117" />

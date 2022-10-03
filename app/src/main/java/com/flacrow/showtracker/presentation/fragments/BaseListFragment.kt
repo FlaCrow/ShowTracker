@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.flacrow.showtracker.R
@@ -84,6 +85,14 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
 
     private fun setupMenu() {
         binding.toolbar.inflateMenu(R.menu.menu_main)
+
+        val settingsButton = binding.toolbar.menu.findItem(R.id.action_settings)
+        settingsButton.setOnMenuItemClickListener {
+            Toast.makeText(this.context, "text", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.settingsFragment)
+            true
+        }
+
         val searchView = binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
         valueAnimator = ValueAnimator.ofFloat(
             0f,

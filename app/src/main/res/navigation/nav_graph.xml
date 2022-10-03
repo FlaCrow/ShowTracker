@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_showListFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_trendingListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/seriesDetailsFragment"
@@ -43,6 +46,9 @@
         <action
             android:id="@+id/action_listWatchingFragment_to_seriesDetailsFragment"
             app:destination="@id/seriesDetailsFragment" />
+        <action
+            android:id="@+id/action_listWatchingFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/listPlanToWatchFragment"
@@ -54,6 +60,9 @@
         <action
             android:id="@+id/action_listPlanToWatchFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_listPlanToWatchFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/listCompletedFragment"
@@ -65,5 +74,12 @@
         <action
             android:id="@+id/action_listCompletedFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_listCompletedFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.flacrow.showtracker.presentation.fragments.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

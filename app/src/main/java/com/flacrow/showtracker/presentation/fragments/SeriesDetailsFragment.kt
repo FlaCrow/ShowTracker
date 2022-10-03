@@ -5,12 +5,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
+import com.flacrow.showtracker.presentation.adapters.SwitchableTypes
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
 import com.flacrow.showtracker.utils.Extensions.setChildrenEnabled
 import kotlinx.coroutines.FlowPreview
@@ -39,8 +41,11 @@ class SeriesDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args: SeriesDetailsFragmentArgs by navArgs()
-        if (isOnline(requireContext())) {
+        if (isOnline(requireContext()) && requireActivity().getPreferences(Context.MODE_PRIVATE)
+                .getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
+        ) {
             viewModel.updateData(args.seriesId)
+            Toast.makeText(requireContext(), "Updates were fetched", Toast.LENGTH_SHORT).show()
         } else viewModel.getData(args.seriesId)
         super.onViewCreated(view, savedInstanceState)
     }
