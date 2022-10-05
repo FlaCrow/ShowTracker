@@ -108,9 +108,10 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
 
             binding.searchTabs.getTabAt(viewModel.tabSelected.value)?.select()
             searchView.setOnQueryTextFocusChangeListener { _, isInFocus ->
-                binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
-                binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
-                if (playAnimations)
+
+                if (playAnimations) {
+                    binding.searchTabs.getTabAt(0)?.view?.isClickable = isInFocus
+                    binding.searchTabs.getTabAt(1)?.view?.isClickable = isInFocus
                     when (isInFocus) {
                         true -> {
                             binding.searchTabs.isVisible = isInFocus
@@ -121,6 +122,7 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
                             valueAnimator?.reverse()
                         }
                     }
+                }
             }
         }
 

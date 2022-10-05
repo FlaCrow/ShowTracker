@@ -1,39 +1,69 @@
 package com.flacrow.showtracker.presentation.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.flacrow.showtracker.BuildConfig
 import com.flacrow.showtracker.R
+import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.databinding.FragmentSettingsBinding
+import com.flacrow.showtracker.presentation.MainActivity
 import com.flacrow.showtracker.presentation.adapters.*
+import com.flacrow.showtracker.presentation.viewModels.SettingsViewModel
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class SettingsFragment :
-    Fragment() {
-    private var _binding: FragmentSettingsBinding? = null
-    protected val binding: FragmentSettingsBinding
-        get() = _binding!!
+    BaseFragment<FragmentSettingsBinding, SettingsViewModel>(FragmentSettingsBinding::inflate) {
+
+
+    private val exportDb =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("*/*")) { uri ->
+            if (uri == null) return@registerForActivityResult
+            val outputStream = context?.contentResolver?.openOutputStream(uri)
+            val inputStream = context?.getDatabasePath("AppDatabase")?.inputStream()
+            if (outputStream != null && inputStream != null) {
+                viewModel.exportFromDatabase(inputStream, outputStream)
+            }
+        }
+
+    private val importDb =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri == null) return@registerForActivityResult
+            val inputStream = context?.contentResolver?.openInputStream(uri)
+            val outputStream = context?.getDatabasePath("AppDatabase")?.outputStream()
+            if (outputStream != null && inputStream != null) {
+                viewModel.importToDatabase(inputStream, outputStream)
+                //Restart an app to reopen database that was closed during import process
+                //There has to be a better way to do this, right?
+                val ctx = requireContext().applicationContext
+                val pm = ctx.packageManager
+                val intent = pm.getLaunchIntentForPackage(ctx.packageName)
+                val mainIntent = Intent.makeRestartActivityTask(intent?.component)
+                ctx.startActivity(mainIntent)
+                Runtime.getRuntime().exit(0)
+            }
+        }
+    override val viewModel: SettingsViewModel by viewModels {
+        viewModelFactory
+    }
+
+    override fun setupDependencies() {
+        requireContext().appComponent.inject(this)
+    }
+
     private var settingsAdapter =
         SettingsAdapter(
             onActionItemClicked = { actionType -> onActionItemClicked(actionType) },
             onItemSwitched = { switchableType, state -> onItemSwitch(switchableType, state) })
     private lateinit var sharedPrefs: SharedPreferences
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSettingsBinding.inflate(inflater)
-        _binding ?: throw IllegalArgumentException("Binding is null")
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         settingsAdapter.submitList(populateSettingsList())
@@ -80,11 +110,6 @@ class SettingsFragment :
         )
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 
     private fun onActionItemClicked(actionType: ActionTypes) {
         when (actionType) {
@@ -94,6 +119,15 @@ class SettingsFragment :
                     getString(R.string.settings_database_export),
                     Toast.LENGTH_SHORT
                 ).show()
+                exportDb.launch(
+
+                    "ShowTracker_backup_" + SimpleDateFormat(
+                        "ddmmyyyy-HHmmss",
+                        Locale.getDefault()
+                    ).format(
+                        Calendar.getInstance().time
+                    ) + ".STData"
+                )
             }
             ActionTypes.DATABASE_IMPORT -> {
                 Toast.makeText(
@@ -101,6 +135,7 @@ class SettingsFragment :
                     getString(R.string.settings_database_import),
                     Toast.LENGTH_SHORT
                 ).show()
+                importDb.launch("*/*")
             }
             ActionTypes.DATABASE_CLEAR -> {
                 Toast.makeText(
@@ -108,6 +143,7 @@ class SettingsFragment :
                     getString(R.string.settings_database_clear),
                     Toast.LENGTH_SHORT
                 ).show()
+                viewModel.nukeDatabase()
             }
         }
     }
@@ -124,4 +160,6 @@ class SettingsFragment :
             }
         }
     }
+
+
 }

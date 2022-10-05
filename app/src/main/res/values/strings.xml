@@ -33,8 +33,8 @@
     <string name="details_button_content_desc">Button for revealing timestamps</string>
     <string name="media_type_image_view">Media Type Image View</string>
     <string name="poster_image_view">Poster Image View</string>
-    <string name="settings_database_export">Export Database</string>
-    <string name="settings_database_import">Import Database</string>
+    <string name="settings_database_export">Export Backup File</string>
+    <string name="settings_database_import">Import Backup File</string>
     <string name="settings_database_clear">Clear Database</string>
     <string name="settings_update_on_interact">Allow this app to update local media entries when interacted with</string>
     <string name="settings_tmdb_thanks">ShowTracker uses TMDb but is not endorsed or certified by TMDb</string>

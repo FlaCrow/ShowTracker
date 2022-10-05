@@ -24,6 +24,7 @@ interface AppComponent {
     fun inject(fragment: ListWatchingFragment)
     fun inject(fragment: ListPlanToWatchFragment)
     fun inject(fragment: ListCompletedFragment)
+    fun inject(fragment: SettingsFragment)
 
 }
 

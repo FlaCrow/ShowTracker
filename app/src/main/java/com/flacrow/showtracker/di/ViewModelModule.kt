@@ -30,7 +30,12 @@ interface ViewModelModule {
     fun provideListCachedShowsViewModel(listCachedShowsViewModel: ListCachedShowsViewModel): ViewModel
 
     @Binds
+    @[IntoMap ViewModelKey(SettingsViewModel::class)]
+    fun provideSettingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
+
+    @Binds
     fun provideViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+
 
 }
 

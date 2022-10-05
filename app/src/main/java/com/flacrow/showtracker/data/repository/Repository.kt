@@ -1,8 +1,12 @@
 package com.flacrow.showtracker.data.repository
 
+import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.flacrow.showtracker.api.ShowAPI
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.MovieDetailed
@@ -13,9 +17,13 @@ import com.flacrow.showtracker.data.pagingSources.ShowsTrendingPagingSource
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_WATCHING
 import com.flacrow.showtracker.utils.Extensions.isMutableFieldEqual
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.io.*
 import javax.inject.Inject
 
 
@@ -26,9 +34,13 @@ interface Repository {
     fun getMovieDetailed(id: Int): Flow<MovieDetailed>
     suspend fun saveMovieToDatabase(movieDetailed: MovieDetailed)
     suspend fun saveSeriesToDatabase(tvDetailed: TvDetailed)
+    fun importBackupFile(inputStream: InputStream, outputStream: FileOutputStream)
+    fun exportBackupFile(inputStream: FileInputStream, outputStream: OutputStream)
+    suspend fun nukeDatabase()
     fun getSavedMovies(query: String): Flow<PagingData<MovieDetailed>>
     fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>>
     fun updateTvDetailed(id: Int): Flow<TvDetailed>
+
 }
 
 class RepositoryImpl @Inject constructor(
@@ -123,5 +135,29 @@ class RepositoryImpl @Inject constructor(
         saveSeriesToDatabase(newTvDetailed)
         emit(newTvDetailed)
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun nukeDatabase() {
+        database.clearAllTables()
+    }
+
+    override fun importBackupFile(
+        inputStream: InputStream,
+        outputStream: FileOutputStream
+    ) {
+        database.close()
+        inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }
+        inputStream.close()
+        outputStream.close()
+    }
+
+    override fun exportBackupFile(
+        inputStream: FileInputStream,
+        outputStream: OutputStream
+    ) {
+        database.movieDao().checkpoint(SimpleSQLiteQuery("pragma wal_checkpoint(full)"))
+        inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }
+        inputStream.close()
+        outputStream.close()
+    }
 
 }
