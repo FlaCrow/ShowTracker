@@ -13,16 +13,18 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
             android:id="@+id/toolbar"
-            app:title="@string/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="?colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            android:layout_height="?actionBarSize"/>
+            app:title="@string/app_name" />
 
         <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_size_default"
             android:id="@+id/search_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimary"
             android:visibility="gone"
             app:tabMode="fixed">
 
@@ -44,10 +46,10 @@
         android:id="@+id/showlist_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:layout_marginLeft="@dimen/grid_2"
+        android:layout_marginRight="@dimen/grid_2"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tools:listitem="@layout/showentity_item" />
 
     <FrameLayout

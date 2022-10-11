@@ -13,11 +13,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ShowTracker">
+        android:theme="@style/ShowTracker.BrandColor">
         <activity
             android:name="com.flacrow.showtracker.presentation.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.ShowTracker.NoActionBar"
+            android:theme="@style/ShowTracker.BrandColor"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

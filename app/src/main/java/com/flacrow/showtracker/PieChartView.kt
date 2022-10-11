@@ -68,10 +68,8 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
         setupAttributeParameters(context, attributeSet)
         textPaint.textSize = percentageSize * resources.displayMetrics.density
         textPaint.textAlign = Paint.Align.CENTER
-        textPaint.color = context.resources.getColor(R.color.white, null)
         secondaryCirclePaint.color =
             context.resources.getColor(R.color.black, null)
-        innerPaint.color = context.resources.getColor(R.color.pie_chart_grey, null)
 
 
         primaryCirclePaint.isAntiAlias = true
@@ -82,8 +80,6 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
         innerPaint.style = Paint.Style.FILL
         secondaryCirclePaint.style = Paint.Style.FILL
         innerPaint.style = Paint.Style.FILL
-
-
     }
 
 
@@ -91,7 +87,8 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
         val attrArray =
             context.theme.obtainStyledAttributes(attributeSet, R.styleable.PieChartView, 0, 0)
         try {
-
+            textPaint.color = attrArray.getColor(R.styleable.PieChartView_color_text, context.resources.getColor(R.color.white, null))
+            innerPaint.color = attrArray.getColor(R.styleable.PieChartView_color_primary, context.resources.getColor(R.color.pie_chart_grey, null))
             percentageSize =
                 attrArray.getFloat(
                     R.styleable.PieChartView_percentage_size,

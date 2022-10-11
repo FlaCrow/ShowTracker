@@ -7,15 +7,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.flacrow.showtracker.BuildConfig
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.databinding.FragmentSettingsBinding
-import com.flacrow.showtracker.presentation.MainActivity
 import com.flacrow.showtracker.presentation.adapters.*
 import com.flacrow.showtracker.presentation.viewModels.SettingsViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,7 +33,7 @@ class SettingsFragment :
             val outputStream = context?.contentResolver?.openOutputStream(uri)
             val inputStream = context?.getDatabasePath("AppDatabase")?.inputStream()
             if (outputStream != null && inputStream != null) {
-                viewModel.exportFromDatabase(inputStream, outputStream)
+                viewModel.exportBackupFile(inputStream, outputStream)
             }
         }
 
@@ -40,15 +43,21 @@ class SettingsFragment :
             val inputStream = context?.contentResolver?.openInputStream(uri)
             val outputStream = context?.getDatabasePath("AppDatabase")?.outputStream()
             if (outputStream != null && inputStream != null) {
-                viewModel.importToDatabase(inputStream, outputStream)
+                binding.dbImportProgressbar.isVisible = true
+                viewModel.importBackupFile(inputStream, outputStream)
                 //Restart an app to reopen database that was closed during import process
                 //There has to be a better way to do this, right?
-                val ctx = requireContext().applicationContext
-                val pm = ctx.packageManager
-                val intent = pm.getLaunchIntentForPackage(ctx.packageName)
-                val mainIntent = Intent.makeRestartActivityTask(intent?.component)
-                ctx.startActivity(mainIntent)
-                Runtime.getRuntime().exit(0)
+                lifecycleScope.launch {
+                    viewModel.importDone.collect { done ->
+                        if (!done) return@collect
+                        val ctx = requireContext().applicationContext
+                        val pm = ctx.packageManager
+                        val intent = pm.getLaunchIntentForPackage(ctx.packageName)
+                        val mainIntent = Intent.makeRestartActivityTask(intent?.component)
+                        ctx.startActivity(mainIntent)
+                        Runtime.getRuntime().exit(0)
+                    }
+                }
             }
         }
     override val viewModel: SettingsViewModel by viewModels {

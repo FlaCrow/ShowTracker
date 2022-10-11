@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
+    android:layout_height="@dimen/season_card_height"
+    android:layout_marginHorizontal="@dimen/grid_2"
+    android:layout_marginVertical="@dimen/grid_1"
     app:cardCornerRadius="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
 
         <ImageView
             android:id="@+id/season_poster_iv"
-            android:layout_width="133dp"
+            android:layout_width="@dimen/season_poster_width"
             android:layout_height="match_parent"
             android:contentDescription="@string/poster_content_desc"
             app:layout_constraintEnd_toStartOf="@id/season_num_tv"
@@ -29,9 +29,9 @@
             android:id="@+id/season_num_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:textSize="25sp"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:textAppearance="?attr/textAppearanceHeadline5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/season_poster_iv"
             app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,8 @@
             android:id="@+id/air_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/grid_2"
+            android:textAppearance="?textAppearanceSubtitle1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/season_poster_iv"
@@ -52,8 +53,9 @@
             android:id="@+id/watched_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/grid_2"
             android:text="@string/episodes_watched"
+            android:textAppearance="?textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ep_done_picker"
             app:layout_constraintStart_toEndOf="@id/season_poster_iv"
@@ -75,6 +77,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:gravity="center"
+            android:textAppearance="?textAppearanceBody2"
             android:theme="@style/NumberPickerStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/watched_tv"
@@ -84,8 +87,9 @@
             android:id="@+id/max_ep_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="@dimen/grid_4"
             android:text="@string/out_of"
+            android:textAppearance="?textAppearanceBody2"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/watched_tv"
             app:layout_constraintStart_toEndOf="@id/watched_tv"
@@ -98,13 +102,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/details_button_content_desc"
-            android:padding="8dp"
+            app:drawableTint="?colorOnSurface"
+            android:padding="@dimen/grid_1"
             android:text="@string/details_button_text"
-            android:textSize="16sp"
+            android:textAppearance="?textAppearanceBody2"
             app:drawableEndCompat="@drawable/ic_baseline_arrow_down_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

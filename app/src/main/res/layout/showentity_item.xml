@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="116dp"
-    android:layout_marginBottom="16dp"
+    android:layout_height="@dimen/media_list_item_height"
+    android:layout_marginTop="@dimen/grid_2"
     android:elevation="@dimen/cardview_default_elevation"
+    android:foreground="@drawable/item_foreground_ripple"
     app:cardCornerRadius="10dp">
 
 
@@ -14,11 +15,11 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:contentDescription="@string/poster_image_view"
             android:id="@+id/poster_iv"
-            android:layout_width="78dp"
-            android:layout_height="116dp"
+            android:layout_width="@dimen/poster_width"
+            android:layout_height="match_parent"
             android:background="@color/cardview_dark_background"
+            android:contentDescription="@string/poster_image_view"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/title_tv"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,45 +31,51 @@
             android:id="@+id/title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:layout_marginEnd="@dimen/grid_2"
             android:gravity="center"
-            android:layout_marginEnd="16dp"
-            android:minLines="2"
             android:maxLines="2"
+            android:minLines="2"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintBottom_toTopOf="@id/released_date_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/poster_iv"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/lorem[1]" />
 
         <ImageView
-            android:contentDescription="@string/media_type_image_view"
             android:id="@+id/media_type_iv"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/grid_1"
+            android:contentDescription="@string/media_type_image_view"
             app:layout_constraintEnd_toStartOf="@id/rating_pie_view"
             app:layout_constraintTop_toTopOf="@id/released_date_tv"
+            app:tint="?colorOnSurface"
             tools:src="@drawable/ic_baseline_movie_24" />
 
         <TextView
             android:id="@+id/released_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/grid_2"
+            android:layout_marginEnd="@dimen/grid_1"
+            android:layout_marginBottom="@dimen/grid_1"
             android:textAlignment="textEnd"
+            android:textAppearance="?textAppearanceBody1"
+            android:textColor="?colorOnSurface"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/media_type_iv"
-            app:layout_constraintTop_toBottomOf="@id/title_tv"
             tools:text="@string/released_in_string" />
 
         <com.flacrow.showtracker.PieChartView
             android:id="@+id/rating_pie_view"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="@dimen/grid_1"
+            android:layout_marginBottom="@dimen/grid_1"
+            android:theme="@style/PieChartStyle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/media_type_iv" />
@@ -76,4 +83,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -4,5 +4,7 @@
         <attr name="percentage" format="float" />
         <attr name="percentage_size" format="float" />
         <attr name="inner_pie_padding" format="float" />
+        <attr name="color_primary" format="color"/>
+        <attr name="color_text" format="color"/>
     </declare-styleable>
 </resources>

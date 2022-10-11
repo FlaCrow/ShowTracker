@@ -2,9 +2,12 @@ package com.flacrow.showtracker.presentation.fragments
 
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.forEach
+import androidx.core.view.forEachIndexed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +24,7 @@ import com.flacrow.showtracker.utils.ConstantValues.ANIMATION_DURATION
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -93,7 +97,8 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
             true
         }
 
-        val searchView = binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
+        val searchView =
+            binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
         valueAnimator = ValueAnimator.ofFloat(
             0f,
             48f * requireContext().resources.displayMetrics.density

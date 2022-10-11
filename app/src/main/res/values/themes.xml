@@ -1,27 +1,32 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.ShowTracker" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
+
+
+    <style name="ShowTracker" parent="@style/Base.ShowTracker" />
+
+    <style name="Base.ShowTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="textAppearanceHeadline5">@style/TextAppearance.ShowTracker.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.ShowTracker.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.ShowTracker.Subtitle1</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.ShowTracker.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.ShowTracker.Body2</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <item name="tabStyle">@style/Widget.ShowTracker.TabLayout</item>
+        <item name="bottomNavigationStyle">@style/Widget.ShowTracker.BottomNavigationView</item>
+        <item name="radioButtonStyle">@style/Widget.ShowTracker.RadioButton</item>
+    </style>
+
+    <style name="ShowTracker.BrandColor">
+        <item name="colorPrimary">@color/brand_500</item>
+        <item name="colorPrimaryVariant">@color/brand_700</item>
+        <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-    </style>
-
-    <style name="Theme.ShowTracker.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="NumberPickerStyle">
-        <item name="android:textSize">18sp</item>
-        <item name="colorControlNormal">@color/transparent</item>
+        <item name="colorSurface">@color/brand_surface</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="android:colorBackground">@color/brand_300</item>
     </style>
 
     <style name="Theme.ShowTracker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

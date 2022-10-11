@@ -1,4 +1,12 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="tab_size_default">48dp</dimen>
+    <dimen name="grid_1">8dp</dimen>
+    <dimen name="grid_2">16dp</dimen>
+    <dimen name="grid_3">24dp</dimen>
+    <dimen name="grid_4">32dp</dimen>
+    <!--width:height proportions ~ 1:1.5-->
+    <dimen name="season_card_height">200dp</dimen>
+    <dimen name="season_poster_width">133dp</dimen>
+    <dimen name="media_list_item_height">116dp</dimen>
+    <dimen name="poster_width">78dp</dimen>
 </resources>

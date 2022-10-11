@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NumberPickerStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="colorControlNormal">@color/transparent</item>
+    </style>
+
+    <style name="PieChartStyle">
+        <item name="color_primary">?colorPrimary</item>
+        <item name="color_text">?android:textColorPrimary</item>
+    </style>
+
+    <style name="Widget.ShowTracker.BottomNavigationView" parent="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface">
+        <item name="itemIconTint">@color/bottom_nav_item</item>
+        <item name="itemTextColor">@color/bottom_nav_item</item>
+        <item name="itemTextAppearanceActive">@style/Widget.ShowTracker.BottomNavigationView</item>
+    </style>
+
+    <style name="Widget.ShowTracker.TabLayout" parent="Widget.MaterialComponents.TabLayout.PrimarySurface">
+        <item name="background">?colorPrimary</item>
+        <item name="tabTextColor">@color/tab_layout_item</item>
+        <item name="tabIndicatorColor">?colorSecondary</item>
+    </style>
+
+    <style name="Widget.ShowTracker.RadioButton" parent="@style/Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/radio_button_item</item>
+    </style>
+</resources>

@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:layout_marginHorizontal="25dp"
-    android:layout_marginVertical="8dp">
+    android:layout_marginHorizontal="@dimen/grid_3"
+    android:layout_marginBottom="@dimen/grid_1">
 
     <TextView
         android:id="@+id/episode_history_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="@tools:sample/lorem[5]"
+        android:textAppearance="?textAppearanceBody1"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="@dimen/grid_2" />
 </androidx.cardview.widget.CardView>
