@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.flacrow.showtracker"
@@ -41,11 +41,11 @@ dependencies {
 
     implementation 'androidx.paging:paging-common-ktx:3.1.1'
     implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
-    implementation 'androidx.databinding:databinding-common:7.2.1'
+    implementation 'androidx.databinding:databinding-common:7.3.1'
     def retrofit_ver = "2.9.0"
     def daggerVersion = '2.41'
-    def glideVersion = '4.13.0'
-    def nav_version = '2.5.1'
+    def glideVersion = '4.13.2'
+    def nav_version = '2.5.2'
     def room_version = '2.4.3'
 
 
@@ -65,8 +65,8 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 

@@ -27,6 +27,8 @@ class SettingsFragment :
     BaseFragment<FragmentSettingsBinding, SettingsViewModel>(FragmentSettingsBinding::inflate) {
 
 
+
+    //TODO: Add permission check, add file-check to prevent user to import unrelated file
     private val exportDb =
         registerForActivityResult(ActivityResultContracts.CreateDocument("*/*")) { uri ->
             if (uri == null) return@registerForActivityResult
@@ -123,11 +125,6 @@ class SettingsFragment :
     private fun onActionItemClicked(actionType: ActionTypes) {
         when (actionType) {
             ActionTypes.DATABASE_EXPORT -> {
-                Toast.makeText(
-                    context,
-                    getString(R.string.settings_database_export),
-                    Toast.LENGTH_SHORT
-                ).show()
                 exportDb.launch(
 
                     "ShowTracker_backup_" + SimpleDateFormat(
@@ -139,11 +136,6 @@ class SettingsFragment :
                 )
             }
             ActionTypes.DATABASE_IMPORT -> {
-                Toast.makeText(
-                    context,
-                    getString(R.string.settings_database_import),
-                    Toast.LENGTH_SHORT
-                ).show()
                 importDb.launch("*/*")
             }
             ActionTypes.DATABASE_CLEAR -> {
@@ -160,11 +152,6 @@ class SettingsFragment :
     private fun onItemSwitch(switchableType: SwitchableTypes, state: Boolean) {
         when (switchableType) {
             SwitchableTypes.UPDATE_ON_INTERACTION -> {
-                Toast.makeText(
-                    context,
-                    "new state UPDATE_ON_INTERACTION: ".plus(state),
-                    Toast.LENGTH_SHORT
-                ).show()
                 sharedPrefs.edit().putBoolean(switchableType.name, state).apply()
             }
         }

@@ -45,7 +45,6 @@ class SeriesDetailsFragment :
                 .getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
         ) {
             viewModel.updateData(args.seriesId)
-            Toast.makeText(requireContext(), "Updates were fetched", Toast.LENGTH_SHORT).show()
         } else viewModel.getData(args.seriesId)
         super.onViewCreated(view, savedInstanceState)
     }

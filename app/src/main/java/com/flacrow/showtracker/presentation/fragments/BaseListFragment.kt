@@ -74,7 +74,6 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
     private fun setupTabListeners() {
         binding.searchTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                Toast.makeText(context, "onTabSelected", Toast.LENGTH_SHORT).show()
                 viewModel.setSelectedTab(tab.position)
                 getShowList((binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView).query.toString())
             }
@@ -92,7 +91,6 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
 
         val settingsButton = binding.toolbar.menu.findItem(R.id.action_settings)
         settingsButton.setOnMenuItemClickListener {
-            Toast.makeText(this.context, "text", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.settingsFragment)
             true
         }
