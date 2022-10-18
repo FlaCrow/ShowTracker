@@ -17,7 +17,7 @@ To build this project you have to create an object named "Config" inside utils p
 * Retrofit, Glide
 * Dependency Injection: Dagger2
 * Implemented custom PieChartView 
-## Planned for nearest updates:
+## Upcoming Features and Updates:
 * Divide project into modules
 * Notify user about updates for followed shows
 * Add more information: actors, seasons, etc.
