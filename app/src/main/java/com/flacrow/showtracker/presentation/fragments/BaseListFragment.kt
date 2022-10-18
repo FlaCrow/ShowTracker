@@ -21,6 +21,7 @@ import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.presentation.viewModels.BaseViewModel
 import com.flacrow.showtracker.utils.ConstantValues.ANIMATION_DURATION
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -58,6 +59,9 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
         setAdapter()
         setupMenu()
         setupTabListeners()
+        //Scroll RecycleView up when bottomNav reselected
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
+            .setOnItemReselectedListener { binding.showlistRecycler.smoothScrollToPosition(0) }
         //if (viewModel.isDataNull()) {
         getShowList("")
         // }
