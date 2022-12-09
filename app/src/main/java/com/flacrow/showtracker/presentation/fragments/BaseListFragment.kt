@@ -2,12 +2,8 @@ package com.flacrow.showtracker.presentation.fragments
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.forEach
-import androidx.core.view.forEachIndexed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope

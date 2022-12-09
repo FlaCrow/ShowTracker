@@ -1,6 +1,6 @@
 package com.flacrow.showtracker.di
 
-import com.flacrow.showtracker.api.ShowAPI
+import com.flacrow.showtracker.data.api.ShowAPI
 import com.flacrow.showtracker.data.models.room.AppDatabase
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.data.repository.RepositoryImpl

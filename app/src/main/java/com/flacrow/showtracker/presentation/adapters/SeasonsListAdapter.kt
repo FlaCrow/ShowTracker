@@ -6,6 +6,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.flacrow.showtracker.data.models.DateItem
+import com.flacrow.showtracker.data.models.SeasonAdapterItem
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.SeasonLocal
 import com.flacrow.showtracker.databinding.SeasonsItemBinding

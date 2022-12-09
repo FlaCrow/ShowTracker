@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.flacrow.showtracker.data.models.SeasonLocal
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.repository.Repository
-import com.flacrow.showtracker.presentation.adapters.DateItem
-import com.flacrow.showtracker.presentation.adapters.SeasonAdapterItem
+import com.flacrow.showtracker.data.models.DateItem
+import com.flacrow.showtracker.data.models.SeasonAdapterItem
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.showtracker.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.showtracker.utils.Extensions.allReverseIteration

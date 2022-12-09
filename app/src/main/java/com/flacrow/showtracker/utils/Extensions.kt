@@ -5,7 +5,6 @@ import android.widget.RadioGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.flacrow.showtracker.R
-import com.flacrow.showtracker.data.models.TvDetailed
 
 
 object Extensions {
@@ -30,12 +29,6 @@ object Extensions {
         return true
     }
 
-    fun TvDetailed.isMutableFieldEqual(tvDetailed: TvDetailed): Boolean {
 
-        if (this.seasons != tvDetailed.seasons) return false
-        if (this.rating != tvDetailed.rating) return false
-        if (this.status != tvDetailed.status) return false
-        return true
-    }
 
 }

@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ShowTracker"
 include ':app'
+include ':core'
+include ':data'
