@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
+import com.flacrow.core.utils.Extensions.setImageWithGlide
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.databinding.ShowentityItemBinding
-import com.flacrow.showtracker.utils.ConstantValues.MOVIE_TYPE_STRING
-import com.flacrow.showtracker.utils.Extensions.setImageWithGlide
 
 class ShowListAdapter(private val navigate: (IShow) -> Unit) :
     PagingDataAdapter<IShow, ShowListAdapter.ViewHolder>(

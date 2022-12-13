@@ -2,7 +2,7 @@ package com.flacrow.showtracker.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.flacrow.showtracker.data.Config.TV_TYPE_STRING
+import com.flacrow.core.utils.Config.TV_TYPE_STRING
 import com.flacrow.showtracker.data.api.Genres
 
 @Entity(tableName = TV_TYPE_STRING)

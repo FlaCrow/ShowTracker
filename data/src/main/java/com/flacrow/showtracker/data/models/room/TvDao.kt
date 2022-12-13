@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.flacrow.showtracker.data.Config.TV_TYPE_STRING
+import com.flacrow.core.utils.Config.TV_TYPE_STRING
 import com.flacrow.showtracker.data.models.TvDetailed
 
 @Dao
@@ -16,6 +16,9 @@ interface TvDao {
 
     @Query("SELECT * FROM ${TV_TYPE_STRING}")
     fun getAllSeries(): PagingSource<Int, TvDetailed>
+
+    @Query("SELECT * FROM ${TV_TYPE_STRING}")
+    fun getAllSeriesAsList(): List<TvDetailed>
 
     @Query("SELECT * FROM ${TV_TYPE_STRING} WHERE id is :id")
     fun getSeriesById(id: Int): TvDetailed?

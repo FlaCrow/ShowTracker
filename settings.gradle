@@ -16,3 +16,4 @@ rootProject.name = "ShowTracker"
 include ':app'
 include ':core'
 include ':data'
+include ':check_update_feature'

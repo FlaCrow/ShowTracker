@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.sqlite.db.SimpleSQLiteQuery
+import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
 import com.flacrow.showtracker.data.api.ShowAPI
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.MovieDetailed
@@ -15,7 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.io.*
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
 
@@ -31,6 +35,7 @@ interface Repository {
     suspend fun nukeDatabase()
     fun getSavedMovies(query: String): Flow<PagingData<MovieDetailed>>
     fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>>
+    fun getSavedSeriesAsList(): List<TvDetailed>
     fun updateTvDetailed(id: Int): Flow<TvDetailed>
 
 }
@@ -113,18 +118,17 @@ class RepositoryImpl @Inject constructor(
         }
 
 
-        //TODO when new episodes added reset to STATUS_WATCHING
         val newTvDetailed = cachedTvDetailed.copy(
             seasons = newSeasonList.mapIndexed { index, newSeason ->
                 newSeason.copy(
                     episodeCount = updatedTvDetailed.seasons[index].episodeCount,
                     dateAired = updatedTvDetailed.seasons[index].dateAired,
-                    //watchStatus = STATUS_WATCHING
+                    watchStatus = STATUS_WATCHING
                 )
             },
             rating = updatedTvDetailed.rating,
             status = updatedTvDetailed.status,
-            //watchStatus = STATUS_WATCHING
+            watchStatus = STATUS_WATCHING
         )
         saveSeriesToDatabase(newTvDetailed)
         emit(newTvDetailed)
@@ -154,8 +158,9 @@ class RepositoryImpl @Inject constructor(
         outputStream.close()
     }
 
-
-
+    override fun getSavedSeriesAsList() : List<TvDetailed> {
+        return database.tvDao().getAllSeriesAsList()
+    }
 
 
 }

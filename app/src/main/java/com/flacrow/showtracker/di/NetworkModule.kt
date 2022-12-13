@@ -1,7 +1,7 @@
 package com.flacrow.showtracker.di
 
+import com.flacrow.core.utils.Config
 import com.flacrow.showtracker.data.api.ShowAPI
-import com.flacrow.showtracker.data.Config
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

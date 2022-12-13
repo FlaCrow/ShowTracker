@@ -8,12 +8,12 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.flacrow.core.utils.Extensions.setChildrenEnabled
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import com.flacrow.showtracker.presentation.adapters.SwitchableTypes
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
-import com.flacrow.showtracker.utils.Extensions.setChildrenEnabled
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce

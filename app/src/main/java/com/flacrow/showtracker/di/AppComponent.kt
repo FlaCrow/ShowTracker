@@ -3,6 +3,7 @@ package com.flacrow.showtracker.di
 import android.app.Application
 import com.flacrow.showtracker.data.repository.Repository
 import com.flacrow.showtracker.presentation.fragments.*
+import com.flacrow.showtracker.updatefeature.UpdateFeatureDependencies
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -11,8 +12,8 @@ import javax.inject.Scope
 
 @Component(modules = [AppModule::class])
 @AppScope
-interface AppComponent {
-    val repository: Repository
+interface AppComponent : UpdateFeatureDependencies {
+    override val repository: Repository
 
     @Component.Builder
     interface Builder {

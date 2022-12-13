@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+                        <RadioButton
+                            android:id="@+id/ptw_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/ic_baseline_ptw_24" />
+
+                        <RadioButton
+                            android:id="@+id/watching_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/ic_baseline_watching_24" />
+
+                        <RadioButton
+                            android:id="@+id/cmpl_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:button="@drawable/ic_baseline_cmpl_24" />
+</merge>

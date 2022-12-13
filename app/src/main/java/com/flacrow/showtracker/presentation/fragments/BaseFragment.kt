@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.flacrow.showtracker.presentation.viewModels.ViewModelFactory
 import javax.inject.Inject
 
 abstract class BaseFragment<VBinding : ViewBinding, VModel : ViewModel>(
@@ -22,7 +22,7 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : ViewModel>(
         get() = _binding!!
 
     @Inject
-    protected lateinit var viewModelFactory: ViewModelProvider.Factory
+    protected lateinit var viewModelFactory: ViewModelFactory
 
 
     override fun onAttach(context: Context) {

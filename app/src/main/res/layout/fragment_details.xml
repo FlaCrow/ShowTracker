@@ -61,11 +61,11 @@
                 android:layout_marginBottom="@dimen/grid_2"
                 android:gravity="center"
                 android:textAppearance="?textAppearanceHeadline6"
+                app:layout_constraintBottom_toTopOf="@id/status_group"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/status_group"
                 tools:text="Breaking Bad" />
 
 
@@ -84,8 +84,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/status_group"
                 app:percentage="0" />
-
-
             <RadioGroup
                 android:id="@+id/status_group"
                 android:layout_width="wrap_content"
@@ -97,26 +95,9 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@id/userscore"
                 app:layout_constraintTop_toBottomOf="@id/series_title_tv">
-
-                <RadioButton
-                    android:id="@+id/ptw_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@drawable/ic_baseline_ptw_24" />
-
-                <RadioButton
-                    android:id="@+id/watching_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@drawable/ic_baseline_watching_24" />
-
-                <RadioButton
-                    android:id="@+id/cmpl_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:button="@drawable/ic_baseline_cmpl_24" />
+                <include layout="@layout/detail_fragment_radio_buttons" />
             </RadioGroup>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/genre_list_card"

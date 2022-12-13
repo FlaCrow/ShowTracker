@@ -2,7 +2,7 @@ package com.flacrow.showtracker.data.pagingSources
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.flacrow.showtracker.data.Config.STARTING_PAGE
+import com.flacrow.core.utils.Config.STARTING_PAGE
 import com.flacrow.showtracker.data.api.ShowAPI
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.Show

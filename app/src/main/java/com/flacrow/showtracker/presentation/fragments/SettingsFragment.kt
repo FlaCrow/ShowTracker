@@ -17,7 +17,6 @@ import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.databinding.FragmentSettingsBinding
 import com.flacrow.showtracker.presentation.adapters.*
 import com.flacrow.showtracker.presentation.viewModels.SettingsViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*

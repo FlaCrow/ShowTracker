@@ -2,11 +2,15 @@ package com.flacrow.showtracker
 
 import android.app.Application
 import android.content.Context
-import androidx.work.Configuration
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.flacrow.showtracker.di.AppComponent
 import com.flacrow.showtracker.di.DaggerAppComponent
-import javax.inject.Inject
+import com.flacrow.showtracker.updatefeature.CheckUpdateWorker
+import com.flacrow.showtracker.updatefeature.UpdateDependenciesStore
+import java.util.concurrent.TimeUnit
 
 class ShowApp : Application() {
 
@@ -19,7 +23,23 @@ class ShowApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-   }
+        UpdateDependenciesStore.dependencies = appComponent
+        val constraints =
+            Constraints.Builder()
+                .setRequiresBatteryNotLow(true)
+                .setRequiresDeviceIdle(true)
+                .build()
+        val periodicWorkRequest =
+            PeriodicWorkRequestBuilder<CheckUpdateWorker>(15, TimeUnit.MINUTES)
+                .addTag("UpdateWorker")
+                .setConstraints(constraints)
+                .build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "CheckUpdateWork",
+            ExistingPeriodicWorkPolicy.KEEP,
+            periodicWorkRequest
+        )
+    }
 
 }
 

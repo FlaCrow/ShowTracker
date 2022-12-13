@@ -2,9 +2,9 @@ package com.flacrow.showtracker.presentation.viewModels
 
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.flacrow.core.utils.ConstantValues.SEARCH_TYPE_MOVIES
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.repository.Repository
-import com.flacrow.showtracker.utils.ConstantValues.SEARCH_TYPE_MOVIES
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update

@@ -1,10 +1,10 @@
-package com.flacrow.showtracker.utils
+package com.flacrow.core.utils
 
 import android.widget.ImageView
 import android.widget.RadioGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.flacrow.showtracker.R
+import com.flacrow.core.R
 
 
 object Extensions {

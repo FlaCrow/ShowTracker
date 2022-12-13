@@ -3,7 +3,7 @@ package com.flacrow.showtracker.data.models.room
 import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.flacrow.showtracker.data.Config.MOVIE_TYPE_STRING
+import com.flacrow.core.utils.Config.MOVIE_TYPE_STRING
 import com.flacrow.showtracker.data.models.MovieDetailed
 
 

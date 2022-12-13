@@ -44,13 +44,16 @@ dependencies {
     implementation 'androidx.databinding:databinding-common:7.3.1'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
-    def daggerVersion = '2.41'
+
+    def daggerVersion = '2.42'
     def glideVersion = '4.13.2'
     def nav_version = '2.5.3'
     def retrofit_ver = "2.9.0"
     def room_version = '2.4.3'
 
     implementation project(':data')
+    implementation project(":check_update_feature")
+    implementation project(':core')
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
