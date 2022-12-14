@@ -30,7 +30,7 @@ class ShowApp : Application() {
                 .setRequiresDeviceIdle(true)
                 .build()
         val periodicWorkRequest =
-            PeriodicWorkRequestBuilder<CheckUpdateWorker>(15, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<CheckUpdateWorker>(12, TimeUnit.HOURS)
                 .addTag("UpdateWorker")
                 .setConstraints(constraints)
                 .build()
