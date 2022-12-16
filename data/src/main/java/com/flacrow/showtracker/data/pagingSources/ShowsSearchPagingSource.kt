@@ -2,10 +2,10 @@ package com.flacrow.showtracker.data.pagingSources
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.flacrow.core.utils.Config.MOVIE_TYPE_STRING
-import com.flacrow.core.utils.Config.SEARCH_TYPE_MOVIES
-import com.flacrow.core.utils.Config.STARTING_PAGE
-import com.flacrow.core.utils.Config.TV_TYPE_STRING
+import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
+import com.flacrow.core.utils.ConstantValues.SEARCH_TYPE_MOVIES
+import com.flacrow.core.utils.ConstantValues.STARTING_PAGE
+import com.flacrow.core.utils.ConstantValues.TV_TYPE_STRING
 import com.flacrow.showtracker.data.api.ShowAPI
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.Show

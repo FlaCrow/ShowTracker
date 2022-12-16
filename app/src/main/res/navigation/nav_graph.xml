@@ -82,4 +82,7 @@
         android:id="@+id/settingsFragment"
         android:name="com.flacrow.showtracker.presentation.fragments.SettingsFragment"
         android:label="SettingsFragment" />
+    <action
+        android:id="@+id/action_global_seriesDetailsFragment"
+        app:destination="@id/seriesDetailsFragment" />
 </navigation>

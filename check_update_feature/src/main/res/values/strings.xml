@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="notification_channel_name">Update Notifications</string>
+    <string name="notification_channel_desc">Used for notifying user when new episodes become available</string>
+    <string name="notification_title">New Episodes Available:</string>
+    <string name="notification_summary_title">New Episodes Available!</string>
+    <string name="notification_summary_text">Several database entries have been updated</string>
+    <string name="notification_text">%s</string>
+</resources>

@@ -1,10 +1,13 @@
 package com.flacrow.showtracker.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.flacrow.core.utils.ConstantValues.SERIES_ID_EXTRA
+import com.flacrow.showtracker.NavGraphDirections
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.databinding.ActivityMainBinding
 
@@ -22,6 +25,12 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         setupBottomNav()
+        if (intent.action == Intent.ACTION_VIEW) {
+            val seriesIdFromNotification = intent.getIntExtra(SERIES_ID_EXTRA, 0)
+            binding.navHostFragmentContainer.findNavController().navigate(
+                NavGraphDirections.actionGlobalSeriesDetailsFragment(seriesIdFromNotification)
+            )
+        }
     }
 
     private fun setupBottomNav() {

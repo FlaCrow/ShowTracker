@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.flacrow.core.utils.Config.TV_TYPE_STRING
+import com.flacrow.core.utils.ConstantValues.TV_TYPE_STRING
 import com.flacrow.showtracker.data.models.TvDetailed
 
 @Dao

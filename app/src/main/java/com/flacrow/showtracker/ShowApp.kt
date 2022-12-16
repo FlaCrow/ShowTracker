@@ -24,13 +24,17 @@ class ShowApp : Application() {
     override fun onCreate() {
         super.onCreate()
         UpdateDependenciesStore.dependencies = appComponent
+        initCheckUpdateWorker()
+    }
+
+    private fun initCheckUpdateWorker() {
         val constraints =
             Constraints.Builder()
                 .setRequiresBatteryNotLow(true)
                 .setRequiresDeviceIdle(true)
                 .build()
         val periodicWorkRequest =
-            PeriodicWorkRequestBuilder<CheckUpdateWorker>(12, TimeUnit.HOURS)
+            PeriodicWorkRequestBuilder<CheckUpdateWorker>(15, TimeUnit.MINUTES)
                 .addTag("UpdateWorker")
                 .setConstraints(constraints)
                 .build()
@@ -39,6 +43,10 @@ class ShowApp : Application() {
             ExistingPeriodicWorkPolicy.KEEP,
             periodicWorkRequest
         )
+        //        val uniqueWorkRequest = OneTimeWorkRequestBuilder<CheckUpdateWorker>().build()
+        //        WorkManager.getInstance(this).enqueueUniqueWork("CheckUpdateWork",
+        //            ExistingWorkPolicy.REPLACE,
+        //            uniqueWorkRequest)
     }
 
 }
