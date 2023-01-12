@@ -110,16 +110,18 @@ class RepositoryImpl @Inject constructor(
             emit(cachedTvDetailed)
             return@flow
         }
-
-        val newSeasonList = cachedTvDetailed.seasons.toMutableList()
-        //check if "extras/season 0" season was added, insert it at the start of the new list if so
-        if (cachedTvDetailed.seasons[0].seasonNumber != updatedTvDetailed.seasons[0].seasonNumber) {
-            newSeasonList.add(0, updatedTvDetailed.seasons[0].copy())
+        // utterly horrible!!!
+        val cachedSeasonListMutable = cachedTvDetailed.seasons.toMutableList()
+        if (cachedTvDetailed.seasons.size != updatedTvDetailed.seasons.size) {
+            //check if "extras/season 0" season was added, insert it at the start of the new list if so
+            if (cachedTvDetailed.seasons[0].seasonNumber != updatedTvDetailed.seasons[0].seasonNumber) {
+                cachedSeasonListMutable.add(0, updatedTvDetailed.seasons[0].copy())
+            }
+            cachedSeasonListMutable.addAll(updatedTvDetailed.seasons.slice(cachedSeasonListMutable.size until updatedTvDetailed.seasons.size))
         }
 
-
         val newTvDetailed = cachedTvDetailed.copy(
-            seasons = newSeasonList.mapIndexed { index, newSeason ->
+            seasons = cachedSeasonListMutable.mapIndexed { index, newSeason ->
                 newSeason.copy(
                     episodeCount = updatedTvDetailed.seasons[index].episodeCount,
                     dateAired = updatedTvDetailed.seasons[index].dateAired,
@@ -158,12 +160,13 @@ class RepositoryImpl @Inject constructor(
         outputStream.close()
     }
 
-    override fun getSavedSeriesAsList() : List<TvDetailed> {
+    override fun getSavedSeriesAsList(): List<TvDetailed> {
         return database.tvDao().getAllSeriesAsList()
     }
 
 
 }
+
 fun TvDetailed.isMutableFieldEqual(tvDetailed: TvDetailed): Boolean {
 
     if (this.seasons != tvDetailed.seasons) return false
