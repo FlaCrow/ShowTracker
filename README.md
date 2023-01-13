@@ -8,7 +8,7 @@ Sort your shows into 3 different categories
 Export and import your watch history  
 More things to come in future updates  
 ## Build Instructions:
-To build this project you have to create an object named "Config" inside utils package and provide your TMDb api key as shown in the picture below  
+To build this project you have to create an object named "Config" inside utils package in the core module and provide your TMDb api key as shown in the picture below  
 <img src="./readme_pics/config_img.png">  
 ##  Notable Features, Libraries and Frameworks Used:
 * Kotlin
