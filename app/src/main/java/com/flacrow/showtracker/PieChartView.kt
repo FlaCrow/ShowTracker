@@ -33,6 +33,7 @@ class PieChartView(context: Context, attributeSet: AttributeSet) : View(context,
     val maxPercentage = 100f
     var percentage = 0f
         set(value) {
+            if(field == value / maxPercentage) return
             field = value / maxPercentage
             angle = (CIRCLE_DEGREES * field)
             setPercentageText()

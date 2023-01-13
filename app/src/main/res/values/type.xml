@@ -5,6 +5,8 @@
 
     <style name="TextAppearance.ShowTracker.Headline6" parent="TextAppearance.MaterialComponents.Headline6"/>
 
+    <style name="TextAppearance.ShowTracker.Overline" parent="TextAppearance.MaterialComponents.Overline"/>
+
     <style name="TextAppearance.ShowTracker.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1"/>
 
     <style name="TextAppearance.ShowTracker.BottomNavigation" parent="TextAppearance.MaterialComponents.Caption">

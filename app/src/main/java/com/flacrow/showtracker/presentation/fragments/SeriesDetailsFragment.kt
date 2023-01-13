@@ -21,27 +21,27 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
-class SeriesDetailsFragment :
-    BaseDetailedFragment<SeriesDetailsViewModel>() {
+class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
 
     override val viewModel: SeriesDetailsViewModel by viewModels {
         viewModelFactory
     }
 
     private val adapter =
-        SeasonsListAdapter(
-            onEpisodePickerValueChanged = { position, newValueFlow ->
-                onEpisodePickerValueChanged(
-                    position, newValueFlow
-                )
-            }, onExpandButtonClicked = { position ->
-                onExpandButtonClicked(position)
-            })
+        SeasonsListAdapter(onEpisodePickerValueChanged = { position, newValueFlow ->
+            onEpisodePickerValueChanged(
+                position, newValueFlow
+            )
+        }, onExpandButtonClicked = { position ->
+            onExpandButtonClicked(position)
+        })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args: SeriesDetailsFragmentArgs by navArgs()
-        if (isOnline(requireContext()) && requireActivity().getPreferences(Context.MODE_PRIVATE)
-                .getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
+        if (isOnline(requireContext()) && requireActivity().getSharedPreferences(
+                    requireContext().packageName,
+                    Context.MODE_PRIVATE
+                ).getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
         ) {
             viewModel.updateData(args.seriesId)
         } else viewModel.getData(args.seriesId)
@@ -71,8 +71,7 @@ class SeriesDetailsFragment :
         lifecycleScope.launch {
             newValueFlow.onEach {
                 binding.statusGroup.setChildrenEnabled(false)
-            }.debounce(500)
-                .collect { newValue ->
+            }.debounce(500).collect { newValue ->
                     viewModel.changeEpisodeWatchedValue(position, newValue)
                     binding.statusGroup.setChildrenEnabled(true)
                 }

@@ -8,6 +8,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.flacrow.showtracker.di.AppComponent
 import com.flacrow.showtracker.di.DaggerAppComponent
+import com.flacrow.showtracker.presentation.adapters.SwitchableTypes
 import com.flacrow.showtracker.updatefeature.CheckUpdateWorker
 import com.flacrow.showtracker.updatefeature.UpdateDependenciesStore
 import java.util.concurrent.TimeUnit
@@ -28,21 +29,8 @@ class ShowApp : Application() {
     }
 
     private fun initCheckUpdateWorker() {
-        val constraints =
-            Constraints.Builder()
-                .setRequiresBatteryNotLow(true)
-                .setRequiresDeviceIdle(true)
-                .build()
-        val periodicWorkRequest =
-            PeriodicWorkRequestBuilder<CheckUpdateWorker>(15, TimeUnit.MINUTES)
-                .addTag("UpdateWorker")
-                .setConstraints(constraints)
-                .build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "CheckUpdateWork",
-            ExistingPeriodicWorkPolicy.KEEP,
-            periodicWorkRequest
-        )
+        val sharedPrefs = getSharedPreferences(packageName, Context.MODE_PRIVATE)
+        setupCheckUpdateWorker(sharedPrefs.getBoolean(SwitchableTypes.UPDATE_IN_BACKGROUND.name, true))
         //        val uniqueWorkRequest = OneTimeWorkRequestBuilder<CheckUpdateWorker>().build()
         //        WorkManager.getInstance(this).enqueueUniqueWork("CheckUpdateWork",
         //            ExistingWorkPolicy.REPLACE,
@@ -56,3 +44,25 @@ val Context.appComponent: AppComponent
         is ShowApp -> appComponent
         else -> this.applicationContext.appComponent
     }
+
+fun Context.setupCheckUpdateWorker(allowUpdate: Boolean) {
+    if (!allowUpdate) {
+        WorkManager.getInstance(this).cancelUniqueWork("CheckUpdateWork")
+        return
+    }
+    val constraints =
+        Constraints.Builder()
+            .setRequiresBatteryNotLow(true)
+            .setRequiresDeviceIdle(true)
+            .build()
+    val periodicWorkRequest =
+        PeriodicWorkRequestBuilder<CheckUpdateWorker>(12, TimeUnit.HOURS)
+            .addTag("UpdateWorker")
+            .setConstraints(constraints)
+            .build()
+    WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+        "CheckUpdateWork",
+        ExistingPeriodicWorkPolicy.KEEP,
+        periodicWorkRequest
+    )
+}

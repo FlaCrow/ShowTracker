@@ -36,7 +36,8 @@
     <string name="settings_database_export">Export Backup File</string>
     <string name="settings_database_import">Import Backup File</string>
     <string name="settings_database_clear">Clear Database</string>
-    <string name="settings_update_on_interact">Allow this app to update local TV Shows when accessed</string>
+    <string name="settings_update_on_interact">Update cached TV series when accessed</string>
+    <string name="settings_update_in_background">Update TV series in the background and show notifications</string>
     <string name="settings_tmdb_thanks">ShowTracker uses TMDb but is not endorsed or certified by TMDb</string>
     <string name="settings_info">&appname; is made by &author; \nBuild Type: %s\nVersion: %s</string>
     <string name="app_logo_desc">App logo</string>

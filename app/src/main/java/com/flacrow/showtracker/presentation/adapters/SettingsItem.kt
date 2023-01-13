@@ -13,7 +13,7 @@ enum class ActionTypes {
 }
 
 enum class SwitchableTypes {
-    UPDATE_ON_INTERACTION
+    UPDATE_ON_INTERACTION, UPDATE_IN_BACKGROUND
 }
 
 data class SettingsPageItem(val type: SettingsItem, val title: String)

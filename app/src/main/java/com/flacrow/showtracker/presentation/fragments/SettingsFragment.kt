@@ -17,6 +17,7 @@ import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.databinding.FragmentSettingsBinding
 import com.flacrow.showtracker.presentation.adapters.*
 import com.flacrow.showtracker.presentation.viewModels.SettingsViewModel
+import com.flacrow.showtracker.setupCheckUpdateWorker
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,7 +25,6 @@ import java.util.*
 
 class SettingsFragment :
     BaseFragment<FragmentSettingsBinding, SettingsViewModel>(FragmentSettingsBinding::inflate) {
-
 
 
     //TODO: Add permission check, add file-check to prevent user to import unrelated file
@@ -96,7 +96,8 @@ class SettingsFragment :
     }
 
     private fun populateSettingsList(): List<SettingsPageItem> {
-        sharedPrefs = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        sharedPrefs =
+            requireActivity().getSharedPreferences(requireContext().packageName, Context.MODE_PRIVATE)
         return listOf(
             SettingsPageItem(
                 SettingsItem.SwitchableItem(
@@ -104,6 +105,13 @@ class SettingsFragment :
                     sharedPrefs.getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
                 ),
                 getString(R.string.settings_update_on_interact)
+            ),
+            SettingsPageItem(
+                SettingsItem.SwitchableItem(
+                    SwitchableTypes.UPDATE_IN_BACKGROUND,
+                    sharedPrefs.getBoolean(SwitchableTypes.UPDATE_IN_BACKGROUND.name, true)
+                ),
+                getString(R.string.settings_update_in_background)
             ),
             SettingsPageItem(
                 SettingsItem.ActionItem(ActionTypes.DATABASE_IMPORT),
@@ -152,6 +160,10 @@ class SettingsFragment :
         when (switchableType) {
             SwitchableTypes.UPDATE_ON_INTERACTION -> {
                 sharedPrefs.edit().putBoolean(switchableType.name, state).apply()
+            }
+            SwitchableTypes.UPDATE_IN_BACKGROUND -> {
+                sharedPrefs.edit().putBoolean(switchableType.name, state).apply()
+                requireContext().setupCheckUpdateWorker(state)
             }
         }
     }

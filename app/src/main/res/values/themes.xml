@@ -9,6 +9,7 @@
         <item name="textAppearanceSubtitle1">@style/TextAppearance.ShowTracker.Subtitle1</item>
         <item name="textAppearanceBody1">@style/TextAppearance.ShowTracker.Body1</item>
         <item name="textAppearanceBody2">@style/TextAppearance.ShowTracker.Body2</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.ShowTracker.Overline</item>
 
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
