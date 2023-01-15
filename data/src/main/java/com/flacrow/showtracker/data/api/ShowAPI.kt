@@ -32,4 +32,10 @@ interface ShowAPI {
 
     @GET("3/tv/{tv_id}?api_key=${Config.API_KEY}")
     suspend fun searchTvById(@Path("tv_id") id: Int): TvDetailedResponse
+
+    @GET("3/movie/{movie_id}/credits?api_key=${Config.API_KEY}")
+    suspend fun getMovieCredits(@Path("movie_id") id: Int): CreditsListsResponse
+
+    @GET("3/tv/{tv_id}/aggregate_credits?api_key=${Config.API_KEY}")
+    suspend fun getTvCredits(@Path("tv_id") id: Int): CreditsListsResponse
 }
