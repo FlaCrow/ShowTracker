@@ -12,7 +12,7 @@ import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
 import com.flacrow.core.utils.Extensions.setImageWithGlide
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.DateItem
-import com.flacrow.showtracker.data.models.SeasonAdapterItem
+import com.flacrow.showtracker.data.models.DetailedRecyclerItem
 import com.flacrow.showtracker.data.models.SeasonLocal
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
@@ -24,7 +24,7 @@ class SeasonsListAdapter(
     private val onEpisodePickerValueChanged: (Int, Flow<Int>) -> Unit,
     private val onExpandButtonClicked: (Int) -> Unit,
 ) :
-    ListAdapter<SeasonAdapterItem, RecyclerView.ViewHolder>(DiffCallback()) {
+    ListAdapter<DetailedRecyclerItem, RecyclerView.ViewHolder>(DiffCallback()) {
     inner class SeasonsViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.seasons_item, parent, false)
@@ -32,7 +32,8 @@ class SeasonsListAdapter(
         private val binding = SeasonsItemBinding.bind(itemView)
         fun bind(season: SeasonLocal, position: Int) {
             binding.apply {
-                seasonPosterIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${season.posterUrl}")
+                seasonPosterIv.setImageWithGlide("https://image.tmdb.org/t/p/w185/${season.posterUrl}",
+                    com.flacrow.core.R.drawable.ic_placeholder_image_24)
                 seasonNumTv.text =
                     root.context.getString(R.string.season_string, season.seasonNumber)
                 maxEpTv.text =
@@ -123,10 +124,10 @@ class SeasonsListAdapter(
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<SeasonAdapterItem>() {
+    private class DiffCallback : DiffUtil.ItemCallback<DetailedRecyclerItem>() {
         override fun areItemsTheSame(
-            oldItem: SeasonAdapterItem,
-            newItem: SeasonAdapterItem,
+            oldItem: DetailedRecyclerItem,
+            newItem: DetailedRecyclerItem,
         ): Boolean {
             return if (oldItem::class != newItem::class) false
             else if (oldItem is SeasonLocal && newItem is SeasonLocal) oldItem.seasonNumber == newItem.seasonNumber
@@ -135,8 +136,8 @@ class SeasonsListAdapter(
         }
 
         override fun areContentsTheSame(
-            oldItem: SeasonAdapterItem,
-            newItem: SeasonAdapterItem,
+            oldItem: DetailedRecyclerItem,
+            newItem: DetailedRecyclerItem,
         ): Boolean {
             return oldItem == newItem
         }

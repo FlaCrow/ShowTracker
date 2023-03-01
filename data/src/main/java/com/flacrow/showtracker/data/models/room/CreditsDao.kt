@@ -1,28 +1,25 @@
 package com.flacrow.showtracker.data.models.room
 
-import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.flacrow.core.utils.ConstantValues
 import com.flacrow.showtracker.data.models.*
-import java.util.Objects
 
 @Dao
 interface CreditsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCastList(creditsLists: CastCredits)
+    suspend fun insertCastList(creditsLists: List<CastCredits>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCrewList(creditsLists: CrewCredits)
+    suspend fun insertCrewList(creditsLists: List<CrewCredits>)
 
-    @Query("SELECT * FROM CastCredits WHERE showId IS :showId AND mediaType IS :mediaType")
-    fun getCastCredits(showId: Int, mediaType:String) : PagingSource<Int,CastCredits>
+    @Query("SELECT * FROM CastCredits WHERE showId IS :showId AND mediaType IS :mediaType LIMIT :limit OFFSET :offset")
+    fun getCastCredits(showId: Int, mediaType: String, limit: Int, offset: Int): List<CastCredits>
 
-    @Query("SELECT * FROM crewcredits WHERE showId IS :showId AND mediaType IS :mediaType")
-    fun getCrewCredits(showId: Int, mediaType:String) : PagingSource<Int,CrewCredits>
+    @Query("SELECT * FROM crewcredits WHERE showId IS :showId AND mediaType IS :mediaType LIMIT :limit OFFSET :offset")
+    fun getCrewCredits(showId: Int, mediaType: String, limit: Int, offset: Int): List<CrewCredits>
 
 }
 

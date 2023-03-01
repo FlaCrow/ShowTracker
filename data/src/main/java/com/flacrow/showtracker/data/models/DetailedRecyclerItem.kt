@@ -1,5 +1,5 @@
 package com.flacrow.showtracker.data.models
 
-interface SeasonAdapterItem{
+interface DetailedRecyclerItem{
     override fun equals(other: Any?): Boolean
 }

@@ -15,6 +15,15 @@ object ConstantValues {
     const val SEARCH_TYPE_MOVIES = 0
     const val SEARCH_TYPE_TV = 1
 
+
+    //detailed view tab names
+    enum class TabNames(val tabName: String) {
+        DETAILED_SEASON_TAB("Seasons"),
+        DETAILED_CAST_TAB("Cast"),
+        DETAILED_CREW_TAB("Crew")
+    }
+
+
     //Intent Extras tag for notification
     const val SERIES_ID_EXTRA = "series_id"
 

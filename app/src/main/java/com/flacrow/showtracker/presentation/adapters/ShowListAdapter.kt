@@ -48,7 +48,10 @@ class ShowListAdapter(private val navigate: (IShow) -> Unit) :
 
         fun bind(showItem: IShow) {
             binding.apply {
-                posterIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${showItem.posterUrl}")
+                posterIv.setImageWithGlide(
+                    "https://image.tmdb.org/t/p/w92/${showItem.posterUrl}",
+                    com.flacrow.core.R.drawable.ic_placeholder_image_24
+                )
                 titleTv.text = showItem.title
                 releasedDateTv.text =
                     root.context.getString(

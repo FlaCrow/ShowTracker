@@ -8,12 +8,14 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.flacrow.core.utils.ConstantValues
 import com.flacrow.core.utils.Extensions.setChildrenEnabled
 import com.flacrow.showtracker.appComponent
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.presentation.adapters.SeasonsListAdapter
 import com.flacrow.showtracker.presentation.adapters.SwitchableTypes
 import com.flacrow.showtracker.presentation.viewModels.SeriesDetailsViewModel
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
@@ -27,7 +29,7 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
         viewModelFactory
     }
 
-    private val adapter =
+    private val seasonsListAdapter =
         SeasonsListAdapter(onEpisodePickerValueChanged = { position, newValueFlow ->
             onEpisodePickerValueChanged(
                 position, newValueFlow
@@ -39,32 +41,30 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args: SeriesDetailsFragmentArgs by navArgs()
         if (isOnline(requireContext()) && requireActivity().getSharedPreferences(
-                    requireContext().packageName,
-                    Context.MODE_PRIVATE
-                ).getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
+                requireContext().packageName,
+                Context.MODE_PRIVATE
+            ).getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
         ) {
             viewModel.updateData(args.seriesId)
         } else viewModel.getData(args.seriesId)
+        viewModel.fetchTvCredits(args.seriesId)
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun updateUi(tvDetailed: IShowDetailed) {
-        setAdapter()
+    override fun updateShowUi(tvDetailed: IShowDetailed) {
+        if(binding.recyclerTabLayout.selectedTabPosition == 0)setAdapter(seasonsListAdapter)
         lifecycleScope.launch {
-            viewModel.seasonListStateFlow.collect {
-                adapter.submitList(it)
+            viewModel.recyclerListStateFlow.collect {
+                seasonsListAdapter.submitList(it)
             }
         }
-        super.updateUi(tvDetailed)
+        super.updateShowUi(tvDetailed)
     }
 
     override fun setupDependencies() {
         requireContext().appComponent.inject(this)
     }
 
-    private fun setAdapter() {
-        binding.seasonsRecycler.adapter = adapter
-    }
 
     @OptIn(FlowPreview::class)
     private fun onEpisodePickerValueChanged(position: Int, newValueFlow: Flow<Int>) {
@@ -72,11 +72,42 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
             newValueFlow.onEach {
                 binding.statusGroup.setChildrenEnabled(false)
             }.debounce(500).collect { newValue ->
-                    viewModel.changeEpisodeWatchedValue(position, newValue)
-                    binding.statusGroup.setChildrenEnabled(true)
-                }
+                viewModel.changeEpisodeWatchedValue(position, newValue)
+                binding.statusGroup.setChildrenEnabled(true)
+            }
         }
     }
+
+    override fun configureTabLayout() {
+        binding.recyclerTabLayout.addTab(binding.recyclerTabLayout.newTab().setText(ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName))
+        super.configureTabLayout()
+        val args: SeriesDetailsFragmentArgs by navArgs()
+        binding.recyclerTabLayout.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when (tab?.text) {
+                        ConstantValues.TabNames.DETAILED_CAST_TAB.tabName -> {
+                            setAdapter(concatCreditsAdapter)
+                            viewModel.getCastData(args.seriesId, ConstantValues.TV_TYPE_STRING)
+                        }
+                        ConstantValues.TabNames.DETAILED_CREW_TAB.tabName -> {
+                            setAdapter(concatCreditsAdapter)
+                            viewModel.getCrewData(args.seriesId, ConstantValues.TV_TYPE_STRING)
+                        }
+                        ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName -> {
+                            setAdapter(seasonsListAdapter)
+                        }
+                    }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
+    }
+
 
     private fun onExpandButtonClicked(position: Int) {
         viewModel.expandRecycler(position)

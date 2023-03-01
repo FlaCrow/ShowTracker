@@ -2,9 +2,9 @@ package com.flacrow.core.utils
 
 import android.widget.ImageView
 import android.widget.RadioGroup
+import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.flacrow.core.R
 
 
 object Extensions {
@@ -14,12 +14,12 @@ object Extensions {
         }
     }
 
-    fun ImageView.setImageWithGlide(url: String) {
+    fun ImageView.setImageWithGlide(url: String, @DrawableRes placeholder: Int) {
         Glide
             .with(this.context)
             .load(url)
-            .placeholder(R.drawable.ic_placeholder_image_50)
-            .error(R.drawable.ic_placeholder_image_50)
+            .placeholder(placeholder)
+            .error(placeholder)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(this)
     }

@@ -6,16 +6,21 @@ import androidx.paging.PagingData
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
 import com.flacrow.showtracker.data.api.ShowAPI
+import com.flacrow.showtracker.data.api.getCastCreditsList
+import com.flacrow.showtracker.data.api.getCrewCreditsList
+import com.flacrow.showtracker.data.models.CreditsRecyclerItem
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.data.models.MovieDetailed
 import com.flacrow.showtracker.data.models.TvDetailed
 import com.flacrow.showtracker.data.models.room.AppDatabase
+import com.flacrow.showtracker.data.pagingSources.CreditsPagingSource
 import com.flacrow.showtracker.data.pagingSources.ShowsSearchPagingSource
 import com.flacrow.showtracker.data.pagingSources.ShowsTrendingPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -37,30 +42,28 @@ interface Repository {
     fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>>
     fun getSavedSeriesAsList(): List<TvDetailed>
     fun updateTvDetailed(id: Int): Flow<TvDetailed>
-
+    fun getCastData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>>
+    fun getCrewData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>>
+    suspend fun fetchMovieCredits(movieId: Int)
+    suspend fun fetchTvCredits(tvId: Int)
 }
 
 class RepositoryImpl @Inject constructor(
-    private val showAPI: ShowAPI,
-    private val database: AppDatabase
+    private val showAPI: ShowAPI, private val database: AppDatabase
 ) : Repository {
 
 
-    override fun getTrendingFlow() = Pager(
-        config = PagingConfig(enablePlaceholders = false, pageSize = 20),
-        pagingSourceFactory = { ShowsTrendingPagingSource(showAPI) })
-        .flow
+    override fun getTrendingFlow() =
+        Pager(config = PagingConfig(enablePlaceholders = false, pageSize = 20),
+            pagingSourceFactory = { ShowsTrendingPagingSource(showAPI) }).flow
 
-    override fun getMovieOrTvByQuery(type: Int, query: String) = Pager(
-        config = PagingConfig(enablePlaceholders = false, pageSize = 20),
-        pagingSourceFactory = {
-            ShowsSearchPagingSource(
-                showAPI = showAPI,
-                query = query,
-                searchType = type
-            )
-        })
-        .flow
+    override fun getMovieOrTvByQuery(type: Int, query: String) =
+        Pager(config = PagingConfig(enablePlaceholders = false, pageSize = 20),
+            pagingSourceFactory = {
+                ShowsSearchPagingSource(
+                    showAPI = showAPI, query = query, searchType = type
+                )
+            }).flow
 
     override fun getTvDetailed(id: Int): Flow<TvDetailed> = flow {
         emit(database.tvDao().getSeriesById(id) ?: showAPI.searchTvById(id).toInternalModel())
@@ -84,8 +87,7 @@ class RepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 if (query.isEmpty()) database.movieDao().getAllMovies() else database.movieDao()
                     .getMoviesByQuery(query)
-            })
-            .flow
+            }).flow
     }
 
     override fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>> {
@@ -93,8 +95,7 @@ class RepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 if (query.isEmpty()) database.tvDao().getAllSeries() else database.tvDao()
                     .getSeriesByQuery(query)
-            })
-            .flow
+            }).flow
     }
 
     override fun updateTvDetailed(id: Int): Flow<TvDetailed> = flow {
@@ -136,13 +137,44 @@ class RepositoryImpl @Inject constructor(
         emit(newTvDetailed)
     }.flowOn(Dispatchers.IO)
 
+    override fun getCastData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>> {
+        return Pager(config = PagingConfig(
+            enablePlaceholders = false,
+            pageSize = 20, initialLoadSize = 20
+        ),
+            pagingSourceFactory = {
+                CreditsPagingSource(database.creditsDao(), "Cast", showType, showId)
+            }).flow.flowOn(Dispatchers.IO)
+    }
+
+    override fun getCrewData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>> {
+        return Pager(config = PagingConfig(
+            enablePlaceholders = false,
+            pageSize = 20, initialLoadSize = 20
+        ),
+            pagingSourceFactory = {
+                CreditsPagingSource(database.creditsDao(), "Crew", showType, showId)
+            }).flow.flowOn(Dispatchers.IO)
+    }
+
+    override suspend fun fetchTvCredits(tvId: Int) = withContext(Dispatchers.IO) {
+
+        database.creditsDao().insertCrewList(showAPI.getTvCredits(tvId).getCrewCreditsList())
+        database.creditsDao().insertCastList(showAPI.getTvCredits(tvId).getCastCreditsList())
+    }
+
+    override suspend fun fetchMovieCredits(movieId: Int) = withContext(Dispatchers.IO) {
+        database.creditsDao().insertCrewList(showAPI.getMovieCredits(movieId).getCrewCreditsList())
+
+        database.creditsDao().insertCastList(showAPI.getMovieCredits(movieId).getCastCreditsList())
+    }
+
     override suspend fun nukeDatabase() {
         database.clearAllTables()
     }
 
     override fun importBackupFile(
-        inputStream: InputStream,
-        outputStream: FileOutputStream
+        inputStream: InputStream, outputStream: FileOutputStream
     ) {
         database.close()
         inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }
@@ -151,8 +183,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun exportBackupFile(
-        inputStream: FileInputStream,
-        outputStream: OutputStream
+        inputStream: FileInputStream, outputStream: OutputStream
     ) {
         database.movieDao().checkpoint(SimpleSQLiteQuery("pragma wal_checkpoint(full)"))
         inputStream.use { input -> outputStream.use { output -> input.copyTo(output) } }

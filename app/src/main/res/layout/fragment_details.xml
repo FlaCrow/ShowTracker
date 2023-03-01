@@ -5,35 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
-
-            <ImageView
-                android:id="@+id/backdropIv"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:contentDescription="@string/poster_content_desc"
-                android:scaleType="centerCrop" />
-
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:id="@+id/error_detailed_series_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="@dimen/grid_2"
-        android:visibility="gone" />
-
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
@@ -41,127 +12,164 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/mainDetailView"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:layout_height="wrap_content">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ImageView
+            android:id="@+id/backdropIv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="200dp"
+            android:contentDescription="@string/poster_content_desc"
+            android:scaleType="centerCrop"
+            app:layout_scrollFlags="scroll|snap" />
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
 
             <TextView
-                android:id="@+id/series_title_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_4"
-                android:layout_marginTop="@dimen/grid_2"
-                android:layout_marginBottom="@dimen/grid_2"
-                android:gravity="center"
-                android:textAppearance="?textAppearanceHeadline6"
-                app:layout_constraintBottom_toTopOf="@id/status_group"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Breaking Bad" />
-
-
-            <com.flacrow.showtracker.PieChartView
-                android:id="@+id/userscore"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="@dimen/grid_3"
-                android:layout_marginTop="@dimen/grid_2"
-                android:layout_marginEnd="@dimen/grid_3"
-                android:layout_marginBottom="@dimen/grid_2"
-                android:theme="@style/PieChartStyle"
-                app:layout_constraintBottom_toBottomOf="@id/status_group"
-                app:layout_constraintEnd_toStartOf="@id/status_group"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/status_group"
-                app:percentage="0" />
-            <RadioGroup
-                android:id="@+id/status_group"
+                android:id="@+id/error_detailed_series_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/grid_2"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@id/genre_list_card"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toEndOf="@id/userscore"
-                app:layout_constraintTop_toBottomOf="@id/series_title_tv">
-                <include layout="@layout/detail_fragment_radio_buttons" />
-            </RadioGroup>
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/grid_2"
+                android:visibility="gone" />
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/genre_list_card"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid_2"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="@dimen/cardview_default_elevation"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/status_group">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/main_detail_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/genre_tv"
+                    android:id="@+id/series_title_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_4"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_marginBottom="@dimen/grid_2"
+                    android:gravity="center"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintBottom_toTopOf="@id/status_group"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Breaking Bad" />
+
+
+                <com.flacrow.showtracker.PieChartView
+                    android:id="@+id/userscore"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="@dimen/grid_3"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:layout_marginEnd="@dimen/grid_3"
+                    android:layout_marginBottom="@dimen/grid_2"
+                    android:theme="@style/PieChartStyle"
+                    app:layout_constraintBottom_toBottomOf="@id/status_group"
+                    app:layout_constraintEnd_toStartOf="@id/status_group"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/status_group"
+                    app:percentage="0" />
+
+                <RadioGroup
+                    android:id="@+id/status_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/grid_2"
-                    android:gravity="center"
-                    android:textAppearance="?textAppearanceBody1"
+                    android:layout_marginBottom="@dimen/grid_2"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@id/genre_list_card"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toEndOf="@id/userscore"
+                    app:layout_constraintTop_toBottomOf="@id/series_title_tv">
+
+                    <include layout="@layout/detail_fragment_radio_buttons" />
+                </RadioGroup>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/genre_list_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/grid_2"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="@dimen/cardview_default_elevation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/status_group"
-                    tools:text="Action, Comedy, Drama, Horror" />
+                    app:layout_constraintTop_toBottomOf="@id/status_group">
 
-            </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/genre_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/grid_2"
+                        android:gravity="center"
+                        android:textAppearance="?textAppearanceBody1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/status_group"
+                        tools:text="Action, Comedy, Drama, Horror" />
 
-            <TextView
-                android:id="@+id/tagline_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_2"
-                android:layout_marginTop="@dimen/grid_2"
-                android:textAppearance="?textAppearanceHeadline6"
-                app:layout_constraintBottom_toTopOf="@id/overview_tv"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/genre_list_card"
-                tools:text="Tagline Text Goes Here" />
+                </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/overview_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_2"
-                android:layout_marginTop="@dimen/grid_2"
-                android:textAppearance="?textAppearanceBody1"
-                app:layout_constraintBottom_toTopOf="@id/seasons_recycler"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tagline_tv"
-                tools:text="Overview Goes Here" />
+                <TextView
+                    android:id="@+id/tagline_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintBottom_toTopOf="@id/overview_tv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/genre_list_card"
+                    tools:text="Tagline Text Goes Here" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/seasons_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/grid_2"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/overview_tv"
-                app:stackFromEnd="true"
-                tools:listitem="@layout/seasons_item" />
+                <TextView
+                    android:id="@+id/overview_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/grid_2"
+                    android:layout_marginTop="@dimen/grid_2"
+                    android:textAppearance="?textAppearanceBody1"
+                    app:layout_constraintBottom_toTopOf="@id/recycler_tab_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tagline_tv"
+                    tools:text="Overview Goes Here" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/recycler_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:layout_marginTop="@dimen/grid_2"
+                    app:layout_constraintTop_toBottomOf="@id/overview_tv" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/items_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/grid_2"
+        android:nestedScrollingEnabled="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/seasons_item" />
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

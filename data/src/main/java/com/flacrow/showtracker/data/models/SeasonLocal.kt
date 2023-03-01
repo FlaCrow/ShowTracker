@@ -10,7 +10,7 @@ data class SeasonLocal(
     val posterUrl: String? = null,
     var watchStatus: Int = 0,
     val seasonNumber: Int,
-) : SeasonAdapterItem
+) : DetailedRecyclerItem
 {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

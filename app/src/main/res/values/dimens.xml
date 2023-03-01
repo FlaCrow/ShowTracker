@@ -7,6 +7,10 @@
     <!--width:height proportions ~ 1:1.5-->
     <dimen name="season_card_height">200dp</dimen>
     <dimen name="season_poster_width">133dp</dimen>
+    <dimen name="actor_card_height">133dp</dimen>
+    <dimen name="actor_photo_width">88dp</dimen>
+    <dimen name="actor_photo_width_plus_grid_2">104dp</dimen>
     <dimen name="media_list_item_height">116dp</dimen>
     <dimen name="poster_width">78dp</dimen>
+
 </resources>

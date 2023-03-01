@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.flacrow.core.utils.ConstantValues
 import com.flacrow.core.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.core.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
@@ -11,11 +14,17 @@ import com.flacrow.core.utils.Extensions.setImageWithGlide
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.databinding.FragmentDetailsBinding
+import com.flacrow.showtracker.presentation.adapters.CreditsListAdapter
+import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.presentation.viewModels.BaseDetailedViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
     BaseFragment<FragmentDetailsBinding, VModel>(FragmentDetailsBinding::inflate) {
+
+    val creditsListAdapter = CreditsListAdapter()
+    val concatCreditsAdapter = creditsListAdapter.withLoadStateFooter(LoadShowsStateAdapter{})
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -24,7 +33,7 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                 when (uiState) {
                     is BaseDetailedViewModel.ShowsDetailsState.Loading -> showProgressBar()
 
-                    is BaseDetailedViewModel.ShowsDetailsState.Success -> updateUi(
+                    is BaseDetailedViewModel.ShowsDetailsState.Success -> updateShowUi(
                         uiState.showDetailed
                     )
                     is BaseDetailedViewModel.ShowsDetailsState.Error,
@@ -33,7 +42,18 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                 }
             }
         }
+        configureTabLayout()
+    }
 
+    protected open fun configureTabLayout() {
+        binding.recyclerTabLayout.addTab(
+            binding.recyclerTabLayout.newTab()
+                .setText(ConstantValues.TabNames.DETAILED_CAST_TAB.tabName)
+        )
+        binding.recyclerTabLayout.addTab(
+            binding.recyclerTabLayout.newTab()
+                .setText(ConstantValues.TabNames.DETAILED_CREW_TAB.tabName)
+        )
     }
 
     private fun setupRadioButtonListeners() {
@@ -63,15 +83,17 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
 
     private fun showProgressBar() {
         binding.mainDetailView.isVisible = false
+        binding.itemsRecycler.isVisible = false
         binding.progressBar.isVisible = true
     }
 
-    protected open fun updateUi(tvDetailed: IShowDetailed) {
+    protected open fun updateShowUi(tvDetailed: IShowDetailed) {
 //        setAdapter()
 //        adapter.submitList(tvDetailed.seasons)
         with(binding) {
             binding.errorDetailedSeriesTv.isVisible = false
             mainDetailView.isVisible = true
+            binding.itemsRecycler.isVisible = true
             progressBar.isVisible = false
             binding.statusGroup.check(tvDetailed.watchStatus)
             setupRadioButtonListeners()
@@ -95,9 +117,20 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
             }
             genreTv.text = buffer
             userscore.percentage = tvDetailed.rating * 10f
-            backdropIv.setImageWithGlide("https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}")
+            backdropIv.setImageWithGlide(
+                "https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}",
+                com.flacrow.core.R.drawable.ic_placeholder_image_24
+            )
+            lifecycleScope.launch {
+                viewModel.creditsPagingDataState.collectLatest {
+                    creditsListAdapter.submitData(it)
+                }
+            }
         }
     }
 
+    protected fun setAdapter(adapter: RecyclerView.Adapter<ViewHolder>?) {
+        binding.itemsRecycler.adapter = adapter
+    }
 
 }
