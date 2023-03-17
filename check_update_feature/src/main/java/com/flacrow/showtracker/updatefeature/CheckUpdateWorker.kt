@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
+import com.flacrow.showtracker.data.models.TvDetailed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
@@ -31,10 +32,10 @@ class CheckUpdateWorker(
                 .filter { it.watchStatus == STATUS_WATCHING }.forEach { show ->
                     val newShow =
                         dependency.repository.updateTvDetailed(show.id).firstOrNull { newShow ->
-                            show.seasons != newShow.seasons
+                            show.seasons != (newShow.result as TvDetailed).seasons
                         }
                     if (newShow != null) {
-                        notificationService.showNotification(newShow.id, newShow.title)
+                        notificationService.showNotification(newShow.result.id, newShow.result.title)
                         notificationService.showSummary()
                     }
 

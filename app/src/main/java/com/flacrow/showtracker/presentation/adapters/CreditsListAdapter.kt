@@ -3,8 +3,8 @@ package com.flacrow.showtracker.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.flacrow.core.utils.Extensions.setImageWithGlide
@@ -15,7 +15,7 @@ import com.flacrow.showtracker.data.models.CrewCredits
 import com.flacrow.showtracker.databinding.ActorItemBinding
 
 class CreditsListAdapter :
-    PagingDataAdapter<CreditsRecyclerItem, RecyclerView.ViewHolder>(DiffCallback()) {
+    ListAdapter<CreditsRecyclerItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
     private class DiffCallback : DiffUtil.ItemCallback<CreditsRecyclerItem>() {
 

@@ -1,8 +1,6 @@
 package com.flacrow.showtracker.presentation.fragments
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -40,14 +38,13 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args: SeriesDetailsFragmentArgs by navArgs()
-        if (isOnline(requireContext()) && requireActivity().getSharedPreferences(
+        if (requireActivity().getSharedPreferences(
                 requireContext().packageName,
                 Context.MODE_PRIVATE
             ).getBoolean(SwitchableTypes.UPDATE_ON_INTERACTION.name, true)
         ) {
             viewModel.updateData(args.seriesId)
         } else viewModel.getData(args.seriesId)
-        viewModel.fetchTvCredits(args.seriesId)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -87,11 +84,11 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.text) {
                         ConstantValues.TabNames.DETAILED_CAST_TAB.tabName -> {
-                            setAdapter(concatCreditsAdapter)
+                            setAdapter(creditsListAdapter)
                             viewModel.getCastData(args.seriesId, ConstantValues.TV_TYPE_STRING)
                         }
                         ConstantValues.TabNames.DETAILED_CREW_TAB.tabName -> {
-                            setAdapter(concatCreditsAdapter)
+                            setAdapter(creditsListAdapter)
                             viewModel.getCrewData(args.seriesId, ConstantValues.TV_TYPE_STRING)
                         }
                         ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName -> {
@@ -111,22 +108,5 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
 
     private fun onExpandButtonClicked(position: Int) {
         viewModel.expandRecycler(position)
-    }
-
-    private fun isOnline(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                return true
-            }
-        }
-        return false
     }
 }

@@ -4,25 +4,23 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.sqlite.db.SimpleSQLiteQuery
+import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
 import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
+import com.flacrow.core.utils.ConstantValues.TV_TYPE_STRING
 import com.flacrow.showtracker.data.api.ShowAPI
 import com.flacrow.showtracker.data.api.getCastCreditsList
 import com.flacrow.showtracker.data.api.getCrewCreditsList
-import com.flacrow.showtracker.data.models.CreditsRecyclerItem
-import com.flacrow.showtracker.data.models.IShow
-import com.flacrow.showtracker.data.models.MovieDetailed
-import com.flacrow.showtracker.data.models.TvDetailed
+import com.flacrow.showtracker.data.models.*
 import com.flacrow.showtracker.data.models.room.AppDatabase
-import com.flacrow.showtracker.data.pagingSources.CreditsPagingSource
 import com.flacrow.showtracker.data.pagingSources.ShowsSearchPagingSource
 import com.flacrow.showtracker.data.pagingSources.ShowsTrendingPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
@@ -32,7 +30,7 @@ interface Repository {
     fun getTrendingFlow(): Flow<PagingData<IShow>>
     fun getMovieOrTvByQuery(type: Int, query: String): Flow<PagingData<IShow>>
     fun getTvDetailed(id: Int): Flow<TvDetailed>
-    fun getMovieDetailed(id: Int): Flow<MovieDetailed>
+    fun getMovieDetailed(id: Int): Flow<DetailedShowResult>
     suspend fun saveMovieToDatabase(movieDetailed: MovieDetailed)
     suspend fun saveSeriesToDatabase(tvDetailed: TvDetailed)
     fun importBackupFile(inputStream: InputStream, outputStream: FileOutputStream)
@@ -41,11 +39,9 @@ interface Repository {
     fun getSavedMovies(query: String): Flow<PagingData<MovieDetailed>>
     fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>>
     fun getSavedSeriesAsList(): List<TvDetailed>
-    fun updateTvDetailed(id: Int): Flow<TvDetailed>
-    fun getCastData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>>
-    fun getCrewData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>>
-    suspend fun fetchMovieCredits(movieId: Int)
-    suspend fun fetchTvCredits(tvId: Int)
+    fun updateTvDetailed(id: Int): Flow<DetailedShowResult>
+    fun getCastData(showId: Int, showType: String): Flow<List<CastCredits>>
+    fun getCrewData(showId: Int, showType: String): Flow<List<CrewCredits>>
 }
 
 class RepositoryImpl @Inject constructor(
@@ -69,8 +65,25 @@ class RepositoryImpl @Inject constructor(
         emit(database.tvDao().getSeriesById(id) ?: showAPI.searchTvById(id).toInternalModel())
     }.flowOn(Dispatchers.IO)
 
-    override fun getMovieDetailed(id: Int): Flow<MovieDetailed> = flow {
-        emit(database.movieDao().getMovieById(id) ?: showAPI.searchMovieById(id).toInternalModel())
+    override fun getMovieDetailed(id: Int): Flow<DetailedShowResult> = flow {
+        database.movieDao().getMovieById(id)?.takeIf { localMovie ->
+            try {
+                database.movieDao().insertMovie(
+                    showAPI.searchMovieById(id).toInternalModel()
+                        .copy(watchStatus = localMovie.watchStatus)
+                )
+                emit(
+                    DetailedShowResult(
+                        database.movieDao().getMovieById(id) ?: showAPI.searchMovieById(id)
+                            .toInternalModel(), null
+                    )
+                )
+
+            } catch (ex: IOException) {
+                emit(DetailedShowResult(localMovie, ex))
+            }
+            true
+        } ?: emit(DetailedShowResult(showAPI.searchMovieById(id).toInternalModel(), null))
     }.flowOn(Dispatchers.IO)
 
     override suspend fun saveMovieToDatabase(movieDetailed: MovieDetailed) {
@@ -98,76 +111,99 @@ class RepositoryImpl @Inject constructor(
             }).flow
     }
 
-    override fun updateTvDetailed(id: Int): Flow<TvDetailed> = flow {
+    override fun updateTvDetailed(id: Int): Flow<DetailedShowResult> = flow {
         val cachedTvDetailed = database.tvDao().getSeriesById(id)
         if (cachedTvDetailed == null) {
-            emit(showAPI.searchTvById(id).toInternalModel())
+            emit(DetailedShowResult(showAPI.searchTvById(id).toInternalModel(), null))
             return@flow
         }
 
-        val updatedTvDetailed = showAPI.searchTvById(id).toInternalModel()
-        //data class SeasonLocal equals is overridden
-        if (cachedTvDetailed.isMutableFieldEqual(updatedTvDetailed)) {
-            emit(cachedTvDetailed)
-            return@flow
-        }
-        // utterly horrible!!!
-        val cachedSeasonListMutable = cachedTvDetailed.seasons.toMutableList()
-        if (cachedTvDetailed.seasons.size != updatedTvDetailed.seasons.size) {
-            //check if "extras/season 0" season was added, insert it at the start of the new list if so
-            if (cachedTvDetailed.seasons[0].seasonNumber != updatedTvDetailed.seasons[0].seasonNumber) {
-                cachedSeasonListMutable.add(0, updatedTvDetailed.seasons[0].copy())
+        try {
+
+            val updatedTvDetailed = showAPI.searchTvById(id).toInternalModel()
+            //data class SeasonLocal equals is overridden
+            if (cachedTvDetailed.isMutableFieldEqual(updatedTvDetailed)) {
+                emit(DetailedShowResult(cachedTvDetailed, null))
+                return@flow
             }
-            cachedSeasonListMutable.addAll(updatedTvDetailed.seasons.slice(cachedSeasonListMutable.size until updatedTvDetailed.seasons.size))
-        }
-
-        val newTvDetailed = cachedTvDetailed.copy(
-            seasons = cachedSeasonListMutable.mapIndexed { index, newSeason ->
-                newSeason.copy(
-                    episodeCount = updatedTvDetailed.seasons[index].episodeCount,
-                    dateAired = updatedTvDetailed.seasons[index].dateAired,
-                    watchStatus = STATUS_WATCHING
+            // utterly horrible!!!
+            val cachedSeasonListMutable = cachedTvDetailed.seasons.toMutableList()
+            if (cachedTvDetailed.seasons.size != updatedTvDetailed.seasons.size) {
+                //check if "extras/season 0" season was added, insert it at the start of the new list if so
+                if (cachedTvDetailed.seasons[0].seasonNumber != updatedTvDetailed.seasons[0].seasonNumber) {
+                    cachedSeasonListMutable.add(0, updatedTvDetailed.seasons[0].copy())
+                }
+                cachedSeasonListMutable.addAll(
+                    updatedTvDetailed.seasons.slice(
+                        cachedSeasonListMutable.size until updatedTvDetailed.seasons.size
+                    )
                 )
-            },
-            rating = updatedTvDetailed.rating,
-            status = updatedTvDetailed.status,
-            watchStatus = STATUS_WATCHING
-        )
-        saveSeriesToDatabase(newTvDetailed)
-        emit(newTvDetailed)
+            }
+
+            val newTvDetailed = cachedTvDetailed.copy(
+                seasons = cachedSeasonListMutable.mapIndexed { index, newSeason ->
+                    newSeason.copy(
+                        episodeCount = updatedTvDetailed.seasons[index].episodeCount,
+                        dateAired = updatedTvDetailed.seasons[index].dateAired,
+                        watchStatus = STATUS_WATCHING
+                    )
+                },
+                rating = updatedTvDetailed.rating,
+                status = updatedTvDetailed.status,
+                watchStatus = STATUS_WATCHING
+            )
+            saveSeriesToDatabase(newTvDetailed)
+            emit(DetailedShowResult(newTvDetailed, null))
+        } catch (ex: IOException) {
+            emit(DetailedShowResult(cachedTvDetailed, ex))
+        }
     }.flowOn(Dispatchers.IO)
 
-    override fun getCastData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>> {
-        return Pager(config = PagingConfig(
-            enablePlaceholders = false,
-            pageSize = 20, initialLoadSize = 20
-        ),
-            pagingSourceFactory = {
-                CreditsPagingSource(database.creditsDao(), "Cast", showType, showId)
-            }).flow.flowOn(Dispatchers.IO)
-    }
+    override fun getCastData(showId: Int, showType: String): Flow<List<CastCredits>> = flow {
+        when (showType) {
+            TV_TYPE_STRING -> emit(
+                database.creditsDao().getCastCredits(showId, showType).ifEmpty {
+                    val creditsFromApi = showAPI.getTvCredits(
+                        showId
+                    ).getCastCreditsList()
+                    database.creditsDao().insertCastList(creditsFromApi)
+                    creditsFromApi
+                }
+            )
+            MOVIE_TYPE_STRING -> emit(
+                database.creditsDao().getCastCredits(showId, showType).ifEmpty {
+                    val creditsFromApi = showAPI.getMovieCredits(
+                        showId
+                    ).getCastCreditsList()
+                    database.creditsDao().insertCastList(creditsFromApi)
+                    creditsFromApi
+                }
+            )
+        }
+    }.flowOn(Dispatchers.IO)
 
-    override fun getCrewData(showId: Int, showType: String): Flow<PagingData<CreditsRecyclerItem>> {
-        return Pager(config = PagingConfig(
-            enablePlaceholders = false,
-            pageSize = 20, initialLoadSize = 20
-        ),
-            pagingSourceFactory = {
-                CreditsPagingSource(database.creditsDao(), "Crew", showType, showId)
-            }).flow.flowOn(Dispatchers.IO)
-    }
-
-    override suspend fun fetchTvCredits(tvId: Int) = withContext(Dispatchers.IO) {
-
-        database.creditsDao().insertCrewList(showAPI.getTvCredits(tvId).getCrewCreditsList())
-        database.creditsDao().insertCastList(showAPI.getTvCredits(tvId).getCastCreditsList())
-    }
-
-    override suspend fun fetchMovieCredits(movieId: Int) = withContext(Dispatchers.IO) {
-        database.creditsDao().insertCrewList(showAPI.getMovieCredits(movieId).getCrewCreditsList())
-
-        database.creditsDao().insertCastList(showAPI.getMovieCredits(movieId).getCastCreditsList())
-    }
+    override fun getCrewData(showId: Int, showType: String): Flow<List<CrewCredits>> = flow {
+        when (showType) {
+            TV_TYPE_STRING -> emit(
+                database.creditsDao().getCrewCredits(showId, showType).ifEmpty {
+                    val creditsFromApi = showAPI.getTvCredits(
+                        showId
+                    ).getCrewCreditsList()
+                    database.creditsDao().insertCrewList(creditsFromApi)
+                    creditsFromApi
+                }
+            )
+            MOVIE_TYPE_STRING -> emit(
+                database.creditsDao().getCrewCredits(showId, showType).ifEmpty {
+                    val creditsFromApi = showAPI.getMovieCredits(
+                        showId
+                    ).getCrewCreditsList()
+                    database.creditsDao().insertCrewList(creditsFromApi)
+                    creditsFromApi
+                }
+            )
+        }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun nukeDatabase() {
         database.clearAllTables()

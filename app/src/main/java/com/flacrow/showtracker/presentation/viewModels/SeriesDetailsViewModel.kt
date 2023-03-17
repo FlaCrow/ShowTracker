@@ -34,15 +34,11 @@ class SeriesDetailsViewModel @Inject constructor(override var repository: Reposi
             repository.getTvDetailed(id).catch { e ->
                 _uiState.value = ShowsDetailsState.Error(e)
             }.collect { tvDetailedResponse ->
-                _uiState.value = ShowsDetailsState.Success(tvDetailedResponse)
+                _uiState.value = ShowsDetailsState.Success(tvDetailedResponse, null)
                 _isRecyclerExpanded.update { BooleanArray(tvDetailedResponse.seasons.size).toList() }
                 _recyclerListStateFlow.update { tvDetailedResponse.seasons.toMutableList() }
             }
         }
-    }
-
-    fun fetchTvCredits(id: Int){
-        viewModelScope.launch { repository.fetchTvCredits(id) }
     }
 
 
@@ -65,7 +61,10 @@ class SeriesDetailsViewModel @Inject constructor(override var repository: Reposi
                 val isCompleted =
                     uiStateCopy.showDetailed.seasons.allReverseIteration { it.episodeDone == it.episodeCount }
                 if (isCompleted) _uiState.update {
-                    ShowsDetailsState.Success(uiStateCopy.showDetailed.copy(watchStatus = STATUS_COMPLETED))
+                    ShowsDetailsState.Success(
+                        uiStateCopy.showDetailed.copy(watchStatus = STATUS_COMPLETED),
+                        null
+                    )
                 }
                 repository.saveSeriesToDatabase((uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed)
 //                _isRecyclerExpanded.update { BooleanArray(uiStateCopy.showDetailed.seasons.size).toList() }
@@ -101,7 +100,7 @@ class SeriesDetailsViewModel @Inject constructor(override var repository: Reposi
                 }
             currentSeries.watchStatus = watchStatus
             _uiState.update {
-                ShowsDetailsState.Success(currentSeries)
+                ShowsDetailsState.Success(currentSeries, null)
             }
             _recyclerListStateFlow.update { currentSeries.seasons }
             _isRecyclerExpanded.update { BooleanArray(currentSeries.seasons.size).toList() }
@@ -142,9 +141,9 @@ class SeriesDetailsViewModel @Inject constructor(override var repository: Reposi
             repository.updateTvDetailed(id).catch { e ->
                 _uiState.value = ShowsDetailsState.Error(e)
             }.collect { tvDetailedResponse ->
-                _uiState.value = ShowsDetailsState.Success(tvDetailedResponse)
-                _isRecyclerExpanded.update { BooleanArray(tvDetailedResponse.seasons.size).toList() }
-                _recyclerListStateFlow.update { tvDetailedResponse.seasons.toMutableList() }
+                _uiState.value = ShowsDetailsState.Success(tvDetailedResponse.result, tvDetailedResponse.exception)
+                _isRecyclerExpanded.update { BooleanArray((tvDetailedResponse.result as TvDetailed).seasons.size).toList() }
+                _recyclerListStateFlow.update { (tvDetailedResponse.result as TvDetailed).seasons.toMutableList() }
             }
         }
     }

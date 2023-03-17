@@ -2,6 +2,7 @@ package com.flacrow.showtracker.presentation.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -15,16 +16,13 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.databinding.FragmentDetailsBinding
 import com.flacrow.showtracker.presentation.adapters.CreditsListAdapter
-import com.flacrow.showtracker.presentation.adapters.LoadShowsStateAdapter
 import com.flacrow.showtracker.presentation.viewModels.BaseDetailedViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
     BaseFragment<FragmentDetailsBinding, VModel>(FragmentDetailsBinding::inflate) {
 
     val creditsListAdapter = CreditsListAdapter()
-    val concatCreditsAdapter = creditsListAdapter.withLoadStateFooter(LoadShowsStateAdapter{})
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,12 +31,20 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                 when (uiState) {
                     is BaseDetailedViewModel.ShowsDetailsState.Loading -> showProgressBar()
 
-                    is BaseDetailedViewModel.ShowsDetailsState.Success -> updateShowUi(
-                        uiState.showDetailed
-                    )
+                    is BaseDetailedViewModel.ShowsDetailsState.Success -> {
+                        updateShowUi(
+                            uiState.showDetailed
+                        )
+                        if (uiState.exception != null) Toast.makeText(
+                            context,
+                            uiState.exception.localizedMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                     is BaseDetailedViewModel.ShowsDetailsState.Error,
                     -> showError(uiState.exception)
                     is BaseDetailedViewModel.ShowsDetailsState.Empty -> {}
+
                 }
             }
         }
@@ -122,8 +128,17 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                 com.flacrow.core.R.drawable.ic_placeholder_image_24
             )
             lifecycleScope.launch {
-                viewModel.creditsPagingDataState.collectLatest {
-                    creditsListAdapter.submitData(it)
+                viewModel.creditsPagingDataState.collect { creditsState ->
+                    when (creditsState) {
+                        is BaseDetailedViewModel.CreditsState.Success ->
+                            creditsListAdapter.submitList(creditsState.creditsRecyclerItem)
+                        is BaseDetailedViewModel.CreditsState.Error -> Toast.makeText(
+                            context,
+                            creditsState.exception.localizedMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        BaseDetailedViewModel.CreditsState.Empty -> {}
+                    }
                 }
             }
         }

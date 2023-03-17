@@ -23,7 +23,7 @@ class MovieDetailsFragment :
         val args: MovieDetailsFragmentArgs by navArgs()
         viewModel.getData(args.movieId)
         viewModel.getCastData(args.movieId, MOVIE_TYPE_STRING)
-        setAdapter(concatCreditsAdapter)
+        setAdapter(creditsListAdapter)
         super.onViewCreated(view, savedInstanceState)
     }
 

@@ -15,11 +15,11 @@ interface CreditsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCrewList(creditsLists: List<CrewCredits>)
 
-    @Query("SELECT * FROM CastCredits WHERE showId IS :showId AND mediaType IS :mediaType LIMIT :limit OFFSET :offset")
-    fun getCastCredits(showId: Int, mediaType: String, limit: Int, offset: Int): List<CastCredits>
+    @Query("SELECT * FROM CastCredits WHERE showId IS :showId AND mediaType IS :mediaType")
+    fun getCastCredits(showId: Int, mediaType: String): List<CastCredits>
 
-    @Query("SELECT * FROM crewcredits WHERE showId IS :showId AND mediaType IS :mediaType LIMIT :limit OFFSET :offset")
-    fun getCrewCredits(showId: Int, mediaType: String, limit: Int, offset: Int): List<CrewCredits>
+    @Query("SELECT * FROM CrewCredits WHERE showId IS :showId AND mediaType IS :mediaType")
+    fun getCrewCredits(showId: Int, mediaType: String): List<CrewCredits>
 
 }
 
