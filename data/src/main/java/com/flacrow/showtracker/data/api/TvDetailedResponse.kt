@@ -20,9 +20,11 @@ data class TvDetailedResponse(
     val status: String,
     val tagline: String,
     @SerializedName(value = "vote_average")
-    val rating: Float
+    val rating: Float,
+    @SerializedName("last_episode_to_air")
+    val lastEpisode: EpisodeResponse?
 ) {
-    fun toInternalModel(): TvDetailed {
+    fun toLocalModel(): TvDetailed {
         return TvDetailed(
             backdropUrl = this.backdropUrl,
             title = this.title,
@@ -31,10 +33,11 @@ data class TvDetailedResponse(
             id = this.id,
             overview = this.overview,
             posterUrl = this.posterUrl,
-            seasons = this.seasonsResponse.map { it.toInternalModel() },
+            seasons = this.seasonsResponse.map { it.toLocalModel() },
             status = this.status,
             tagline = this.tagline,
             rating = this.rating,
+            lastEpisode = this.lastEpisode?.toLocalModel(),
             watchStatus = 0
         )
     }

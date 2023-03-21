@@ -32,7 +32,7 @@ class CheckUpdateWorker(
                 .filter { it.watchStatus == STATUS_WATCHING }.forEach { show ->
                     val newShow =
                         dependency.repository.updateTvDetailed(show.id).firstOrNull { newShow ->
-                            show.seasons != (newShow.result as TvDetailed).seasons
+                            show.lastEpisode != (newShow.result as TvDetailed).lastEpisode
                         }
                     if (newShow != null) {
                         notificationService.showNotification(newShow.result.id, newShow.result.title)

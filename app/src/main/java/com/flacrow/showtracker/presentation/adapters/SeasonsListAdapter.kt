@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.flacrow.core.utils.Config.IMAGE_BASE_URL
 import com.flacrow.core.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.core.utils.ConstantValues.STATUS_PLAN_TO_WATCH
 import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
@@ -13,7 +14,9 @@ import com.flacrow.core.utils.Extensions.setImageWithGlide
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.DateItem
 import com.flacrow.showtracker.data.models.DetailedRecyclerItem
+import com.flacrow.showtracker.data.models.Episode
 import com.flacrow.showtracker.data.models.SeasonLocal
+import com.flacrow.showtracker.databinding.EpisodeItemBinding
 import com.flacrow.showtracker.databinding.SeasonsItemBinding
 import com.flacrow.showtracker.databinding.WatchHistoryItemBinding
 import kotlinx.coroutines.channels.awaitClose
@@ -32,8 +35,10 @@ class SeasonsListAdapter(
         private val binding = SeasonsItemBinding.bind(itemView)
         fun bind(season: SeasonLocal, position: Int) {
             binding.apply {
-                seasonPosterIv.setImageWithGlide("https://image.tmdb.org/t/p/w185/${season.posterUrl}",
-                    com.flacrow.core.R.drawable.ic_placeholder_image_24)
+                seasonPosterIv.setImageWithGlide(
+                    "${IMAGE_BASE_URL}/t/p/w185/${season.posterUrl}",
+                    com.flacrow.core.R.drawable.ic_placeholder_image_24
+                )
                 seasonNumTv.text =
                     root.context.getString(R.string.season_string, season.seasonNumber)
                 maxEpTv.text =
@@ -95,10 +100,34 @@ class SeasonsListAdapter(
 
     }
 
+    inner class EpisodeViewHolder(parent: ViewGroup) :
+        RecyclerView.ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.episode_item, parent, false)
+        ) {
+        private val binding = EpisodeItemBinding.bind(itemView)
+
+        fun bind(episodeItem: Episode) {
+            binding.episodeStillIv.setImageWithGlide(
+                "${IMAGE_BASE_URL}/t/p/w92/${episodeItem.stillUrl}",
+                com.flacrow.core.R.drawable.ic_placeholder_image_24
+            )
+            binding.episodeNameTv.text = episodeItem.epName
+            binding.epRatingPie.percentage = episodeItem.epRating * 10
+            binding.epDatesTv.text = binding.root.context.getString(
+                R.string.dates_formatting_string,
+                episodeItem.epDateAired,
+                episodeItem.epDateAired
+            )
+        }
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.seasons_item -> SeasonsViewHolder(parent)
             R.layout.watch_history_item -> WatchHistoryViewHolder(parent)
+            R.layout.episode_item -> EpisodeViewHolder(parent)
             else -> {
                 throw IllegalArgumentException()
             }
@@ -109,6 +138,7 @@ class SeasonsListAdapter(
         return when (getItem(position)) {
             is SeasonLocal -> R.layout.seasons_item
             is DateItem -> R.layout.watch_history_item
+            is Episode -> R.layout.episode_item
             else -> throw IllegalArgumentException()
         }
     }
@@ -119,6 +149,8 @@ class SeasonsListAdapter(
                 (holder as SeasonsViewHolder).bind(getItem(position) as SeasonLocal, position)
             R.layout.watch_history_item ->
                 (holder as WatchHistoryViewHolder).bind(getItem(position) as DateItem)
+            R.layout.episode_item ->
+                (holder as EpisodeViewHolder).bind(getItem(position) as Episode)
             else ->
                 throw IllegalArgumentException()
         }

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.flacrow.core.utils.Config.IMAGE_BASE_URL
 import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
 import com.flacrow.core.utils.Extensions.setImageWithGlide
 import com.flacrow.showtracker.R
@@ -49,7 +50,7 @@ class ShowListAdapter(private val navigate: (IShow) -> Unit) :
         fun bind(showItem: IShow) {
             binding.apply {
                 posterIv.setImageWithGlide(
-                    "https://image.tmdb.org/t/p/w92/${showItem.posterUrl}",
+                    "${IMAGE_BASE_URL}/t/p/w92/${showItem.posterUrl}",
                     com.flacrow.core.R.drawable.ic_placeholder_image_24
                 )
                 titleTv.text = showItem.title

@@ -12,14 +12,16 @@ data class Season(
     @SerializedName("poster_path")
     val posterUrl: String? = null,
     @SerializedName("season_number")
-    val seasonNumber: Int,
-)  {
-    fun toInternalModel(): SeasonLocal {
-        return SeasonLocal(dateAired = this.dateAired,
+    val seasonNumber: Int
+) {
+    fun toLocalModel(): SeasonLocal {
+        return SeasonLocal(
+            dateAired = this.dateAired,
             episodeCount = this.episodeCount,
             name = this.name,
             posterUrl = this.posterUrl,
-            seasonNumber = this.seasonNumber)
+            seasonNumber = this.seasonNumber
+        )
 
     }
 }

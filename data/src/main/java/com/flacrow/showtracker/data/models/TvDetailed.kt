@@ -1,5 +1,6 @@
 package com.flacrow.showtracker.data.models
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.flacrow.core.utils.ConstantValues.TV_TYPE_STRING
@@ -20,5 +21,7 @@ data class TvDetailed(
     val status: String,
     override val tagline: String,
     override val rating: Float,
-    override var watchStatus: Int
+    override var watchStatus: Int,
+    @Embedded
+    val lastEpisode: Episode?
 ) : IShowDetailed

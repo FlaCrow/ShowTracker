@@ -38,4 +38,10 @@ interface ShowAPI {
 
     @GET("3/tv/{tv_id}/aggregate_credits?api_key=${Config.API_KEY}")
     suspend fun getTvCredits(@Path("tv_id") id: Int): CreditsListsResponse
+
+    @GET("3/tv/{tv_id}/season/{season_num}?api_key=${Config.API_KEY}")
+    suspend fun getSeasonEpisodes(
+        @Path("tv_id") id: Int,
+        @Path("season_num") seasonNumber: Int
+    ): SeasonEpisodesResponse
 }

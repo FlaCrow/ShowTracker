@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.flacrow.core.utils.Config.IMAGE_BASE_URL
 import com.flacrow.core.utils.Extensions.setImageWithGlide
 import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.CastCredits
@@ -63,7 +64,7 @@ class CreditsListAdapter :
                     is CrewCredits -> {
                         personNameTv.text = creditsItem.name
                         if (creditsItem.photoUrl != null) personPhotoIv.setImageWithGlide(
-                            "https://image.tmdb.org/t/p/w92/${creditsItem.photoUrl}",
+                            "${IMAGE_BASE_URL}/t/p/w92/${creditsItem.photoUrl}",
                             com.flacrow.core.R.drawable.ic_baseline_person_outline_24
                         )
                         else personPhotoIv.setImageResource(com.flacrow.core.R.drawable.ic_baseline_person_outline_24)
@@ -73,7 +74,7 @@ class CreditsListAdapter :
                     is CastCredits -> {
                         personNameTv.text = creditsItem.name
                         if (creditsItem.photoUrl != null) personPhotoIv.setImageWithGlide(
-                            "https://image.tmdb.org/t/p/w92/${creditsItem.photoUrl}",
+                            "${IMAGE_BASE_URL}/t/p/w92/${creditsItem.photoUrl}",
                             com.flacrow.core.R.drawable.ic_baseline_person_outline_24
                         )
                         else personPhotoIv.setImageResource(com.flacrow.core.R.drawable.ic_baseline_person_outline_24)

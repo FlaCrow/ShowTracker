@@ -5,7 +5,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
-import com.flacrow.core.utils.ConstantValues.STATUS_WATCHING
 import com.flacrow.core.utils.ConstantValues.TV_TYPE_STRING
 import com.flacrow.showtracker.data.api.ShowAPI
 import com.flacrow.showtracker.data.api.getCastCreditsList
@@ -18,14 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
 import javax.inject.Inject
 
-
+//!TODO Repository is getting too big
 interface Repository {
     fun getTrendingFlow(): Flow<PagingData<IShow>>
     fun getMovieOrTvByQuery(type: Int, query: String): Flow<PagingData<IShow>>
@@ -42,6 +37,7 @@ interface Repository {
     fun updateTvDetailed(id: Int): Flow<DetailedShowResult>
     fun getCastData(showId: Int, showType: String): Flow<List<CastCredits>>
     fun getCrewData(showId: Int, showType: String): Flow<List<CrewCredits>>
+    fun getSeasonEpisodes(tvId: Int, seasonNumber: Int): Flow<List<Episode>>
 }
 
 class RepositoryImpl @Inject constructor(
@@ -62,7 +58,7 @@ class RepositoryImpl @Inject constructor(
             }).flow
 
     override fun getTvDetailed(id: Int): Flow<TvDetailed> = flow {
-        emit(database.tvDao().getSeriesById(id) ?: showAPI.searchTvById(id).toInternalModel())
+        emit(database.tvDao().getSeriesById(id) ?: showAPI.searchTvById(id).toLocalModel())
     }.flowOn(Dispatchers.IO)
 
     override fun getMovieDetailed(id: Int): Flow<DetailedShowResult> = flow {
@@ -114,13 +110,13 @@ class RepositoryImpl @Inject constructor(
     override fun updateTvDetailed(id: Int): Flow<DetailedShowResult> = flow {
         val cachedTvDetailed = database.tvDao().getSeriesById(id)
         if (cachedTvDetailed == null) {
-            emit(DetailedShowResult(showAPI.searchTvById(id).toInternalModel(), null))
+            emit(DetailedShowResult(showAPI.searchTvById(id).toLocalModel(), null))
             return@flow
         }
 
         try {
 
-            val updatedTvDetailed = showAPI.searchTvById(id).toInternalModel()
+            val updatedTvDetailed = showAPI.searchTvById(id).toLocalModel()
             //data class SeasonLocal equals is overridden
             if (cachedTvDetailed.isMutableFieldEqual(updatedTvDetailed)) {
                 emit(DetailedShowResult(cachedTvDetailed, null))
@@ -139,18 +135,16 @@ class RepositoryImpl @Inject constructor(
                     )
                 )
             }
-
             val newTvDetailed = cachedTvDetailed.copy(
                 seasons = cachedSeasonListMutable.mapIndexed { index, newSeason ->
                     newSeason.copy(
                         episodeCount = updatedTvDetailed.seasons[index].episodeCount,
                         dateAired = updatedTvDetailed.seasons[index].dateAired,
-                        watchStatus = STATUS_WATCHING
                     )
                 },
                 rating = updatedTvDetailed.rating,
                 status = updatedTvDetailed.status,
-                watchStatus = STATUS_WATCHING
+                lastEpisode = updatedTvDetailed.lastEpisode
             )
             saveSeriesToDatabase(newTvDetailed)
             emit(DetailedShowResult(newTvDetailed, null))
@@ -205,6 +199,11 @@ class RepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
+    override fun getSeasonEpisodes(tvId: Int, seasonNumber: Int): Flow<List<Episode>> =
+        flow {
+            emit(showAPI.getSeasonEpisodes(tvId, seasonNumber).episodes.map { it.toLocalModel() })
+        }.flowOn(Dispatchers.IO)
+
     override suspend fun nukeDatabase() {
         database.clearAllTables()
     }
@@ -235,7 +234,7 @@ class RepositoryImpl @Inject constructor(
 }
 
 fun TvDetailed.isMutableFieldEqual(tvDetailed: TvDetailed): Boolean {
-
+    if (this.lastEpisode != tvDetailed.lastEpisode) return false
     if (this.seasons != tvDetailed.seasons) return false
     if (this.rating != tvDetailed.rating) return false
     if (this.status != tvDetailed.status) return false

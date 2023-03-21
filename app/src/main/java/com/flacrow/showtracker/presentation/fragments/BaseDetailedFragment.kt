@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.flacrow.core.utils.Config.IMAGE_BASE_URL
 import com.flacrow.core.utils.ConstantValues
 import com.flacrow.core.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.core.utils.ConstantValues.STATUS_PLAN_TO_WATCH
@@ -124,7 +125,7 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
             genreTv.text = buffer
             userscore.percentage = tvDetailed.rating * 10f
             backdropIv.setImageWithGlide(
-                "https://image.tmdb.org/t/p/w500/${tvDetailed.backdropUrl}",
+                "${IMAGE_BASE_URL}/t/p/w500/${tvDetailed.backdropUrl}",
                 com.flacrow.core.R.drawable.ic_placeholder_image_24
             )
             lifecycleScope.launch {
