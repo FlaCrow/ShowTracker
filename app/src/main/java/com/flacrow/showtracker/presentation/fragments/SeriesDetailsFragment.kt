@@ -28,16 +28,17 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
     }
 
     private val seasonsListAdapter =
-        SeasonsListAdapter(onEpisodePickerValueChanged = { position, newValueFlow ->
+        SeasonsListAdapter(onEpisodePickerValueChanged = { newValueFlow ->
             onEpisodePickerValueChanged(
-                position, newValueFlow
+                newValueFlow
             )
-        }, onExpandButtonClicked = { position ->
-            onExpandButtonClicked(position)
+        }, onExpandButtonClicked = { seasonNumber ->
+            onExpandButtonClicked(seasonNumber)
         })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val args: SeriesDetailsFragmentArgs by navArgs()
+        seasonsListAdapter.setHasStableIds(true)
         if (requireActivity().getSharedPreferences(
                 requireContext().packageName,
                 Context.MODE_PRIVATE
@@ -49,7 +50,7 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
     }
 
     override fun updateShowUi(tvDetailed: IShowDetailed) {
-        if(binding.recyclerTabLayout.selectedTabPosition == 0)setAdapter(seasonsListAdapter)
+        if (binding.recyclerTabLayout.selectedTabPosition == 0) setAdapter(seasonsListAdapter)
         lifecycleScope.launch {
             viewModel.recyclerListStateFlow.collect {
                 seasonsListAdapter.submitList(it)
@@ -64,37 +65,40 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
 
 
     @OptIn(FlowPreview::class)
-    private fun onEpisodePickerValueChanged(position: Int, newValueFlow: Flow<Int>) {
+    private fun onEpisodePickerValueChanged(newValueFlow: Flow<Pair<Int, Int>>) {
         lifecycleScope.launch {
             newValueFlow.onEach {
                 binding.statusGroup.setChildrenEnabled(false)
             }.debounce(500).collect { newValue ->
-                viewModel.changeEpisodeWatchedValue(position, newValue)
+                viewModel.changeEpisodeWatchedValue(newValue.first, newValue.second)
                 binding.statusGroup.setChildrenEnabled(true)
             }
         }
     }
 
     override fun configureTabLayout() {
-        binding.recyclerTabLayout.addTab(binding.recyclerTabLayout.newTab().setText(ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName))
+        binding.recyclerTabLayout.addTab(
+            binding.recyclerTabLayout.newTab()
+                .setText(ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName)
+        )
         super.configureTabLayout()
         val args: SeriesDetailsFragmentArgs by navArgs()
         binding.recyclerTabLayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                    when (tab?.text) {
-                        ConstantValues.TabNames.DETAILED_CAST_TAB.tabName -> {
-                            setAdapter(creditsListAdapter)
-                            viewModel.getCastData(args.seriesId, ConstantValues.TV_TYPE_STRING)
-                        }
-                        ConstantValues.TabNames.DETAILED_CREW_TAB.tabName -> {
-                            setAdapter(creditsListAdapter)
-                            viewModel.getCrewData(args.seriesId, ConstantValues.TV_TYPE_STRING)
-                        }
-                        ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName -> {
-                            setAdapter(seasonsListAdapter)
-                        }
+                when (tab?.text) {
+                    ConstantValues.TabNames.DETAILED_CAST_TAB.tabName -> {
+                        setAdapter(creditsListAdapter)
+                        viewModel.getCastData(args.seriesId, ConstantValues.TV_TYPE_STRING)
                     }
+                    ConstantValues.TabNames.DETAILED_CREW_TAB.tabName -> {
+                        setAdapter(creditsListAdapter)
+                        viewModel.getCrewData(args.seriesId, ConstantValues.TV_TYPE_STRING)
+                    }
+                    ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName -> {
+                        setAdapter(seasonsListAdapter)
+                    }
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -106,7 +110,7 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
     }
 
 
-    private fun onExpandButtonClicked(position: Int) {
-        viewModel.expandRecycler(position)
+    private fun onExpandButtonClicked(seasonNumber: Int) {
+        viewModel.expandRecycler(seasonNumber)
     }
 }

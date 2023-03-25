@@ -23,8 +23,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
+
 class SeasonsListAdapter(
-    private val onEpisodePickerValueChanged: (Int, Flow<Int>) -> Unit,
+    private val onEpisodePickerValueChanged: (Flow<Pair<Int, Int>>) -> Unit,
     private val onExpandButtonClicked: (Int) -> Unit,
 ) :
     ListAdapter<DetailedRecyclerItem, RecyclerView.ViewHolder>(DiffCallback()) {
@@ -33,7 +34,7 @@ class SeasonsListAdapter(
             .inflate(R.layout.seasons_item, parent, false)
     ) {
         private val binding = SeasonsItemBinding.bind(itemView)
-        fun bind(season: SeasonLocal, position: Int) {
+        fun bind(season: SeasonLocal) {
             binding.apply {
                 seasonPosterIv.setImageWithGlide(
                     "${IMAGE_BASE_URL}/t/p/w185/${season.posterUrl}",
@@ -70,13 +71,14 @@ class SeasonsListAdapter(
                 }
                 val flow = callbackFlow {
                     epDonePicker.setOnValueChangedListener { _, _, newValue ->
-                        trySend(newValue)
+                        if(getItem(layoutPosition) is SeasonLocal)
+                        trySend(Pair(getItemId(layoutPosition).toInt(), newValue))
                     }
                     awaitClose { epDonePicker.setOnValueChangedListener(null) }
                 }
-                onEpisodePickerValueChanged.invoke(position, flow)
+                onEpisodePickerValueChanged.invoke(flow)
                 detailsButton.setOnClickListener {
-                    onExpandButtonClicked.invoke(position)
+                    onExpandButtonClicked.invoke(getItemId(layoutPosition).toInt())
                 }
             }
 
@@ -143,10 +145,21 @@ class SeasonsListAdapter(
         }
     }
 
+    //Temporary?
+    override fun getItemId(position: Int): Long {
+        val item = getItem(position)
+        return when(item){
+            is SeasonLocal -> (item.seasonNumber).toLong()
+            is DateItem -> item.date.time
+            is Episode -> item.epId.toLong()
+            else -> throw IllegalArgumentException()
+        }
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             R.layout.seasons_item ->
-                (holder as SeasonsViewHolder).bind(getItem(position) as SeasonLocal, position)
+                (holder as SeasonsViewHolder).bind(getItem(position) as SeasonLocal)
             R.layout.watch_history_item ->
                 (holder as WatchHistoryViewHolder).bind(getItem(position) as DateItem)
             R.layout.episode_item ->
