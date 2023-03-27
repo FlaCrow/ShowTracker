@@ -5,6 +5,7 @@ data class Episode(
     val epName: String,
     val epOverview: String,
     val epDateAired: String?,
+    val epDateWatched: String?,
     val episodeNumber: Int,
     val stillUrl: String?,
     val epRating: Float,

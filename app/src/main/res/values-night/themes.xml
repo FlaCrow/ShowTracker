@@ -7,4 +7,10 @@
         <item name="colorOnSurface">@color/white</item>
         <item name="android:colorBackground">@color/background_night</item>
     </style>
+
+    <style name="EpisodeCardTopStyle">
+        <item name="android:background">?colorSurface</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
 </resources>

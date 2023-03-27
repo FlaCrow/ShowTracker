@@ -32,6 +32,7 @@ data class EpisodeResponse(
             epName = this.name,
             epOverview = this.overview,
             epDateAired = this.dateAired,
+            epDateWatched = null,
             episodeNumber = this.episodeNumber,
             stillUrl = this.stillUrl,
             epRating = this.rating,

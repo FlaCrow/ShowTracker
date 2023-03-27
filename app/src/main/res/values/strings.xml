@@ -42,4 +42,10 @@
     <string name="settings_info">&appname; is made by &author; \nBuild Type: %s\nVersion: %s</string>
     <string name="app_logo_desc">App logo</string>
     <string name="tmdb_logo_description">The Movie Database Logo</string>
+    <string name="ep_aired_string">Aired:</string>
+    <string name="ep_watched_string">Watched:</string>
+    <string name="avg_rating_string">Avg.\nrating</string>
+    <string name="no_tagline_string">No Tagline Available</string>
+    <string name="no_overview_available_string">No Overview Available</string>
+    <string name="watched_never_string">Never</string>
 </resources>

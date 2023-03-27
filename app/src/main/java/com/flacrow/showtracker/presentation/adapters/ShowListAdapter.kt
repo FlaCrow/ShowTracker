@@ -50,7 +50,7 @@ class ShowListAdapter(private val navigate: (IShow) -> Unit) :
         fun bind(showItem: IShow) {
             binding.apply {
                 posterIv.setImageWithGlide(
-                    "${IMAGE_BASE_URL}/t/p/w92/${showItem.posterUrl}",
+                    "${IMAGE_BASE_URL}/t/p/w185/${showItem.posterUrl}",
                     com.flacrow.core.R.drawable.ic_placeholder_image_24
                 )
                 titleTv.text = showItem.title

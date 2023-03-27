@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/grid_4"
+    android:layout_marginVertical="@dimen/grid_1"
+    app:cardCornerRadius="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <View
+            android:id="@+id/episode_card_top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/episode_still_height"
+            style="@style/EpisodeCardTopStyle"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/episode_still_iv"
+            android:layout_width="@dimen/episode_still_width"
+            android:layout_height="@dimen/episode_still_height"
+            android:contentDescription="@string/poster_content_desc"
+            android:elevation="4dp"
+            tools:src="@color/black"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/aired_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_1"
+            android:elevation="4dp"
+            android:text="@string/ep_aired_string"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintStart_toEndOf="@id/episode_still_iv"
+            app:layout_constraintTop_toTopOf="@id/episode_still_iv" />
+
+        <TextView
+            android:id="@+id/watched_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:elevation="4dp"
+            android:text="@string/ep_watched_string"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintStart_toEndOf="@id/episode_still_iv"
+            app:layout_constraintTop_toBottomOf="@id/aired_tv" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/aired_watched_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="aired_tv,watched_tv" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/still_iv_plus_top_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="episode_card_top,episode_still_iv" />
+
+
+        <TextView
+            android:id="@+id/aired_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_1"
+            android:elevation="4dp"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintStart_toEndOf="@id/aired_watched_barrier"
+            app:layout_constraintTop_toTopOf="@id/episode_still_iv"
+            tools:text="2020-03-03" />
+
+        <TextView
+            android:id="@+id/watched_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/grid_2"
+            android:elevation="4dp"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintStart_toEndOf="@id/aired_watched_barrier"
+            app:layout_constraintTop_toBottomOf="@id/aired_tv"
+            tools:text="2020-03-03" />
+
+
+        <com.flacrow.showtracker.PieChartView
+            android:id="@+id/ep_rating_pie"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="@dimen/grid_2"
+            android:elevation="4dp"
+            android:theme="@style/PieChartStyle"
+            app:layout_constraintBottom_toBottomOf="@id/episode_still_iv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/episode_still_iv" />
+
+
+        <TextView
+            android:id="@+id/episode_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/grid_2"
+            android:layout_marginTop="@dimen/grid_2"
+            android:layout_marginEnd="@dimen/grid_2"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/still_iv_plus_top_barrier"
+            tools:text="Episode Title" />
+
+        <TextView
+            android:id="@+id/overview_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/grid_1"
+            android:paddingBottom="@dimen/grid_2"
+            android:textAppearance="@style/TextAppearance.ShowTracker.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/episode_name_tv"
+            tools:text="@tools:sample/lorem[15]" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -116,9 +116,9 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
             }
             overviewTv.text =
                 tvDetailed.overview.ifEmpty { requireContext().getText(R.string.no_overview) }
-            taglineTv.text = tvDetailed.tagline
+            taglineTv.text = tvDetailed.tagline.ifEmpty { getString(R.string.no_tagline_string) }
             for (i in tvDetailed.genres.indices) {
-                buffer += tvDetailed.genres.get(i).name + if (tvDetailed.genres.indices.last != i) {
+                buffer += tvDetailed.genres[i].name + if (tvDetailed.genres.indices.last != i) {
                     ", "
                 } else "."
             }

@@ -6,7 +6,10 @@
     <dimen name="grid_4">32dp</dimen>
     <!--width:height proportions ~ 1:1.5-->
     <dimen name="season_card_height">200dp</dimen>
+    <dimen name="episode_card_height">100dp</dimen>
     <dimen name="season_poster_width">133dp</dimen>
+    <dimen name="episode_still_height">52dp</dimen>
+    <dimen name="episode_still_width">92dp</dimen>
     <dimen name="actor_card_height">133dp</dimen>
     <dimen name="actor_photo_width">88dp</dimen>
     <dimen name="actor_photo_width_plus_grid_2">104dp</dimen>

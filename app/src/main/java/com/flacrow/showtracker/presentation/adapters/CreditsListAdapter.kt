@@ -64,7 +64,7 @@ class CreditsListAdapter :
                     is CrewCredits -> {
                         personNameTv.text = creditsItem.name
                         if (creditsItem.photoUrl != null) personPhotoIv.setImageWithGlide(
-                            "${IMAGE_BASE_URL}/t/p/w92/${creditsItem.photoUrl}",
+                            "${IMAGE_BASE_URL}/t/p/w185/${creditsItem.photoUrl}",
                             com.flacrow.core.R.drawable.ic_baseline_person_outline_24
                         )
                         else personPhotoIv.setImageResource(com.flacrow.core.R.drawable.ic_baseline_person_outline_24)
@@ -74,7 +74,7 @@ class CreditsListAdapter :
                     is CastCredits -> {
                         personNameTv.text = creditsItem.name
                         if (creditsItem.photoUrl != null) personPhotoIv.setImageWithGlide(
-                            "${IMAGE_BASE_URL}/t/p/w92/${creditsItem.photoUrl}",
+                            "${IMAGE_BASE_URL}/t/p/w185/${creditsItem.photoUrl}",
                             com.flacrow.core.R.drawable.ic_baseline_person_outline_24
                         )
                         else personPhotoIv.setImageResource(com.flacrow.core.R.drawable.ic_baseline_person_outline_24)

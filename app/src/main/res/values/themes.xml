@@ -30,6 +30,11 @@
         <item name="android:colorBackground">@color/brand_300</item>
     </style>
 
+    <style name="EpisodeCardTopStyle">
+        <item name="android:background">?colorSurface</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+
     <style name="Theme.ShowTracker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ShowTracker.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

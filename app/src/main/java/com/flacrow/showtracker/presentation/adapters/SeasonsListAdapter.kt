@@ -2,6 +2,7 @@ package com.flacrow.showtracker.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,11 +28,9 @@ import kotlinx.coroutines.flow.callbackFlow
 class SeasonsListAdapter(
     private val onEpisodePickerValueChanged: (Flow<Pair<Int, Int>>) -> Unit,
     private val onExpandButtonClicked: (Int) -> Unit,
-) :
-    ListAdapter<DetailedRecyclerItem, RecyclerView.ViewHolder>(DiffCallback()) {
+) : ListAdapter<DetailedRecyclerItem, RecyclerView.ViewHolder>(DiffCallback()) {
     inner class SeasonsViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.seasons_item, parent, false)
+        LayoutInflater.from(parent.context).inflate(R.layout.seasons_item, parent, false)
     ) {
         private val binding = SeasonsItemBinding.bind(itemView)
         fun bind(season: SeasonLocal) {
@@ -42,16 +41,13 @@ class SeasonsListAdapter(
                 )
                 seasonNumTv.text =
                     root.context.getString(R.string.season_string, season.seasonNumber)
-                maxEpTv.text =
-                    root.context.getString(
-                        R.string.out_of,
-                        season.episodeCount.toString()
-                    )
-                airDateTv.text =
-                    root.context.getString(
-                        R.string.aired_string,
-                        season.dateAired ?: root.context.getString(R.string.no_info)
-                    )
+                maxEpTv.text = root.context.getString(
+                    R.string.out_of, season.episodeCount.toString()
+                )
+                airDateTv.text = root.context.getString(
+                    R.string.aired_string,
+                    season.dateAired ?: root.context.getString(R.string.no_info)
+                )
                 epDonePicker.isVisible = season.watchStatus == STATUS_WATCHING
                 epDoneImmutableTv.isVisible = !epDonePicker.isVisible
                 epDonePicker.wrapSelectorWheel = false
@@ -62,8 +58,7 @@ class SeasonsListAdapter(
                         epDoneImmutableTv.text = "0"
                         detailsButton.isVisible = false
                     }
-                    STATUS_COMPLETED ->
-                        epDoneImmutableTv.text = season.episodeCount.toString()
+                    STATUS_COMPLETED -> epDoneImmutableTv.text = season.episodeCount.toString()
                     else -> {
                         epDoneImmutableTv.text = season.episodeDone.toString()
                         detailsButton.isVisible = true
@@ -71,8 +66,13 @@ class SeasonsListAdapter(
                 }
                 val flow = callbackFlow {
                     epDonePicker.setOnValueChangedListener { _, _, newValue ->
-                        if(getItem(layoutPosition) is SeasonLocal)
-                        trySend(Pair(getItemId(layoutPosition).toInt(), newValue))
+                        if (getItem(layoutPosition) is SeasonLocal) trySend(
+                            Pair(
+                                getItemId(
+                                    layoutPosition
+                                ).toInt(), newValue
+                            )
+                        )
                     }
                     awaitClose { epDonePicker.setOnValueChangedListener(null) }
                 }
@@ -85,11 +85,9 @@ class SeasonsListAdapter(
         }
     }
 
-    inner class WatchHistoryViewHolder(parent: ViewGroup) :
-        RecyclerView.ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.watch_history_item, parent, false)
-        ) {
+    inner class WatchHistoryViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.watch_history_item, parent, false)
+    ) {
         private val binding = WatchHistoryItemBinding.bind(itemView)
 
         fun bind(dateItem: DateItem) {
@@ -102,25 +100,28 @@ class SeasonsListAdapter(
 
     }
 
-    inner class EpisodeViewHolder(parent: ViewGroup) :
-        RecyclerView.ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.episode_item, parent, false)
-        ) {
+    inner class EpisodeViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.episode_item, parent, false)
+    ) {
         private val binding = EpisodeItemBinding.bind(itemView)
 
         fun bind(episodeItem: Episode) {
-            binding.episodeStillIv.setImageWithGlide(
-                "${IMAGE_BASE_URL}/t/p/w92/${episodeItem.stillUrl}",
-                com.flacrow.core.R.drawable.ic_placeholder_image_24
-            )
-            binding.episodeNameTv.text = episodeItem.epName
-            binding.epRatingPie.percentage = episodeItem.epRating * 10
-            binding.epDatesTv.text = binding.root.context.getString(
-                R.string.dates_formatting_string,
-                episodeItem.epDateAired,
-                episodeItem.epDateAired
-            )
+            with(binding) {
+                episodeStillIv.isGone = episodeItem.stillUrl.isNullOrEmpty()
+                episodeStillIv.setImageWithGlide(
+                    "${IMAGE_BASE_URL}/t/p/w185/${episodeItem.stillUrl}",
+                    com.flacrow.core.R.drawable.ic_placeholder_image_24
+                )
+                episodeNameTv.text = episodeItem.epName
+                epRatingPie.percentage = episodeItem.epRating * 10
+                watchedDateTv.text = episodeItem.epDateWatched?:  root.context.getString(R.string.watched_never_string)
+                airedDateTv.text = episodeItem.epDateAired
+                overviewTv.text = episodeItem.epOverview.ifEmpty { root.context.getString(R.string.no_overview_available_string) }
+                epRatingPie.isGone = episodeItem.epVoteCount == 0
+                epRatingPie.percentage = episodeItem.epRating * 10
+            }
+
+
         }
 
     }
@@ -148,7 +149,7 @@ class SeasonsListAdapter(
     //Temporary?
     override fun getItemId(position: Int): Long {
         val item = getItem(position)
-        return when(item){
+        return when (item) {
             is SeasonLocal -> (item.seasonNumber).toLong()
             is DateItem -> item.date.time
             is Episode -> item.epId.toLong()
@@ -158,14 +159,10 @@ class SeasonsListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            R.layout.seasons_item ->
-                (holder as SeasonsViewHolder).bind(getItem(position) as SeasonLocal)
-            R.layout.watch_history_item ->
-                (holder as WatchHistoryViewHolder).bind(getItem(position) as DateItem)
-            R.layout.episode_item ->
-                (holder as EpisodeViewHolder).bind(getItem(position) as Episode)
-            else ->
-                throw IllegalArgumentException()
+            R.layout.seasons_item -> (holder as SeasonsViewHolder).bind(getItem(position) as SeasonLocal)
+            R.layout.watch_history_item -> (holder as WatchHistoryViewHolder).bind(getItem(position) as DateItem)
+            R.layout.episode_item -> (holder as EpisodeViewHolder).bind(getItem(position) as Episode)
+            else -> throw IllegalArgumentException()
         }
     }
 
