@@ -7,6 +7,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
@@ -19,7 +21,9 @@ import com.flacrow.showtracker.presentation.adapters.ShowListAdapter
 import com.flacrow.showtracker.presentation.viewModels.BaseViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 
@@ -47,11 +51,22 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
     private var valueAnimator: ValueAnimator? = null
 
 
-    protected val adapter =
-        ShowListAdapter { show -> onListElementClick(show) }
+    protected val adapter = ShowListAdapter { show, cardView ->
+
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 300
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 300
+        }
+
+        onListElementClick(show, FragmentNavigatorExtras(cardView to show.title))
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        postponeEnterTransition(100, TimeUnit.MILLISECONDS)
+        //view.doOnPreDraw { startPostponedEnterTransition() }
         setAdapter()
         setupMenu()
         setupTabListeners()
@@ -95,11 +110,9 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
             true
         }
 
-        val searchView =
-            binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
+        val searchView = binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
         valueAnimator = ValueAnimator.ofFloat(
-            0f,
-            48f * requireContext().resources.displayMetrics.density
+            0f, 48f * requireContext().resources.displayMetrics.density
         )
         valueAnimator?.apply {
             duration = ANIMATION_DURATION
@@ -129,23 +142,21 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
             }
         }
 
-        searchView.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    getShowList(query ?: "")
-                    return true
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText?.isEmpty() == true) {
-                        getShowList("")
-                    }
-                    return false
-                }
-
-
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                getShowList(query ?: "")
+                return true
             }
-        )
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText?.isEmpty() == true) {
+                    getShowList("")
+                }
+                return false
+            }
+
+
+        })
     }
 
 
@@ -165,5 +176,5 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
         }
     }
 
-    protected abstract fun onListElementClick(show: IShow)
+    protected abstract fun onListElementClick(show: IShow, extras: FragmentNavigator.Extras)
 }

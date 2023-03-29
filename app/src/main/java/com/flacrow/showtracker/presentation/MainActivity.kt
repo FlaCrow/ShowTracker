@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.flacrow.core.utils.ConstantValues.SERIES_ID_EXTRA
@@ -14,6 +15,12 @@ import com.flacrow.showtracker.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    val currentNavigationFragment: Fragment?
+        get() = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
+            ?.childFragmentManager
+            ?.fragments
+            ?.first()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +44,18 @@ class MainActivity : AppCompatActivity() {
         val navController = binding.navHostFragmentContainer.findNavController()
         binding.bottomNav.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
+
             when (destination.id) {
                 R.id.movieDetailsFragment -> hideBottomNav()
                 R.id.seriesDetailsFragment -> hideBottomNav()
                 R.id.settingsFragment -> hideBottomNav()
-                else -> showBottomNav()
+                else -> {
+                    showBottomNav()
+                    currentNavigationFragment?.apply {
+                        exitTransition = null
+                        reenterTransition = null
+                    }
+                }
             }
         }
     }

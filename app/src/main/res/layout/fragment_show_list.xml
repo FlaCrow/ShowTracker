@@ -48,6 +48,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/grid_2"
         android:layout_marginRight="@dimen/grid_2"
+        android:transitionGroup="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         tools:listitem="@layout/showentity_item" />

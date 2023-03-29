@@ -49,14 +49,14 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun updateShowUi(tvDetailed: IShowDetailed) {
+    override fun updateShowUi(showDetailed: IShowDetailed) {
         if (binding.recyclerTabLayout.selectedTabPosition == 0) setAdapter(seasonsListAdapter)
         lifecycleScope.launch {
             viewModel.recyclerListStateFlow.collect {
                 seasonsListAdapter.submitList(it)
             }
         }
-        super.updateShowUi(tvDetailed)
+        super.updateShowUi(showDetailed)
     }
 
     override fun setupDependencies() {

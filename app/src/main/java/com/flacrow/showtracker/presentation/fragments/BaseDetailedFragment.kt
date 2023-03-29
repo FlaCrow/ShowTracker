@@ -1,5 +1,6 @@
 package com.flacrow.showtracker.presentation.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -18,6 +19,7 @@ import com.flacrow.showtracker.data.models.IShowDetailed
 import com.flacrow.showtracker.databinding.FragmentDetailsBinding
 import com.flacrow.showtracker.presentation.adapters.CreditsListAdapter
 import com.flacrow.showtracker.presentation.viewModels.BaseDetailedViewModel
+import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.launch
 
 abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
@@ -25,6 +27,15 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
 
     val creditsListAdapter = CreditsListAdapter()
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.nav_host_fragment_container
+            duration = 300
+            scrimColor = Color.TRANSPARENT
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
@@ -37,9 +48,7 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                             uiState.showDetailed
                         )
                         if (uiState.exception != null) Toast.makeText(
-                            context,
-                            uiState.exception.localizedMessage,
-                            Toast.LENGTH_SHORT
+                            context, uiState.exception.localizedMessage, Toast.LENGTH_SHORT
                         ).show()
                     }
                     is BaseDetailedViewModel.ShowsDetailsState.Error,
@@ -94,49 +103,49 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
         binding.progressBar.isVisible = true
     }
 
-    protected open fun updateShowUi(tvDetailed: IShowDetailed) {
+    protected open fun updateShowUi(showDetailed: IShowDetailed) {
 //        setAdapter()
 //        adapter.submitList(tvDetailed.seasons)
         with(binding) {
-            binding.errorDetailedSeriesTv.isVisible = false
+            showCard.transitionName = showDetailed.title
+            errorDetailedSeriesTv.isVisible = false
             mainDetailView.isVisible = true
-            binding.itemsRecycler.isVisible = true
+            itemsRecycler.isVisible = true
             progressBar.isVisible = false
-            binding.statusGroup.check(tvDetailed.watchStatus)
+            statusGroup.check(showDetailed.watchStatus)
             setupRadioButtonListeners()
 
             var buffer = ""
-            seriesTitleTv.text = if (tvDetailed.firstAirDate.isNullOrEmpty()) tvDetailed.title
+            seriesTitleTv.text = if (showDetailed.firstAirDate.isNullOrEmpty()) showDetailed.title
             else {
                 requireContext().getString(
                     R.string.title_year_parenthesis,
-                    tvDetailed.title,
-                    tvDetailed.firstAirDate?.dropLast(6)
+                    showDetailed.title,
+                    showDetailed.firstAirDate?.dropLast(6)
                 )
             }
             overviewTv.text =
-                tvDetailed.overview.ifEmpty { requireContext().getText(R.string.no_overview) }
-            taglineTv.text = tvDetailed.tagline.ifEmpty { getString(R.string.no_tagline_string) }
-            for (i in tvDetailed.genres.indices) {
-                buffer += tvDetailed.genres[i].name + if (tvDetailed.genres.indices.last != i) {
+                showDetailed.overview.ifEmpty { requireContext().getText(R.string.no_overview) }
+            taglineTv.text = showDetailed.tagline.ifEmpty { getString(R.string.no_tagline_string) }
+            for (i in showDetailed.genres.indices) {
+                buffer += showDetailed.genres[i].name + if (showDetailed.genres.indices.last != i) {
                     ", "
                 } else "."
             }
             genreTv.text = buffer
-            userscore.percentage = tvDetailed.rating * 10f
+            userscore.percentage = showDetailed.rating * 10f
             backdropIv.setImageWithGlide(
-                "${IMAGE_BASE_URL}/t/p/w500/${tvDetailed.backdropUrl}",
+                "${IMAGE_BASE_URL}/t/p/w500/${showDetailed.backdropUrl}",
                 com.flacrow.core.R.drawable.ic_placeholder_image_24
             )
             lifecycleScope.launch {
                 viewModel.creditsPagingDataState.collect { creditsState ->
                     when (creditsState) {
-                        is BaseDetailedViewModel.CreditsState.Success ->
-                            creditsListAdapter.submitList(creditsState.creditsRecyclerItem)
+                        is BaseDetailedViewModel.CreditsState.Success -> creditsListAdapter.submitList(
+                            creditsState.creditsRecyclerItem
+                        )
                         is BaseDetailedViewModel.CreditsState.Error -> Toast.makeText(
-                            context,
-                            creditsState.exception.localizedMessage,
-                            Toast.LENGTH_SHORT
+                            context, creditsState.exception.localizedMessage, Toast.LENGTH_SHORT
                         ).show()
                         BaseDetailedViewModel.CreditsState.Empty -> {}
                     }
