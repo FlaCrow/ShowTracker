@@ -94,7 +94,7 @@ class SeasonsListAdapter(
             binding.episodeHistoryTv.text = binding.root.context.getString(
                 R.string.watch_history_string,
                 dateItem.position.toString(),
-                dateItem.date.toString()
+                dateItem.getLongFormattedString()
             )
         }
 

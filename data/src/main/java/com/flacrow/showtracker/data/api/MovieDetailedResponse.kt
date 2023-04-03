@@ -18,7 +18,9 @@ data class MovieDetailedResponse(
     val status: String,
     val tagline: String,
     @SerializedName(value = "vote_average")
-    val rating: Float
+    val rating: Float,
+    @SerializedName(value = "credits")
+    val credits: CreditsListsResponse
 ) {
     fun toInternalModel(): MovieDetailed {
         return MovieDetailed(
@@ -32,7 +34,9 @@ data class MovieDetailedResponse(
             status = this.status,
             tagline = this.tagline,
             rating = this.rating,
-            watchStatus = 0
+            watchStatus = 0,
+            crewList = credits.getCrewCreditsList(),
+            castList = credits.getCastCreditsList()
         )
     }
 }

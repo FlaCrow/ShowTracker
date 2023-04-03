@@ -1,6 +1,5 @@
 package com.flacrow.showtracker.presentation.viewModels
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.flacrow.core.utils.ConstantValues.STATUS_COMPLETED
 import com.flacrow.core.utils.ConstantValues.STATUS_PLAN_TO_WATCH
@@ -8,9 +7,11 @@ import com.flacrow.core.utils.Extensions.allReverseIteration
 import com.flacrow.showtracker.data.models.*
 import com.flacrow.showtracker.data.repository.Repository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 
@@ -64,10 +65,14 @@ class SeriesDetailsViewModel @Inject constructor(override var repository: Reposi
                 //check if episodeDone == episodeCount : if so for all seasons -> watch status "completed"
                 val isCompleted =
                     uiStateCopy.showDetailed.seasons.allReverseIteration { it.episodeDone == it.episodeCount }
-                if (isCompleted) _uiState.update {
-                    ShowsDetailsState.Success(
-                        uiStateCopy.showDetailed.copy(watchStatus = STATUS_COMPLETED), null
-                    )
+                if (isCompleted) {
+                    _uiState.update {
+                        ShowsDetailsState.Success(
+                            uiStateCopy.showDetailed.copy(watchStatus = STATUS_COMPLETED), null
+                        )
+                    }
+                    _recyclerListStateFlow.update { uiStateCopy.showDetailed.seasons }
+                    return@launch
                 }
                 repository.saveSeriesToDatabase((uiState.value as ShowsDetailsState.Success).showDetailed as TvDetailed)
                 if (_isRecyclerExpanded.value[seasonNumber]) {

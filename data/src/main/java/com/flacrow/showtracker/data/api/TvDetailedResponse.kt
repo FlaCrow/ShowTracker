@@ -22,7 +22,9 @@ data class TvDetailedResponse(
     @SerializedName(value = "vote_average")
     val rating: Float,
     @SerializedName("last_episode_to_air")
-    val lastEpisode: EpisodeResponse?
+    val lastEpisode: EpisodeResponse?,
+    @SerializedName(value = "aggregate_credits")
+    val credits: CreditsListsResponse
 ) {
     fun toLocalModel(): TvDetailed {
         return TvDetailed(
@@ -38,7 +40,9 @@ data class TvDetailedResponse(
             tagline = this.tagline,
             rating = this.rating,
             lastEpisode = this.lastEpisode?.toLocalModel(),
-            watchStatus = 0
+            watchStatus = 0,
+            crewList = credits.getCrewCreditsList(),
+            castList = credits.getCastCreditsList()
         )
     }
 }

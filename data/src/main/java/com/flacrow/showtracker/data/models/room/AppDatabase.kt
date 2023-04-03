@@ -5,10 +5,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.flacrow.showtracker.data.models.*
 
-@Database(entities = [MovieDetailed::class, TvDetailed::class, CrewCredits::class, CastCredits::class], version = 1, exportSchema = false)
+@Database(entities = [MovieDetailed::class, TvDetailed::class], version = 1, exportSchema = false)
 @TypeConverters(DataConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao
     abstract fun tvDao(): TvDao
-    abstract fun creditsDao() : CreditsDao
 }

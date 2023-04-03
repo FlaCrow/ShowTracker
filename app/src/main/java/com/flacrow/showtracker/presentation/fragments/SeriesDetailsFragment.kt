@@ -82,18 +82,17 @@ class SeriesDetailsFragment : BaseDetailedFragment<SeriesDetailsViewModel>() {
                 .setText(ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName)
         )
         super.configureTabLayout()
-        val args: SeriesDetailsFragmentArgs by navArgs()
         binding.recyclerTabLayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.text) {
                     ConstantValues.TabNames.DETAILED_CAST_TAB.tabName -> {
                         setAdapter(creditsListAdapter)
-                        viewModel.getCastData(args.seriesId, ConstantValues.TV_TYPE_STRING)
+                        viewModel.getCastData()
                     }
                     ConstantValues.TabNames.DETAILED_CREW_TAB.tabName -> {
                         setAdapter(creditsListAdapter)
-                        viewModel.getCrewData(args.seriesId, ConstantValues.TV_TYPE_STRING)
+                        viewModel.getCrewData()
                     }
                     ConstantValues.TabNames.DETAILED_SEASON_TAB.tabName -> {
                         setAdapter(seasonsListAdapter)

@@ -19,5 +19,7 @@ data class MovieDetailed(
     val status: String,
     override val tagline: String,
     override val rating: Float,
-    override var watchStatus: Int
+    override var watchStatus: Int,
+    override val castList: List<CastCredits>,
+    override val crewList: List<CrewCredits>
 ) : IShowDetailed

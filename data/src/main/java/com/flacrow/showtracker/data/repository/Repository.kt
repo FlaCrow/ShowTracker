@@ -4,11 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.sqlite.db.SimpleSQLiteQuery
-import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
-import com.flacrow.core.utils.ConstantValues.TV_TYPE_STRING
 import com.flacrow.showtracker.data.api.ShowAPI
-import com.flacrow.showtracker.data.api.getCastCreditsList
-import com.flacrow.showtracker.data.api.getCrewCreditsList
 import com.flacrow.showtracker.data.models.*
 import com.flacrow.showtracker.data.models.room.AppDatabase
 import com.flacrow.showtracker.data.pagingSources.ShowsSearchPagingSource
@@ -35,8 +31,6 @@ interface Repository {
     fun getSavedSeries(query: String): Flow<PagingData<TvDetailed>>
     fun getSavedSeriesAsList(): List<TvDetailed>
     fun updateTvDetailed(id: Int): Flow<DetailedShowResult>
-    fun getCastData(showId: Int, showType: String): Flow<List<CastCredits>>
-    fun getCrewData(showId: Int, showType: String): Flow<List<CrewCredits>>
     fun getSeasonEpisodes(tvId: Int, seasonNumber: Int): Flow<List<Episode>>
 }
 
@@ -118,7 +112,7 @@ class RepositoryImpl @Inject constructor(
 
             val updatedTvDetailed = showAPI.searchTvById(id).toLocalModel()
             //data class SeasonLocal equals is overridden
-            if (cachedTvDetailed.isMutableFieldEqual(updatedTvDetailed)) {
+            if (cachedTvDetailed.isNonUserChangeableFieldEqual(updatedTvDetailed)) {
                 emit(DetailedShowResult(cachedTvDetailed, null))
                 return@flow
             }
@@ -144,7 +138,9 @@ class RepositoryImpl @Inject constructor(
                 },
                 rating = updatedTvDetailed.rating,
                 status = updatedTvDetailed.status,
-                lastEpisode = updatedTvDetailed.lastEpisode
+                lastEpisode = updatedTvDetailed.lastEpisode,
+                castList = updatedTvDetailed.castList,
+                crewList = updatedTvDetailed.crewList
             )
             saveSeriesToDatabase(newTvDetailed)
             emit(DetailedShowResult(newTvDetailed, null))
@@ -153,51 +149,6 @@ class RepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getCastData(showId: Int, showType: String): Flow<List<CastCredits>> = flow {
-        when (showType) {
-            TV_TYPE_STRING -> emit(
-                database.creditsDao().getCastCredits(showId, showType).ifEmpty {
-                    val creditsFromApi = showAPI.getTvCredits(
-                        showId
-                    ).getCastCreditsList()
-                    database.creditsDao().insertCastList(creditsFromApi)
-                    creditsFromApi
-                }
-            )
-            MOVIE_TYPE_STRING -> emit(
-                database.creditsDao().getCastCredits(showId, showType).ifEmpty {
-                    val creditsFromApi = showAPI.getMovieCredits(
-                        showId
-                    ).getCastCreditsList()
-                    database.creditsDao().insertCastList(creditsFromApi)
-                    creditsFromApi
-                }
-            )
-        }
-    }.flowOn(Dispatchers.IO)
-
-    override fun getCrewData(showId: Int, showType: String): Flow<List<CrewCredits>> = flow {
-        when (showType) {
-            TV_TYPE_STRING -> emit(
-                database.creditsDao().getCrewCredits(showId, showType).ifEmpty {
-                    val creditsFromApi = showAPI.getTvCredits(
-                        showId
-                    ).getCrewCreditsList()
-                    database.creditsDao().insertCrewList(creditsFromApi)
-                    creditsFromApi
-                }
-            )
-            MOVIE_TYPE_STRING -> emit(
-                database.creditsDao().getCrewCredits(showId, showType).ifEmpty {
-                    val creditsFromApi = showAPI.getMovieCredits(
-                        showId
-                    ).getCrewCreditsList()
-                    database.creditsDao().insertCrewList(creditsFromApi)
-                    creditsFromApi
-                }
-            )
-        }
-    }.flowOn(Dispatchers.IO)
 
     override fun getSeasonEpisodes(tvId: Int, seasonNumber: Int): Flow<List<Episode>> =
         flow {
@@ -233,10 +184,12 @@ class RepositoryImpl @Inject constructor(
 
 }
 
-fun TvDetailed.isMutableFieldEqual(tvDetailed: TvDetailed): Boolean {
+fun TvDetailed.isNonUserChangeableFieldEqual(tvDetailed: TvDetailed): Boolean {
     if (this.lastEpisode != tvDetailed.lastEpisode) return false
     if (this.seasons != tvDetailed.seasons) return false
     if (this.rating != tvDetailed.rating) return false
     if (this.status != tvDetailed.status) return false
+    if (this.crewList != tvDetailed.crewList) return false
+    if (this.castList != tvDetailed.castList) return false
     return true
 }

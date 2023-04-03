@@ -23,5 +23,7 @@ data class TvDetailed(
     override val rating: Float,
     override var watchStatus: Int,
     @Embedded
-    val lastEpisode: Episode?
+    val lastEpisode: Episode?,
+    override val castList: List<CastCredits>,
+    override val crewList: List<CrewCredits>
 ) : IShowDetailed

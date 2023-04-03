@@ -133,11 +133,6 @@ abstract class BaseDetailedFragment<VModel : BaseDetailedViewModel> :
                     when (creditsState) {
                         is BaseDetailedViewModel.CreditsState.Success ->
                             creditsListAdapter.submitList(creditsState.creditsRecyclerItem)
-                        is BaseDetailedViewModel.CreditsState.Error -> Toast.makeText(
-                            context,
-                            creditsState.exception.localizedMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
                         BaseDetailedViewModel.CreditsState.Empty -> {}
                     }
                 }

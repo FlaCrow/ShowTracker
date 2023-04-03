@@ -7,4 +7,6 @@ interface IShowDetailed : IShow {
     val genres: List<Genres>
     val overview: String
     val tagline: String
+    val castList: List<CastCredits>
+    val crewList: List<CrewCredits>
 }

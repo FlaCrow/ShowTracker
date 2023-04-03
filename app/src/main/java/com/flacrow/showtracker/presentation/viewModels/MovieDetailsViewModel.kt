@@ -21,6 +21,7 @@ class MovieDetailsViewModel @Inject constructor(override var repository: Reposit
                 }
                 }.collect { movieDetailedResponse ->
                 _uiState.update { ShowsDetailsState.Success(movieDetailedResponse.result, movieDetailedResponse.exception) }
+                _creditsPagingDataState.update { CreditsState.Success(movieDetailedResponse.result.castList) }
             }
         }
     }
