@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.paging.filter
 import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
@@ -31,20 +32,18 @@ class ListPlanToWatchFragment : BaseListFragment<ListCachedShowsViewModel>() {
         binding.searchTabs.isVisible = true
     }
 
-    override fun onListElementClick(show: IShow) {
+    override fun onListElementClick(show: IShow, extras: FragmentNavigator.Extras) {
         when (show.mediaType) {
-            TV_TYPE_STRING ->
-                findNavController().navigate(
-                    ListPlanToWatchFragmentDirections.actionListPlanToWatchFragmentToSeriesDetailsFragment(
-                        show.id
-                    )
-                )
-            MOVIE_TYPE_STRING ->
-                findNavController().navigate(
-                    ListPlanToWatchFragmentDirections.actionListPlanToWatchFragmentToMovieDetailsFragment(
-                        show.id
-                    )
-                )
+            TV_TYPE_STRING -> findNavController().navigate(
+                ListPlanToWatchFragmentDirections.actionListPlanToWatchFragmentToSeriesDetailsFragment(
+                    show.id
+                ), extras
+            )
+            MOVIE_TYPE_STRING -> findNavController().navigate(
+                ListPlanToWatchFragmentDirections.actionListPlanToWatchFragmentToMovieDetailsFragment(
+                    show.id
+                ), extras
+            )
         }
     }
 

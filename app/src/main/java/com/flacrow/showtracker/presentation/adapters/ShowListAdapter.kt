@@ -1,6 +1,7 @@
 package com.flacrow.showtracker.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,7 @@ import com.flacrow.showtracker.R
 import com.flacrow.showtracker.data.models.IShow
 import com.flacrow.showtracker.databinding.ShowentityItemBinding
 
-class ShowListAdapter(private val navigate: (IShow) -> Unit) :
+class ShowListAdapter(private val navigate: (IShow, View) -> Unit) :
     PagingDataAdapter<IShow, ShowListAdapter.ViewHolder>(
         DiffCallback()
     ) {
@@ -53,6 +54,7 @@ class ShowListAdapter(private val navigate: (IShow) -> Unit) :
                     "${IMAGE_BASE_URL}/t/p/w185/${showItem.posterUrl}",
                     com.flacrow.core.R.drawable.ic_placeholder_image_24
                 )
+                root.transitionName = showItem.title
                 titleTv.text = showItem.title
                 releasedDateTv.text =
                     root.context.getString(
@@ -62,7 +64,7 @@ class ShowListAdapter(private val navigate: (IShow) -> Unit) :
                 if (showItem.mediaType == MOVIE_TYPE_STRING) {
                     mediaTypeIv.setImageResource(R.drawable.ic_baseline_movie_24)
                 } else mediaTypeIv.setImageResource(R.drawable.ic_baseline_tv_24)
-                binding.root.setOnClickListener { navigate.invoke(showItem) }
+                binding.root.setOnClickListener { navigate.invoke(showItem, binding.root) }
             }
         }
     }

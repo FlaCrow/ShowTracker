@@ -1,6 +1,7 @@
 package com.flacrow.showtracker.presentation.fragments
 
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import com.flacrow.core.utils.ConstantValues.MOVIE_TYPE_STRING
 import com.flacrow.core.utils.ConstantValues.TV_TYPE_STRING
@@ -19,18 +20,17 @@ class ListTrendingFragment : BaseListFragment<ListTrendingViewModel>() {
         requireContext().appComponent.inject(this)
     }
 
-    override fun onListElementClick(show: IShow) {
+    override fun onListElementClick(show: IShow, extras: FragmentNavigator.Extras) {
         when (show.mediaType) {
-            TV_TYPE_STRING ->
-                findNavController().navigate(
-                    ListTrendingFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(
-                        show.id
-                    )
-                )
-            MOVIE_TYPE_STRING ->
-                findNavController().navigate(
-                    ListTrendingFragmentDirections.actionShowListFragmentToMovieDetailsFragment(show.id)
-                )
+            TV_TYPE_STRING -> findNavController().navigate(
+                ListTrendingFragmentDirections.actionShowListFragmentToSeriesDetailsFragment(
+                    show.id
+                ), extras
+            )
+            MOVIE_TYPE_STRING -> findNavController().navigate(
+                ListTrendingFragmentDirections.actionShowListFragmentToMovieDetailsFragment(show.id),
+                extras
+            )
 
         }
     }
