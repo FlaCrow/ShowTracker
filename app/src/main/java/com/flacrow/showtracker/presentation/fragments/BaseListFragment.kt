@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,7 @@ import com.flacrow.showtracker.presentation.viewModels.BaseViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.transition.MaterialElevationScale
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -65,8 +67,8 @@ abstract class BaseListFragment<VModel : BaseViewModel> :
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        postponeEnterTransition(100, TimeUnit.MILLISECONDS)
-        //view.doOnPreDraw { startPostponedEnterTransition() }
+        postponeEnterTransition()
+        view.doOnPreDraw { lifecycleScope.launch { delay(55); this@BaseListFragment.startPostponedEnterTransition() } }
         setAdapter()
         setupMenu()
         setupTabListeners()
